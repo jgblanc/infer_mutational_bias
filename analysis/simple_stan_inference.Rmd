@@ -1,0 +1,150 @@
+---
+title: "Simple_stan_inference"
+author: "Jennifer Blanc"
+date: "11/8/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(rstan)
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+```
+
+## Infer W using RAF   
+
+
+Here we have the distrubution of risk alleles for a given effect size $(\beta)$, populaiton size (N), mutation rate ($\mu$), and W. Where W * B is the selection coefficient. We are interested in infering W from the data. 
+
+$$\psi(x|\beta, N,W) = C * e^{-4 N\beta W x} (x(1-x))^{4N\mu -1}$$
+
+To start with we will do a very simple inference where we assume that all loci have effect size $\beta =1$. In this case our data will be the risk allele frequency (x) for a set of causal loci. 
+
+First we will write the functions needed to simulated data from $psi$:  
+
+Helper Functions
+```{r}
+# Function to integrate 
+psi_no_c <- function(x, N, B, W, mu) {
+  p1 <- exp(-4 * N * B * W * x)
+  p2 <- (x *(1-x))^((4*N*mu)-1)
+  return(p1 * p2)
+}
+
+# This is the target distribution from which we want to sample
+psi_target <- function(x, N, B, W, mu, C) {
+  p1 <- exp(-4 * N * B * W * x)
+  p2 <- (x *(1-x))^((4*N*mu)-1)
+  return(p1 * p2 * C)
+}
+
+# Probability that an allele is derived 
+derived_risk <- function(x, W, N, B) {
+  one <- exp(4 * N * B * W) - exp(4 * N * B * W * x)
+  two <- -1 + exp(4 * N * B * W)
+  return(one/two)
+}
+```
+
+Simulate a set of Risk Allele frequencies acording to $\psi$
+```{r}
+simulate_data <- function(N, B, W, m) {
+  # This function will sample 
+  
+  # Calculate normalizing constant 
+  C <- 1/ integrate(psi_no_c,  (0.5/(2*N)),1 - (0.5/(2*N)) , N=N, B=B, W=W, mu=mu)$value
+  
+  # Discretize the target CDF 
+  i_values <- seq(0,1-(1/(2*N)), 1/(2*N))
+  pis <- rep(0, length(i_values))
+
+  # Integrate up to i + (0.5/2N) for all i 
+  for (j in 1:length(i_values)) {
+    pis[j] <- integrate(psi_target, (0.5/(2*N)), (i_values[j]+ (0.5/(2*N))), N=N, B=B, W=W, mu=mu, C=C)$value
+  }
+  
+  # Draw from uniform
+  U <- runif(m)
+
+  # Find smallest i such that pi < U is true
+  UT <- rep(0, length(U))
+  for (j in 1:length(U)) {
+    UT[j] <- which(U[j] <= pis)[1] - 1
+  }
+  
+  # Calculate set of RAF 
+  x_freqs <- UT / (2*N)
+  
+  return(x_freqs)
+}
+```
+
+Now we will set our parameters and simulated the data:  
+```{r}
+N <- 100000
+mu <- 10^-9 
+W <- 1e-4
+B <- 1
+m <- 200
+
+x_freqs <- simulate_data(N, B, W, m)
+```
+
+Finally we will fit the stan model and get the posterior distribution on W  
+```{r}
+data <- list(y = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
+fit <- stan(file = '../code/simple_RAF.stan', data = data)
+```
+
+```{r}
+print(fit)
+plot(fit)
+traceplot(fit,pars="W" )
+```
+
+
+## Infer W using evolutionary status  
+```{r}
+# 0 = Ancestral 
+# 1 = Derived 
+assign_status <- function(m,W,N,B,x_freqs) {
+  status <- rep(NA, m)
+  for (i in 1:m) {
+    freq <- x_freqs[i]
+    p <- derived_risk(freq, W=W, N=N, B=B)
+    ind <- rbinom(1,1, p)
+    status[i] <- ind
+  }
+  return(status)
+}
+```
+
+```{r}
+W <- 1e-8
+m <- 500
+x_freqs <- simulate_data(N, B, W, m)
+status <- assign_status(m, W, N, B, x_freqs)
+```
+
+```{r, warning=FALSE}
+data <- list(s = status, x = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
+fit <- stan(file = '../code/simple_status.stan', data = data, iter = 5000, init = 1e-8)
+```
+
+```{r}
+print(fit)
+plot(fit)
+traceplot(fit,pars="W" )
+```
+
+```{r}
+result <- extract(fit)
+W_post <- result$W
+hist(W_post)
+
+sampler_params <- get_sampler_params(fit, inc_warmup = FALSE)
+sampler_params[[1]][1:5,]
+```
+
+
