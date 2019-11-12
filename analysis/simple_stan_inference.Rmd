@@ -94,7 +94,7 @@ x_freqs <- simulate_data(N, B, W, m)
 Finally we will fit the stan model and get the posterior distribution on W  
 ```{r}
 data <- list(y = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
-fit <- stan(file = '../code/simple_RAF.stan', data = data)
+fit <- stan(file = 'code/simple_RAF.stan', data = data)
 ```
 
 ```{r}
@@ -129,7 +129,7 @@ status <- assign_status(m, W, N, B, x_freqs)
 
 ```{r, warning=FALSE}
 data <- list(s = status, x = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
-fit <- stan(file = '../code/simple_status.stan', data = data, iter = 5000, init = 1e-8)
+fit <- stan(file = 'code/simple_status.stan', data = data, iter = 5000, init = 1e-8)
 ```
 
 ```{r}

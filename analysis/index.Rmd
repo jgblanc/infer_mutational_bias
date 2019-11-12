@@ -8,4 +8,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+Welcome to my research website. 
+
+To see my simple inference of W using STAN, click here [link](simple_stan_inference.html)
