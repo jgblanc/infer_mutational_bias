@@ -535,10 +535,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreea89bee441cf6011ab61134b29e9434712bf62cb7targetblanka89bee4a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/a89bee441cf6011ab61134b29e9434712bf62cb7" target="_blank">a89bee4</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree01c8d3ac71009c40941edbe907add0cbbe06fde7targetblank01c8d3aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/01c8d3ac71009c40941edbe907add0cbbe06fde7" target="_blank">01c8d3a</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreea89bee441cf6011ab61134b29e9434712bf62cb7targetblanka89bee4a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree01c8d3ac71009c40941edbe907add0cbbe06fde7targetblank01c8d3aa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -590,6 +590,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/01c8d3ac71009c40941edbe907add0cbbe06fde7/analysis/simple_stan_inference.Rmd" target="_blank">01c8d3a</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+<td>
+Publish the simple stan inference
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/6edc2e71998fd85eab195db0fec9f17474225e8e/docs/simple_stan_inference.html" target="_blank">6edc2e7</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -727,7 +761,7 @@ psi_target &lt;- function(x, N, B, W, mu, C) {
 N &lt;- 100000
 mu &lt;- 10^-9 
 B &lt;- 1
-m &lt;- 200 # Number of causal snps 
+m &lt;- 500 # Number of causal snps 
 
 # Value of W for simuation 
 W &lt;- 1e-5
@@ -738,6 +772,43 @@ x_freqs &lt;- simulate_data(N, B, W, m)
 # Look at distribution of data
 hist(x_freqs)</code></pre>
 <p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/6edc2e71998fd85eab195db0fec9f17474225e8e/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-3-1.png" target="_blank">6edc2e7</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Now we have data are are ready to do inference. Let’s look again at the distrubtion of risk alleles as stated above:</p>
 <p><span class="math display">\[\psi(x|\beta, N,W, \mu) = C * e^{-4 N\beta W x} (x(1-x))^{4N\mu -1}\]</span></p>
 <p>Using Bayes rule we can re-write this as:</p>
@@ -779,13 +850,13 @@ fit &lt;- sampling(simple_RAF, data = data)</code></pre>
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
         mean se_mean   sd    2.5%     25%     50%     75%  97.5% n_eff
-W       0.00    0.00 0.00    0.00    0.00    0.00    0.00    0.0  1503
-lp__ 1385.17    0.03 0.79 1382.73 1385.04 1385.47 1385.66 1385.7   815
+W       0.00    0.00 0.00    0.00    0.00    0.00    0.00    0.0  1484
+lp__ 3613.24    0.03 0.79 3610.92 3613.06 3613.53 3613.74 3613.8   866
      Rhat
 W       1
 lp__    1
 
-Samples were drawn using NUTS(diag_e) at Wed Nov 13 10:55:51 2019.
+Samples were drawn using NUTS(diag_e) at Wed Nov 13 11:03:47 2019.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
@@ -793,8 +864,82 @@ convergence, Rhat=1).</code></pre>
 <pre><code>ci_level: 0.8 (80% intervals)</code></pre>
 <pre><code>outer_level: 0.95 (95% intervals)</code></pre>
 <p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/6edc2e71998fd85eab195db0fec9f17474225e8e/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-6-1.png" target="_blank">6edc2e7</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>traceplot(fit,pars=&quot;W&quot; )</code></pre>
 <p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-2">
+Past versions of unnamed-chunk-6-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/6edc2e71998fd85eab195db0fec9f17474225e8e/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-6-2.png" target="_blank">6edc2e7</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Right now on default settings, I am not doing a great job of infering W (whole order of magnitude off).</p>
 </div>
 <div id="infer-w-using-evolutionary-status" class="section level2">
@@ -821,625 +966,13 @@ assign_status &lt;- function(m,W,N,B,x_freqs) {
   }
   return(status)
 }</code></pre>
-<p>Now we will simulate our data:</p>
-<pre class="r"><code># Constant parameters 
-N &lt;- 100000
-mu &lt;- 10^-9 
-B &lt;- 1
-m &lt;- 500 # Number of causal snps 
-
-# Value of W for simuation 
-W &lt;- 1e-5
-
-# Simulate data 
-#x_freqs &lt;- simulate_data(N, B, W, m)
-status &lt;- assign_status(m, W, N, B, x_freqs)</code></pre>
-<pre><code>Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced
-
-Warning in rbinom(1, 1, p): NAs produced</code></pre>
-<pre class="r"><code># Look at distribution of data
-hist(x_freqs)</code></pre>
-<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>table(status)</code></pre>
+<p>Now we will assign evolutionary status to our previously simulated set of RAFs:</p>
+<pre class="r"><code>status &lt;- assign_status(m, W, N, B, x_freqs)
+# Look at distribution of status data
+table(status)</code></pre>
 <pre><code>status
   0   1 
-  4 196 </code></pre>
+ 11 489 </code></pre>
 <p>We now have our data and wish to do inference on the W used to generate the data. We can write the posterior distribution on W as:</p>
 <p><span class="math display">\[P(W|x, N, \beta, D) \propto P(D|W, x, N, \beta) P(W) \]</span></p>
 <p>The likelihood is the same as written above and the prior <span class="math inline">\(P(W)\)</span> we will consider uniform and equal to 1. Now that we have the posterior distribution we can sample from it using STAN.</p>
@@ -1483,15 +1016,26 @@ model {
 <p>Let’s fit the STAN model to our data</p>
 <pre class="r"><code>data &lt;- list(s = status, x = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
 fit &lt;- sampling(simple_status, data = data)</code></pre>
-<pre><code>Error in FUN(X[[i]], ...) : Stan does not support NA (in s) in data</code></pre>
-<pre><code>failed to preprocess the data; sampling not done</code></pre>
 <p>Let’s look at the results</p>
 <pre class="r"><code>print(fit)</code></pre>
-<pre><code>Stan model &#39;0a72b61c4421c091dad73d7010c6cd06&#39; does not contain samples.</code></pre>
+<pre><code>Inference for Stan model: 0a72b61c4421c091dad73d7010c6cd06.
+4 chains, each with iter=2000; warmup=1000; thin=1; 
+post-warmup draws per chain=1000, total post-warmup draws=4000.
+
+       mean se_mean   sd  2.5%    25%   50%    75%  97.5% n_eff Rhat
+W      0.00    0.00 0.00   0.0   0.00   0.0   0.00   0.00   690 1.01
+lp__ -26.14    0.02 0.61 -27.9 -26.27 -25.9 -25.76 -25.72   744 1.01
+
+Samples were drawn using NUTS(diag_e) at Wed Nov 13 11:04:25 2019.
+For each parameter, n_eff is a crude measure of effective sample size,
+and Rhat is the potential scale reduction factor on split chains (at 
+convergence, Rhat=1).</code></pre>
 <pre class="r"><code>plot(fit)</code></pre>
-<pre><code>Stan model &#39;0a72b61c4421c091dad73d7010c6cd06&#39; does not contain samples.</code></pre>
+<pre><code>ci_level: 0.8 (80% intervals)</code></pre>
+<pre><code>outer_level: 0.95 (95% intervals)</code></pre>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>traceplot(fit,pars=&quot;W&quot; )</code></pre>
-<pre><code>Stan model &#39;0a72b61c4421c091dad73d7010c6cd06&#39; does not contain samples.</code></pre>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Again I am not doing a very good job. Using the evolutionary information consistently over estimates W.</p>
 </div>
 <div id="infer-w-using-both-raf-and-evolutionary-status" class="section level2">
@@ -1540,39 +1084,32 @@ model {
   s ~ my_ll_risk_lpmf(x, W, N, mu, B);
 }
 </code></pre>
-<p>We can simulate our data the same way we did for just evolutionary status:</p>
-<pre class="r"><code># Constant parameters 
-N &lt;- 100000
-mu &lt;- 10^-9 
-B &lt;- 1
-m &lt;- 500 # Number of causal snps 
-
-# Value of W for simuation 
-W &lt;- 1e-5
-
-# Simulate data 
-#x_freqs &lt;- simulate_data(N, B, W, m)
-#status &lt;- assign_status(m, W, N, B, x_freqs)
-
-# Look at distribution of data
-hist(x_freqs)</code></pre>
-<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>table(status)</code></pre>
-<pre><code>status
-  0   1 
-  4 196 </code></pre>
-<p>We can now fit our STAN model:</p>
+<p>We can use the same data simulated above and fit our STAN model:</p>
 <pre class="r"><code>data &lt;- list(s = status, x = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
 fit &lt;- sampling(RAF_status, data = data)</code></pre>
-<pre><code>Error in FUN(X[[i]], ...) : Stan does not support NA (in s) in data</code></pre>
-<pre><code>failed to preprocess the data; sampling not done</code></pre>
 <p>Let’s look at our results</p>
 <pre class="r"><code>print(fit)</code></pre>
-<pre><code>Stan model &#39;6b7b06424d57581b71b6cc314b68d8ca&#39; does not contain samples.</code></pre>
+<pre><code>Inference for Stan model: 6b7b06424d57581b71b6cc314b68d8ca.
+4 chains, each with iter=2000; warmup=1000; thin=1; 
+post-warmup draws per chain=1000, total post-warmup draws=4000.
+
+        mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
+W       0.00    0.00 0.00    0.00    0.00    0.00    0.00    0.00  1552
+lp__ 3523.72    0.02 0.77 3521.58 3523.54 3524.03 3524.22 3524.28  1034
+     Rhat
+W       1
+lp__    1
+
+Samples were drawn using NUTS(diag_e) at Wed Nov 13 11:05:05 2019.
+For each parameter, n_eff is a crude measure of effective sample size,
+and Rhat is the potential scale reduction factor on split chains (at 
+convergence, Rhat=1).</code></pre>
 <pre class="r"><code>plot(fit)</code></pre>
-<pre><code>Stan model &#39;6b7b06424d57581b71b6cc314b68d8ca&#39; does not contain samples.</code></pre>
+<pre><code>ci_level: 0.8 (80% intervals)</code></pre>
+<pre><code>outer_level: 0.95 (95% intervals)</code></pre>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>traceplot(fit,pars=&quot;W&quot; )</code></pre>
-<pre><code>Stan model &#39;6b7b06424d57581b71b6cc314b68d8ca&#39; does not contain samples.</code></pre>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-14-2.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
