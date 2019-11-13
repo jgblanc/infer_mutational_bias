@@ -535,10 +535,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree01c8d3ac71009c40941edbe907add0cbbe06fde7targetblank01c8d3aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/01c8d3ac71009c40941edbe907add0cbbe06fde7" target="_blank">01c8d3a</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree7617ca3a91de547f6a57c293b7d0ffa372bde09ftargetblank7617ca3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/7617ca3a91de547f6a57c293b7d0ffa372bde09f" target="_blank">7617ca3</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree01c8d3ac71009c40941edbe907add0cbbe06fde7targetblank01c8d3aa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree7617ca3a91de547f6a57c293b7d0ffa372bde09ftargetblank7617ca3a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -590,6 +590,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/7617ca3a91de547f6a57c293b7d0ffa372bde09f/analysis/simple_stan_inference.Rmd" target="_blank">7617ca3</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+<td>
+Publish the simple stan inference
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/d8e8b148140dd54125a60f18df79717a3bf12268/docs/simple_stan_inference.html" target="_blank">d8e8b14</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -796,6 +830,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d8e8b148140dd54125a60f18df79717a3bf12268/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-3-1.png" target="_blank">d8e8b14</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/6edc2e71998fd85eab195db0fec9f17474225e8e/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-3-1.png" target="_blank">6edc2e7</a>
 </td>
 <td>
@@ -812,7 +857,7 @@ jgblanc
 <p>Now we have data are are ready to do inference. Let’s look again at the distrubtion of risk alleles as stated above:</p>
 <p><span class="math display">\[\psi(x|\beta, N,W, \mu) = C * e^{-4 N\beta W x} (x(1-x))^{4N\mu -1}\]</span></p>
 <p>Using Bayes rule we can re-write this as:</p>
-<p><span class="math display">\[P(W|\beta, N, \mu, x) = \frac{P(x| \beta, N, \mu, W) P(W)}{P(x)} \propto P(x| \beta, N, \mu, W) P(W)\]</span></p>
+<p><span class="math display">\[P(W|\beta, N, \mu, x) = \frac{P(x| \beta, N, \mu, W) P(W)}{P(x|\beta, N, \mu)} \propto P(x| \beta, N, \mu, W) P(W)\]</span></p>
 <p>Now we have a posterior distribution on W that we can sample from using the likelihood (<span class="math inline">\(\psi(x|\beta, N,W, \mu)\)</span>) and the prior, which we for now assume to be 1. Below is the STAN program I wrote to sample from this posterior</p>
 <p><strong>Confusion:</strong> I’m not sure how to deal with the constant of integration in <span class="math inline">\(psi\)</span>. To me it seems like in order to evaluate the likelihood we need to recalculate C for each possible step in the MCMC but I’m not sure how to do this in stan.</p>
 <pre class="stan"><code>functions {
@@ -856,7 +901,7 @@ lp__ 3613.24    0.03 0.79 3610.92 3613.06 3613.53 3613.74 3613.8   866
 W       1
 lp__    1
 
-Samples were drawn using NUTS(diag_e) at Wed Nov 13 11:03:47 2019.
+Samples were drawn using NUTS(diag_e) at Wed Nov 13 11:09:18 2019.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
@@ -886,6 +931,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d8e8b148140dd54125a60f18df79717a3bf12268/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-6-1.png" target="_blank">d8e8b14</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/6edc2e71998fd85eab195db0fec9f17474225e8e/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-6-1.png" target="_blank">6edc2e7</a>
@@ -925,6 +981,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d8e8b148140dd54125a60f18df79717a3bf12268/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-6-2.png" target="_blank">d8e8b14</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/6edc2e71998fd85eab195db0fec9f17474225e8e/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-6-2.png" target="_blank">6edc2e7</a>
@@ -1026,7 +1093,7 @@ post-warmup draws per chain=1000, total post-warmup draws=4000.
 W      0.00    0.00 0.00   0.0   0.00   0.0   0.00   0.00   690 1.01
 lp__ -26.14    0.02 0.61 -27.9 -26.27 -25.9 -25.76 -25.72   744 1.01
 
-Samples were drawn using NUTS(diag_e) at Wed Nov 13 11:04:25 2019.
+Samples were drawn using NUTS(diag_e) at Wed Nov 13 11:09:55 2019.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
@@ -1034,8 +1101,82 @@ convergence, Rhat=1).</code></pre>
 <pre><code>ci_level: 0.8 (80% intervals)</code></pre>
 <pre><code>outer_level: 0.95 (95% intervals)</code></pre>
 <p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
+Past versions of unnamed-chunk-11-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d8e8b148140dd54125a60f18df79717a3bf12268/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-11-1.png" target="_blank">d8e8b14</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>traceplot(fit,pars=&quot;W&quot; )</code></pre>
 <p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-2">
+Past versions of unnamed-chunk-11-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d8e8b148140dd54125a60f18df79717a3bf12268/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-11-2.png" target="_blank">d8e8b14</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Again I am not doing a very good job. Using the evolutionary information consistently over estimates W.</p>
 </div>
 <div id="infer-w-using-both-raf-and-evolutionary-status" class="section level2">
@@ -1100,7 +1241,7 @@ lp__ 3523.72    0.02 0.77 3521.58 3523.54 3524.03 3524.22 3524.28  1034
 W       1
 lp__    1
 
-Samples were drawn using NUTS(diag_e) at Wed Nov 13 11:05:05 2019.
+Samples were drawn using NUTS(diag_e) at Wed Nov 13 11:10:30 2019.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
@@ -1108,8 +1249,82 @@ convergence, Rhat=1).</code></pre>
 <pre><code>ci_level: 0.8 (80% intervals)</code></pre>
 <pre><code>outer_level: 0.95 (95% intervals)</code></pre>
 <p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
+Past versions of unnamed-chunk-14-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d8e8b148140dd54125a60f18df79717a3bf12268/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-14-1.png" target="_blank">d8e8b14</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>traceplot(fit,pars=&quot;W&quot; )</code></pre>
 <p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-14-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-2">
+Past versions of unnamed-chunk-14-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d8e8b148140dd54125a60f18df79717a3bf12268/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-14-2.png" target="_blank">d8e8b14</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
