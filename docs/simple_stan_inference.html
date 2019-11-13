@@ -444,7 +444,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2019-11-12
+<strong>Last updated:</strong> 2019-11-13
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -535,10 +535,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree2c7bc48d122b8b25403bea947eb99c616c375fdatargetblank2c7bc48a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/2c7bc48d122b8b25403bea947eb99c616c375fda" target="_blank">2c7bc48</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreea89bee441cf6011ab61134b29e9434712bf62cb7targetblanka89bee4a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/a89bee441cf6011ab61134b29e9434712bf62cb7" target="_blank">a89bee4</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree2c7bc48d122b8b25403bea947eb99c616c375fdatargetblank2c7bc48a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreea89bee441cf6011ab61134b29e9434712bf62cb7targetblanka89bee4a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -548,10 +548,10 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    docs/figure/
+    Ignored:    data/47UKBB/
 
 Unstaged changes:
-    Modified:   code/simple_RAF.rds
+    Modified:   code/parse_alphas_47UKBB.R
 
 </code></pre>
 <p>
@@ -595,6 +595,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/a89bee441cf6011ab61134b29e9434712bf62cb7/analysis/simple_stan_inference.Rmd" target="_blank">a89bee4</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+<td>
+Publish the simple stan inference
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/548c5f30e2be63906b6f28123ffe0cc508a6ba6f/docs/simple_stan_inference.html" target="_blank">548c5f3</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/2c7bc48d122b8b25403bea947eb99c616c375fda/analysis/simple_stan_inference.Rmd" target="_blank">2c7bc48</a>
 </td>
 <td>
@@ -631,13 +665,20 @@ added simple STAN inference
 </div>
 </div>
 </div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>For this project, we are interested in infering the degree of mutational bias across traits. In order to calculate the mutational bias, we need to infer specific parameters from the data. First consider the polygenic mutation-selection balance model. In this model, the selection coefficient for each individual allele is determined by the approximation below:</p>
+<p><span class="math display">\[s \approx \beta \phi(T) S\]</span></p>
+<p>Here <span class="math inline">\(\beta\)</span> is the true effect size of the allele, <span class="math inline">\(\phi(T)\)</span> is the height of the liability threshold, and S is the fitness cost of the disease. We can think of <span class="math inline">\(\beta * \phi(T)\)</span> as an approximation of the portion of the population pushed over the liability threshold when the protective allele is swapped to the risk allele. <span class="math inline">\(\phi(T) S\)</span> is a compound parameter that is related to the prevelance of the disease. The larger the <span class="math inline">\(\phi(T)\)</span> the higher the prevalance of disease (the threshold is closer to the center), the smaller the fitness cost must be. Here we will call this compound parameter <span class="math inline">\(W\)</span>:</p>
+<p><span class="math display">\[W = \phi(T)S\]</span></p>
+<p>In this analysis we are interested in infering from simulated data. We will simulate data under a specfic value of W and then use bayesian inference (using STAN) to infer back the value of W, the data were generated under.</p>
+</div>
 <div id="infer-w-using-raf" class="section level2">
 <h2>Infer W using RAF</h2>
-<p>Here we have the distrubution of risk alleles for a given effect size <span class="math inline">\((\beta)\)</span>, populaiton size (N), mutation rate (<span class="math inline">\(\mu\)</span>), and W. Where W * B is the selection coefficient. We are interested in infering W from the data.</p>
-<p><span class="math display">\[\psi(x|\beta, N,W) = C * e^{-4 N\beta W x} (x(1-x))^{4N\mu -1}\]</span></p>
-<p>To start with we will do a very simple inference where we assume that all loci have effect size <span class="math inline">\(\beta =1\)</span>. In this case our data will be the risk allele frequency (x) for a set of causal loci.</p>
-<p>First we will write the functions needed to simulated data from <span class="math inline">\(psi\)</span>:</p>
-<p>Helper Functions</p>
+<p>To start with we are going to make a (very) simplifying assumption that we know all the causal loci and that they all have an effect size of one (<span class="math inline">\(\beta\)</span> = 1). The distribution of risk alleles in the population for a given effect size <span class="math inline">\((\beta)\)</span>, population size (N), mutation rate <span class="math inline">\((\mu)\)</span>, and W is given below:</p>
+<p><span class="math display">\[\psi(x|\beta, N,W, \mu) = C * e^{-4 N\beta W x} (x(1-x))^{4N\mu -1}\]</span></p>
+<p>The first thing we need to do is simulate data (set of risk allele frequencies) from the above distribution under a specfic value of W.</p>
+<p>Here are helper functions that will allow us to draw allele frequencies from <span class="math inline">\(psi\)</span>. We first need a function for the distribution without the constant of integration. For the set of parameters, we will calculate C by integrating this function and then using that C as an argument for the target <span class="math inline">\(\psi\)</span> function we want to draw samples from.</p>
 <pre class="r"><code># Function to integrate 
 psi_no_c &lt;- function(x, N, B, W, mu) {
   p1 &lt;- exp(-4 * N * B * W * x)
@@ -650,17 +691,10 @@ psi_target &lt;- function(x, N, B, W, mu, C) {
   p1 &lt;- exp(-4 * N * B * W * x)
   p2 &lt;- (x *(1-x))^((4*N*mu)-1)
   return(p1 * p2 * C)
-}
-
-# Probability that an allele is derived 
-derived_risk &lt;- function(x, W, N, B) {
-  one &lt;- exp(4 * N * B * W) - exp(4 * N * B * W * x)
-  two &lt;- -1 + exp(4 * N * B * W)
-  return(one/two)
 }</code></pre>
-<p>Simulate a set of Risk Allele frequencies acording to <span class="math inline">\(\psi\)</span></p>
+<p>This function will simulate a set of Risk Allele frequencies acording to <span class="math inline">\(\psi\)</span> using inverse transform sampling and discritizing the distribution.</p>
 <pre class="r"><code>simulate_data &lt;- function(N, B, W, m) {
-  # This function will sample 
+  # This function will sample a set of risk allele frequencies 
   
   # Calculate normalizing constant 
   C &lt;- 1/ integrate(psi_no_c,  (0.5/(2*N)),1 - (0.5/(2*N)) , N=N, B=B, W=W, mu=mu)$value
@@ -688,43 +722,94 @@ derived_risk &lt;- function(x, W, N, B) {
   
   return(x_freqs)
 }</code></pre>
-<p>Now we will set our parameters and simulated the data:</p>
-<pre class="r"><code>N &lt;- 100000
+<p>Now we are ready to simulate data. We will set the constant parameters we are not interested in inferring and then set W and simulate the data</p>
+<pre class="r"><code># Constant parameters 
+N &lt;- 100000
 mu &lt;- 10^-9 
-W &lt;- 1e-4
 B &lt;- 1
-m &lt;- 200
+m &lt;- 200 # Number of causal snps 
 
-x_freqs &lt;- simulate_data(N, B, W, m)</code></pre>
+# Value of W for simuation 
+W &lt;- 1e-5
+
+# Simulate data 
+x_freqs &lt;- simulate_data(N, B, W, m)
+
+# Look at distribution of data
+hist(x_freqs)</code></pre>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Now we have data are are ready to do inference. Let’s look again at the distrubtion of risk alleles as stated above:</p>
+<p><span class="math display">\[\psi(x|\beta, N,W, \mu) = C * e^{-4 N\beta W x} (x(1-x))^{4N\mu -1}\]</span></p>
+<p>Using Bayes rule we can re-write this as:</p>
+<p><span class="math display">\[P(W|\beta, N, \mu, x) = \frac{P(x| \beta, N, \mu, W) P(W)}{P(x)} \propto P(x| \beta, N, \mu, W) P(W)\]</span></p>
+<p>Now we have a posterior distribution on W that we can sample from using the likelihood (<span class="math inline">\(\psi(x|\beta, N,W, \mu)\)</span>) and the prior, which we for now assume to be 1. Below is the STAN program I wrote to sample from this posterior</p>
+<p><strong>Confusion:</strong> I’m not sure how to deal with the constant of integration in <span class="math inline">\(psi\)</span>. To me it seems like in order to evaluate the likelihood we need to recalculate C for each possible step in the MCMC but I’m not sure how to do this in stan.</p>
+<pre class="stan"><code>functions {
+  real my_raf_lpdf(real[] x, real W, int N, real mu, real B){ // PSI density 
+    vector[num_elements(x)] prob;
+    real lprob;
+    for (i in 1:num_elements(x)) {
+      prob[i] = ((x[i] * (1- x[i]))^((4*N*mu) - 1)) * exp(-4 * N * B * W * x[i]) ;
+    }
+    lprob = sum(log(prob));
+    return lprob;
+  }
+}
+data {
+  int&lt;lower=0&gt; m;         // Number snps
+  real y[m];              // RAF
+  real&lt;lower=0&gt; mu; // mutation rate
+  real B; // effect size
+  int N; // population size
+}
+parameters {
+  real&lt;lower=1e-20, upper=1e-3&gt; W;                // selection
+}
+model {
+  y ~ my_raf_lpdf(W, N, mu, B);       // posterior 
+}
+</code></pre>
 <p>Finally we will fit the stan model and get the posterior distribution on W</p>
 <pre class="r"><code>data &lt;- list(y = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
-fit &lt;- stan(file = &#39;code/simple_RAF.stan&#39;, data = data)</code></pre>
+fit &lt;- sampling(simple_RAF, data = data)</code></pre>
+<p>Let’s look at the results.</p>
 <pre class="r"><code>print(fit)</code></pre>
-<pre><code>Inference for Stan model: simple_RAF.
+<pre><code>Inference for Stan model: 90224baf57b8619ceed2c1aef12c6f1a.
 4 chains, each with iter=2000; warmup=1000; thin=1; 
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
-        mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
-W       0.00    0.00 0.00    0.00    0.00    0.00    0.00    0.00  1249
-lp__ 1686.68    0.02 0.74 1684.56 1686.47 1686.97 1687.17 1687.23   929
+        mean se_mean   sd    2.5%     25%     50%     75%  97.5% n_eff
+W       0.00    0.00 0.00    0.00    0.00    0.00    0.00    0.0  1503
+lp__ 1385.17    0.03 0.79 1382.73 1385.04 1385.47 1385.66 1385.7   815
      Rhat
 W       1
 lp__    1
 
-Samples were drawn using NUTS(diag_e) at Tue Nov 12 10:37:06 2019.
+Samples were drawn using NUTS(diag_e) at Wed Nov 13 10:55:51 2019.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
 <pre class="r"><code>plot(fit)</code></pre>
 <pre><code>ci_level: 0.8 (80% intervals)</code></pre>
 <pre><code>outer_level: 0.95 (95% intervals)</code></pre>
-<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>traceplot(fit,pars=&quot;W&quot; )</code></pre>
-<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Right now on default settings, I am not doing a great job of infering W (whole order of magnitude off).</p>
 </div>
 <div id="infer-w-using-evolutionary-status" class="section level2">
 <h2>Infer W using evolutionary status</h2>
-<pre class="r"><code># 0 = Ancestral 
+<p>So far we have only considered inferring W using the distribution of risk allele frequencies. Now we will introduce evolutionary information. The probability that the risk allele is derived is:</p>
+<p><span class="math display">\[P(D|x, N, W, \beta) = \frac{e^{4N\beta W} - e^{4N\beta x}}{-1 + e^{4 N \beta W}}\]</span></p>
+<p>Here D is an indicator variable that equals 0 if the risk allele is ancestral and 1 if the risk allele is derived. Now we want to simulate data that consisits of a set of pairs of risk allele frequecies and D (if the risk allele is derived). We will use the same inverse transform sampling function from above to draw risk allele frequencies according to <span class="math inline">\(psi\)</span> and then use the functions below to assign evolutionary status (risk derived or ancestral) to each allele by drawing a bernoulle RV with probability calculate from the above equation.</p>
+<pre class="r"><code># Probability that an allele is derived 
+derived_risk &lt;- function(x, W, N, B) {
+  one &lt;- exp(4 * N * B * W) - exp(4 * N * B * W * x)
+  two &lt;- -1 + exp(4 * N * B * W)
+  return(one/two)
+}
+
+# 0 = Ancestral 
 # 1 = Derived 
 assign_status &lt;- function(m,W,N,B,x_freqs) {
   status &lt;- rep(NA, m)
@@ -736,52 +821,758 @@ assign_status &lt;- function(m,W,N,B,x_freqs) {
   }
   return(status)
 }</code></pre>
-<pre class="r"><code>W &lt;- 1e-8
-m &lt;- 500
-x_freqs &lt;- simulate_data(N, B, W, m)
+<p>Now we will simulate our data:</p>
+<pre class="r"><code># Constant parameters 
+N &lt;- 100000
+mu &lt;- 10^-9 
+B &lt;- 1
+m &lt;- 500 # Number of causal snps 
+
+# Value of W for simuation 
+W &lt;- 1e-5
+
+# Simulate data 
+#x_freqs &lt;- simulate_data(N, B, W, m)
 status &lt;- assign_status(m, W, N, B, x_freqs)</code></pre>
+<pre><code>Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced
+
+Warning in rbinom(1, 1, p): NAs produced</code></pre>
+<pre class="r"><code># Look at distribution of data
+hist(x_freqs)</code></pre>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>table(status)</code></pre>
+<pre><code>status
+  0   1 
+  4 196 </code></pre>
+<p>We now have our data and wish to do inference on the W used to generate the data. We can write the posterior distribution on W as:</p>
+<p><span class="math display">\[P(W|x, N, \beta, D) \propto P(D|W, x, N, \beta) P(W) \]</span></p>
+<p>The likelihood is the same as written above and the prior <span class="math inline">\(P(W)\)</span> we will consider uniform and equal to 1. Now that we have the posterior distribution we can sample from it using STAN.</p>
+<p>Here is the STAN program I wrote to sample from the posterior:</p>
+<pre class="stan"><code>functions {
+  real my_derived_risk_lpdf(real f, real W, int N, real mu, real B){ 
+    real prob;
+    prob = (exp(4 * N * B * W) - exp(4 * N * B * W * f)) / (-1 + exp(4 * N * B * W)) ;
+    return prob;
+  }
+  real my_ll_risk_lpmf(int[] s, real[] x, real W, int N, real mu, real B){
+    vector[num_elements(x)] prob;
+    real lprob;
+    for (i in 1:num_elements(x)) {
+      if (x[i] == 0) {
+        prob[i] = 1 - my_derived_risk_lpdf(x[i] | W, N, mu, B);
+      }
+      else {
+        prob[i] = my_derived_risk_lpdf(x[i] | W, N, mu, B);
+      }
+    }
+    lprob = sum(log(prob));
+    return lprob;
+  }
+}
+data {
+  int&lt;lower=0&gt; m;         // Number snps
+  real x[m];              // RAF
+  int s[m];
+  real&lt;lower=0&gt; mu; // mutation rate
+  real B; // effect size
+  int N; // population size
+}
+parameters {
+  real&lt;lower=1e-20, upper=1e-3&gt; W;                // selection
+}
+model {
+  s ~ my_ll_risk_lpmf(x, W, N, mu, B);
+}
+</code></pre>
+<p>Let’s fit the STAN model to our data</p>
 <pre class="r"><code>data &lt;- list(s = status, x = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
-fit &lt;- stan(file = &#39;code/simple_status.stan&#39;, data = data, iter = 5000, init = 1e-8)</code></pre>
+fit &lt;- sampling(simple_status, data = data)</code></pre>
+<pre><code>Error in FUN(X[[i]], ...) : Stan does not support NA (in s) in data</code></pre>
+<pre><code>failed to preprocess the data; sampling not done</code></pre>
+<p>Let’s look at the results</p>
 <pre class="r"><code>print(fit)</code></pre>
-<pre><code>Inference for Stan model: simple_status.
-4 chains, each with iter=5000; warmup=2500; thin=1; 
-post-warmup draws per chain=2500, total post-warmup draws=10000.
-
-        mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
-W       0.00    0.00 0.00    0.00    0.00    0.00    0.00    0.00   681
-lp__ -508.05    0.04 0.92 -510.37 -508.43 -507.78 -507.39 -507.12   683
-     Rhat
-W       1
-lp__    1
-
-Samples were drawn using NUTS(diag_e) at Tue Nov 12 10:37:38 2019.
-For each parameter, n_eff is a crude measure of effective sample size,
-and Rhat is the potential scale reduction factor on split chains (at 
-convergence, Rhat=1).</code></pre>
+<pre><code>Stan model &#39;0a72b61c4421c091dad73d7010c6cd06&#39; does not contain samples.</code></pre>
 <pre class="r"><code>plot(fit)</code></pre>
-<pre><code>ci_level: 0.8 (80% intervals)</code></pre>
-<pre><code>outer_level: 0.95 (95% intervals)</code></pre>
-<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>Stan model &#39;0a72b61c4421c091dad73d7010c6cd06&#39; does not contain samples.</code></pre>
 <pre class="r"><code>traceplot(fit,pars=&quot;W&quot; )</code></pre>
-<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>result &lt;- extract(fit)
-W_post &lt;- result$W
-hist(W_post)</code></pre>
-<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>sampler_params &lt;- get_sampler_params(fit, inc_warmup = FALSE)
-sampler_params[[1]][1:5,]</code></pre>
-<pre><code>     accept_stat__ stepsize__ treedepth__ n_leapfrog__ divergent__
-[1,]     0.4999970  0.1444947           1            2           1
-[2,]     0.7499724  0.1444947           2            4           1
-[3,]     0.7999503  0.1444947           2            5           1
-[4,]     0.8999815  0.1444947           3           10           1
-[5,]     0.8999890  0.1444947           3           10           1
-     energy__
-[1,] 507.1694
-[2,] 507.4683
-[3,] 508.5893
-[4,] 508.1582
-[5,] 508.2825</code></pre>
+<pre><code>Stan model &#39;0a72b61c4421c091dad73d7010c6cd06&#39; does not contain samples.</code></pre>
+<p>Again I am not doing a very good job. Using the evolutionary information consistently over estimates W.</p>
+</div>
+<div id="infer-w-using-both-raf-and-evolutionary-status" class="section level2">
+<h2>Infer W using both RAF and Evolutionary Status</h2>
+<p>So far we have been using only the RAF distribution or evolutionary status to compute the log-likelihood used in the inference. By factoring the likelihood, we are able to use both peices of information to calculate the posterior:</p>
+<p><span class="math display">\[P(W|x, D, N, \mu, \beta) \propto P(D|x, N, \beta, W) P(x|N, \beta, \mu) P(D) P(x)\]</span></p>
+<p>Here is the STAN program I wrote to sample from this posterior distribution.</p>
+<pre class="stan"><code>functions {
+  real my_raf_lpdf(real f, real W, int N, real mu, real B){ // PSI density 
+    real prob;
+    prob = ((f * (1- f))^((4*N*mu) - 1)) * exp(-4 * N * B * W * f) ;
+    return prob;
+  }
+  real my_derived_risk_lpdf(real f, real W, int N, real mu, real B){ // Probability density of derived risk
+    real prob;
+    prob = (exp(4 * N * B * W) - exp(4 * N * B * W * f)) / (-1 + exp(4 * N * B * W)) ;
+    return prob;
+  }
+  real my_ll_risk_lpmf(int[] s, real[] x, real W, int N, real mu, real B){ // General log-likelihood 
+    vector[num_elements(x)] prob;
+    real lprob;
+    for (i in 1:num_elements(x)) {
+      if (x[i] == 0) {
+        prob[i] = (1 - my_derived_risk_lpdf(x[i] | W, N, mu, B)) * my_raf_lpdf(x[i] | W, N, mu, B);
+      }
+      else {
+        prob[i] = my_derived_risk_lpdf(x[i] | W, N, mu, B) * my_raf_lpdf(x[i] | W, N, mu, B);
+      }
+    }
+    lprob = sum(log(prob));
+    return lprob;
+  }
+}
+data {
+  int&lt;lower=0&gt; m;         // Number snps
+  real x[m];              // RAF
+  int s[m];          // A/D status (coded as 0 or 1)
+  real&lt;lower=0&gt; mu; // mutation rate
+  real B; // effect size
+  int N; // population size
+}
+parameters {
+  real&lt;lower=1e-20, upper=1e-3&gt; W;                // selection
+}
+model {
+  s ~ my_ll_risk_lpmf(x, W, N, mu, B);
+}
+</code></pre>
+<p>We can simulate our data the same way we did for just evolutionary status:</p>
+<pre class="r"><code># Constant parameters 
+N &lt;- 100000
+mu &lt;- 10^-9 
+B &lt;- 1
+m &lt;- 500 # Number of causal snps 
+
+# Value of W for simuation 
+W &lt;- 1e-5
+
+# Simulate data 
+#x_freqs &lt;- simulate_data(N, B, W, m)
+#status &lt;- assign_status(m, W, N, B, x_freqs)
+
+# Look at distribution of data
+hist(x_freqs)</code></pre>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>table(status)</code></pre>
+<pre><code>status
+  0   1 
+  4 196 </code></pre>
+<p>We can now fit our STAN model:</p>
+<pre class="r"><code>data &lt;- list(s = status, x = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
+fit &lt;- sampling(RAF_status, data = data)</code></pre>
+<pre><code>Error in FUN(X[[i]], ...) : Stan does not support NA (in s) in data</code></pre>
+<pre><code>failed to preprocess the data; sampling not done</code></pre>
+<p>Let’s look at our results</p>
+<pre class="r"><code>print(fit)</code></pre>
+<pre><code>Stan model &#39;6b7b06424d57581b71b6cc314b68d8ca&#39; does not contain samples.</code></pre>
+<pre class="r"><code>plot(fit)</code></pre>
+<pre><code>Stan model &#39;6b7b06424d57581b71b6cc314b68d8ca&#39; does not contain samples.</code></pre>
+<pre class="r"><code>traceplot(fit,pars=&quot;W&quot; )</code></pre>
+<pre><code>Stan model &#39;6b7b06424d57581b71b6cc314b68d8ca&#39; does not contain samples.</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
