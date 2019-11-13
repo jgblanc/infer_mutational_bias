@@ -108,7 +108,7 @@ $$\psi(x|\beta, N,W, \mu) = C * e^{-4 N\beta W x} (x(1-x))^{4N\mu -1}$$
 
 Using Bayes rule we can re-write this as:  
 
-$$P(W|\beta, N, \mu, x) = \frac{P(x| \beta, N, \mu, W) P(W)}{P(x)} \propto P(x| \beta, N, \mu, W) P(W)$$  
+$$P(W|\beta, N, \mu, x) = \frac{P(x| \beta, N, \mu, W) P(W)}{P(x|\beta, N, \mu)} \propto P(x| \beta, N, \mu, W) P(W)$$  
 
 Now we have a posterior distribution on W that we can sample from using the likelihood ($\psi(x|\beta, N,W, \mu)$) and the prior, which we for now assume to be 1. Below is the STAN program I wrote to sample from this posterior    
 
