@@ -89,7 +89,7 @@ Now we are ready to simulate data. We will set the constant parameters we are no
 N <- 100000
 mu <- 10^-9 
 B <- 1
-m <- 200 # Number of causal snps 
+m <- 500 # Number of causal snps 
 
 # Value of W for simuation 
 W <- 1e-5
@@ -187,25 +187,11 @@ assign_status <- function(m,W,N,B,x_freqs) {
 }
 ```
 
-Now we will simulate our data:  
+Now we will assign evolutionary status to our previously simulated set of RAFs:   
 ```{r}
-# Constant parameters 
-N <- 100000
-mu <- 10^-9 
-B <- 1
-m <- 500 # Number of causal snps 
-
-# Value of W for simuation 
-W <- 1e-5
-
-# Simulate data 
-#x_freqs <- simulate_data(N, B, W, m)
 status <- assign_status(m, W, N, B, x_freqs)
-
-# Look at distribution of data
-hist(x_freqs)
+# Look at distribution of status data
 table(status)
-
 ```
 
 We now have our data and wish to do inference on the W used to generate the data. We can write the posterior distribution on W as:  
@@ -320,28 +306,7 @@ model {
 
 ```
 
-We can simulate our data the same way we did for just evolutionary status:  
-```{r}
-# Constant parameters 
-N <- 100000
-mu <- 10^-9 
-B <- 1
-m <- 500 # Number of causal snps 
-
-# Value of W for simuation 
-W <- 1e-5
-
-# Simulate data 
-#x_freqs <- simulate_data(N, B, W, m)
-#status <- assign_status(m, W, N, B, x_freqs)
-
-# Look at distribution of data
-hist(x_freqs)
-table(status)
-
-```
-
-We can now fit our STAN model: 
+We can use the same data simulated above and fit our STAN model: 
 ```{r, warning=FALSE}
 data <- list(s = status, x = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
 fit <- sampling(RAF_status, data = data)
