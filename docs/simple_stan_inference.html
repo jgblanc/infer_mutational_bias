@@ -444,7 +444,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2019-11-13
+<strong>Last updated:</strong> 2019-11-26
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -535,10 +535,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree7617ca3a91de547f6a57c293b7d0ffa372bde09ftargetblank7617ca3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/7617ca3a91de547f6a57c293b7d0ffa372bde09f" target="_blank">7617ca3</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreea345f14861ed70fcb037605855396c7f58e9d1b5targetblanka345f14a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/a345f14861ed70fcb037605855396c7f58e9d1b5" target="_blank">a345f14</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree7617ca3a91de547f6a57c293b7d0ffa372bde09ftargetblank7617ca3a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreea345f14861ed70fcb037605855396c7f58e9d1b5targetblanka345f14a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -590,6 +590,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/a345f14861ed70fcb037605855396c7f58e9d1b5/analysis/simple_stan_inference.Rmd" target="_blank">a345f14</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-26
+</td>
+<td>
+Update 11/26
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/b12f75e026901b485b96a5ce8efd6417264d7657/docs/simple_stan_inference.html" target="_blank">b12f75e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-11-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -885,6 +919,9 @@ model {
   y ~ my_raf_lpdf(W, N, mu, B);       // posterior 
 }
 </code></pre>
+<p>Try to integrate psi using stan - the problem seems to be that STAN doesn’t recognize the function “integrate_1d”</p>
+<p>{stan, output.var=“test”, eval=F} functions { real integrand(real x, real xc, real[] W, real[] x_r, int[] x_i) { int N; real mu; real B; real no_c; N = x_i[1]; mu = x_r[1]; B = x_r[2]; no_c = ((x * (1- x))^((4<em>N</em>mu) - 1)) * exp(-4 * N * B * W[1] * x); return no_c; } real my_raf_lpdf(real[] x, real[] W, int N, real mu, real B, real[] x_r, int[] x_i){ // PSI density vector[num_elements(x)] prob; real lprob; real r; r = integrate_1d(integrand, (0.5/(2<em>N)),(1 - (0.5/(2</em>N))), W, x_r, x_i, 1e-6); for (i in 1:num_elements(x)) { prob[i] = ((x[i] * (1- x[i]))^((4<em>N</em>mu) - 1)) * exp(-4 * N * B * W[1] * x[i]) * r; } lprob = sum(log(prob)); return lprob; } } data { int<lower=0> m; // Number snps real y[m]; // RAF real<lower=0> mu; // mutation rate real B; // effect size int N; // population size } parameters { real<lower=1e-20, upper=1e-3> W[1]; // selection } model { real x_r[2]; int x_i[1]; x_r = {mu, B}; x_i = {N}; y ~ my_raf_lpdf(W, N, mu, B, x_r, x_i); // posterior</p>
+<p>}</p>
 <p>Finally we will fit the stan model and get the posterior distribution on W</p>
 <pre class="r"><code>data &lt;- list(y = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
 fit &lt;- sampling(simple_RAF, data = data)</code></pre>
@@ -901,7 +938,7 @@ lp__ 3613.24    0.03 0.79 3610.92 3613.06 3613.53 3613.74 3613.8   866
 W       1
 lp__    1
 
-Samples were drawn using NUTS(diag_e) at Wed Nov 13 11:09:18 2019.
+Samples were drawn using NUTS(diag_e) at Tue Nov 26 15:31:51 2019.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
@@ -1080,6 +1117,45 @@ model {
   s ~ my_ll_risk_lpmf(x, W, N, mu, B);
 }
 </code></pre>
+<p>Use the binom function - WIP</p>
+<pre class="stan"><code>functions {
+  real my_derived_risk(real f, real W, int N, real mu, real B){ 
+    real prob;
+    prob = (exp(4 * N * B * W) - exp(4 * N * B * W * f)) / (-1 + exp(4 * N * B * W)) ;
+    return prob;
+  }
+  real my_ll_risk_log(int[] s, real[] x, real W, int N, real mu, real B){
+    vector[num_elements(x)] prob;
+    real lprob;
+    for (i in 1:num_elements(x)) {
+      if (x[i] == 0) {
+        prob[i] = 1 - my_derived_risk(x[i] , W, N, mu, B);
+      }
+      else {
+        prob[i] = my_derived_risk(x[i] , W, N, mu, B);
+      }
+    }
+    lprob = sum(log(prob));
+    return lprob;
+  }
+}
+data {
+  int&lt;lower=0&gt; m;         // Number snps
+  real x[m];              // RAF
+  int s[m];
+  real&lt;lower=0&gt; mu; // mutation rate
+  real B; // effect size
+  int N; // population size
+}
+parameters {
+  real&lt;lower=1e-20, upper=1e-3&gt; W;                // selection
+}
+model {
+// real p[m]
+// p[m] = function(x)
+  s ~ my_ll_risk(x, W, N, mu, B);
+}
+</code></pre>
 <p>Let’s fit the STAN model to our data</p>
 <pre class="r"><code>data &lt;- list(s = status, x = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
 fit &lt;- sampling(simple_status, data = data)</code></pre>
@@ -1093,91 +1169,38 @@ post-warmup draws per chain=1000, total post-warmup draws=4000.
 W      0.00    0.00 0.00   0.0   0.00   0.0   0.00   0.00   690 1.01
 lp__ -26.14    0.02 0.61 -27.9 -26.27 -25.9 -25.76 -25.72   744 1.01
 
-Samples were drawn using NUTS(diag_e) at Wed Nov 13 11:09:55 2019.
+Samples were drawn using NUTS(diag_e) at Tue Nov 26 15:33:04 2019.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
 <pre class="r"><code>plot(fit)</code></pre>
 <pre><code>ci_level: 0.8 (80% intervals)</code></pre>
 <pre><code>outer_level: 0.95 (95% intervals)</code></pre>
-<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
-Past versions of unnamed-chunk-11-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-11-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d8e8b148140dd54125a60f18df79717a3bf12268/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-11-1.png" target="_blank">d8e8b14</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>traceplot(fit,pars=&quot;W&quot; )</code></pre>
-<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-2">
-Past versions of unnamed-chunk-11-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-11-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d8e8b148140dd54125a60f18df79717a3bf12268/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-11-2.png" target="_blank">d8e8b14</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Again I am not doing a very good job. Using the evolutionary information consistently over estimates W.</p>
+<div id="compare-to-r-mle" class="section level3">
+<h3>Compare to R MLE</h3>
+<p>Since my posterior mean for W is consistently larger than the true W value, I want to compare it to my MLE inference in R. When I implimented it in R, I did a simple grid search where I tried a bunch of possible W values and picked the W that maximized the likelihood function.</p>
+<p>Here is my grid search function:</p>
+<pre class="r"><code>grid_search &lt;- function(end, by, x_freqs, status, N, B, m, mu){
+
+  # Start with a large range of W values 
+  W_range &lt;- seq(0, end, by=by)
+
+  # Loop through and calculate the LL for each W value 
+  result_LL_freq &lt;- rep(NA, length(W_range))
+  result_LL_status &lt;- rep(NA, length(W_range))
+  for (i in 1:length(W_range)) {
+    W_test &lt;- W_range[i]
+    result_LL_freq[i] &lt;- log_like_freq(data_freq=x_freqs,N=N,B=B,W=W_test,m=m, mu=mu)
+    result_LL_status[i] &lt;- log_like_status(data_freq=x_freqs,data_status=status,N=N,B=B,W=W_test,m=m)
+  }  
+  
+  return(c(W_range[which.max(result_LL_freq)],W_range[which.max(result_LL_status)]))
+}</code></pre>
+</div>
 </div>
 <div id="infer-w-using-both-raf-and-evolutionary-status" class="section level2">
 <h2>Infer W using both RAF and Evolutionary Status</h2>
@@ -1241,90 +1264,16 @@ lp__ 3523.72    0.02 0.77 3521.58 3523.54 3524.03 3524.22 3524.28  1034
 W       1
 lp__    1
 
-Samples were drawn using NUTS(diag_e) at Wed Nov 13 11:10:30 2019.
+Samples were drawn using NUTS(diag_e) at Tue Nov 26 15:33:38 2019.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).</code></pre>
 <pre class="r"><code>plot(fit)</code></pre>
 <pre><code>ci_level: 0.8 (80% intervals)</code></pre>
 <pre><code>outer_level: 0.95 (95% intervals)</code></pre>
-<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
-Past versions of unnamed-chunk-14-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-14-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d8e8b148140dd54125a60f18df79717a3bf12268/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-14-1.png" target="_blank">d8e8b14</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>traceplot(fit,pars=&quot;W&quot; )</code></pre>
-<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-14-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-2">
-Past versions of unnamed-chunk-14-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-14-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d8e8b148140dd54125a60f18df79717a3bf12268/docs/figure/simple_stan_inference.Rmd/unnamed-chunk-14-2.png" target="_blank">d8e8b14</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/simple_stan_inference.Rmd/unnamed-chunk-16-2.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1348,27 +1297,27 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] rstan_2.19.2       ggplot2_3.1.1      StanHeaders_2.19.0
+[1] rstan_2.19.2       ggplot2_3.2.1      StanHeaders_2.19.0
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.1         compiler_3.5.1     pillar_1.4.1      
- [4] git2r_0.25.2       plyr_1.8.4         workflowr_1.4.0   
- [7] prettyunits_1.0.2  tools_3.5.1        pkgbuild_1.0.3    
-[10] digest_0.6.19      evaluate_0.14      tibble_2.1.1      
-[13] gtable_0.3.0       pkgconfig_2.0.2    rlang_0.3.4       
+ [1] Rcpp_1.0.3         compiler_3.5.1     pillar_1.4.2      
+ [4] git2r_0.25.2       workflowr_1.4.0    prettyunits_1.0.2 
+ [7] tools_3.5.1        pkgbuild_1.0.6     digest_0.6.22     
+[10] evaluate_0.14      lifecycle_0.1.0    tibble_2.1.3      
+[13] gtable_0.3.0       pkgconfig_2.0.3    rlang_0.4.1       
 [16] cli_1.1.0          parallel_3.5.1     yaml_2.2.0        
 [19] xfun_0.7           loo_2.1.0          gridExtra_2.3     
 [22] withr_2.1.2        stringr_1.4.0      dplyr_0.8.1       
 [25] knitr_1.23         fs_1.3.1           stats4_3.5.1      
 [28] rprojroot_1.3-2    grid_3.5.1         tidyselect_0.2.5  
-[31] glue_1.3.1         inline_0.3.15      R6_2.4.0          
-[34] processx_3.3.1     rmarkdown_1.13     callr_3.2.0       
-[37] purrr_0.3.2        magrittr_1.5       whisker_0.3-2     
-[40] codetools_0.2-16   matrixStats_0.54.0 ps_1.3.0          
-[43] backports_1.1.4    scales_1.0.0       htmltools_0.3.6   
-[46] assertthat_0.2.1   colorspace_1.4-1   labeling_0.3      
-[49] stringi_1.4.3      lazyeval_0.2.2     munsell_0.5.0     
-[52] crayon_1.3.4      </code></pre>
+[31] inline_0.3.15      glue_1.3.1         R6_2.4.1          
+[34] processx_3.4.1     rmarkdown_1.13     farver_2.0.1      
+[37] callr_3.3.2        purrr_0.3.2        magrittr_1.5      
+[40] whisker_0.3-2      codetools_0.2-16   matrixStats_0.55.0
+[43] ps_1.3.0           backports_1.1.5    scales_1.1.0      
+[46] htmltools_0.3.6    assertthat_0.2.1   colorspace_1.4-1  
+[49] labeling_0.3       stringi_1.4.3      lazyeval_0.2.2    
+[52] munsell_0.5.0      crayon_1.3.4      </code></pre>
 </div>
 </div>
 
