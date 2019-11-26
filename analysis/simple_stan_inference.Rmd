@@ -142,6 +142,53 @@ model {
 
 ```
 
+Try to integrate psi using stan - the problem seems to be that STAN doesn't recognize the function "integrate_1d"
+
+{stan, output.var="test", eval=F}
+functions {
+  real integrand(real x, real xc, real[] W, real[] x_r, int[] x_i) {
+    int N; 
+    real mu;
+    real B;
+    real no_c; 
+    N = x_i[1];
+    mu = x_r[1];
+    B = x_r[2];
+    no_c = ((x * (1- x))^((4*N*mu) - 1)) * exp(-4 * N * B * W[1] * x);
+    return no_c;
+  }
+  real my_raf_lpdf(real[] x, real[] W, int N, real mu, real B, real[] x_r, int[] x_i){ // PSI density 
+    vector[num_elements(x)] prob;
+    real lprob;
+    real r;
+    r = integrate_1d(integrand, (0.5/(2*N)),(1 - (0.5/(2*N))), W, x_r, x_i, 1e-6);
+    for (i in 1:num_elements(x)) {
+      prob[i] = ((x[i] * (1- x[i]))^((4*N*mu) - 1)) * exp(-4 * N * B * W[1] * x[i]) * r;
+    }
+    lprob = sum(log(prob));
+    return lprob;
+  }
+}
+data {
+  int<lower=0> m;         // Number snps
+  real y[m];              // RAF
+  real<lower=0> mu; // mutation rate
+  real B; // effect size
+  int N; // population size
+}
+parameters {
+  real<lower=1e-20, upper=1e-3> W[1];                // selection
+}
+model {
+  real x_r[2];
+  int x_i[1];
+  x_r = {mu, B};
+  x_i = {N};
+  y ~ my_raf_lpdf(W, N, mu, B, x_r, x_i); // posterior 
+
+}
+
+ 
 
 Finally we will fit the stan model and get the posterior distribution on W  
 ```{r, warning=FALSE}
@@ -240,6 +287,49 @@ model {
 
 ```
 
+Use the binom function - WIP
+```{stan output.var="simple_status2"}
+functions {
+  real my_derived_risk(real f, real W, int N, real mu, real B){ 
+    real prob;
+    prob = (exp(4 * N * B * W) - exp(4 * N * B * W * f)) / (-1 + exp(4 * N * B * W)) ;
+    return prob;
+  }
+  real my_ll_risk_log(int[] s, real[] x, real W, int N, real mu, real B){
+    vector[num_elements(x)] prob;
+    real lprob;
+    for (i in 1:num_elements(x)) {
+      if (x[i] == 0) {
+        prob[i] = 1 - my_derived_risk(x[i] , W, N, mu, B);
+      }
+      else {
+        prob[i] = my_derived_risk(x[i] , W, N, mu, B);
+      }
+    }
+    lprob = sum(log(prob));
+    return lprob;
+  }
+}
+data {
+  int<lower=0> m;         // Number snps
+  real x[m];              // RAF
+  int s[m];
+  real<lower=0> mu; // mutation rate
+  real B; // effect size
+  int N; // population size
+}
+parameters {
+  real<lower=1e-20, upper=1e-3> W;                // selection
+}
+model {
+// real p[m]
+// p[m] = function(x)
+  s ~ my_ll_risk(x, W, N, mu, B);
+}
+
+```
+
+
 Let's fit the STAN model to our data
 ```{r, warning=FALSE}
 data <- list(s = status, x = x_freqs, m = m, B = B, N = N, W=W, mu=mu)
@@ -254,6 +344,31 @@ traceplot(fit,pars="W" )
 ```
 
 Again I am not doing a very good job. Using the evolutionary information consistently over estimates W.  
+
+### Compare to R MLE  
+
+Since my posterior mean for W is consistently larger than the true W value, I want to compare it to my MLE inference in R. When I implimented it in R, I did a simple grid search where I tried a bunch of possible W values and picked the W that maximized the likelihood function.  
+
+Here is my grid search function:  
+```{r}
+grid_search <- function(end, by, x_freqs, status, N, B, m, mu){
+
+  # Start with a large range of W values 
+  W_range <- seq(0, end, by=by)
+
+  # Loop through and calculate the LL for each W value 
+  result_LL_freq <- rep(NA, length(W_range))
+  result_LL_status <- rep(NA, length(W_range))
+  for (i in 1:length(W_range)) {
+    W_test <- W_range[i]
+    result_LL_freq[i] <- log_like_freq(data_freq=x_freqs,N=N,B=B,W=W_test,m=m, mu=mu)
+    result_LL_status[i] <- log_like_status(data_freq=x_freqs,data_status=status,N=N,B=B,W=W_test,m=m)
+  }  
+  
+  return(c(W_range[which.max(result_LL_freq)],W_range[which.max(result_LL_status)]))
+}
+```
+
 
 ## Infer W using both RAF and Evolutionary Status  
 

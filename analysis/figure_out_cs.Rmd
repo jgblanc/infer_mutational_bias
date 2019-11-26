@@ -1,0 +1,17 @@
+---
+title: "figure_out_cs"
+author: "Jennifer Blanc"
+date: "11/26/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## What is happening with the CS in their analysis 
+
+Interesting regions 
+
+r_beta <- subset(r1_chr1, r1_chr1$BP < 110000000 & r1_chr1$BP > 109000000)
+r_beta <- subset(r1_chr1, r1_chr1$BP < 231000000 & r1_chr1$BP > 230000000)
