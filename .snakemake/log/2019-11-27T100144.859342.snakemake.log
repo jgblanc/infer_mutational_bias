@@ -1,0 +1,24 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_evo_info
+	1
+
+[Wed Nov 27 10:01:44 2019]
+rule add_evo_info:
+    input: output/47UKBB/parsed_alphas/biochemistry_HDLcholesterol_alphas_parsed.txt
+    output: output/47UKBB/evo_info_added/biochemistry_HDLcholesterol_evo_added.txt
+    jobid: 0
+    wildcards: trait=biochemistry_HDLcholesterol
+
+[Wed Nov 27 10:01:44 2019]
+Error in rule add_evo_info:
+    jobid: 0
+    output: output/47UKBB/evo_info_added/biochemistry_HDLcholesterol_evo_added.txt
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2019-11-27T100144.859342.snakemake.log

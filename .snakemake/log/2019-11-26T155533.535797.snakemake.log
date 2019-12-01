@@ -1,0 +1,24 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	parse_alphas_funct
+	1
+
+[Tue Nov 26 15:55:33 2019]
+rule parse_alphas_funct:
+    input: data/47UKBB/biochemistry_HDLcholesterol.funct.alphas.parquet, data/47UKBB/biochemistry_HDLcholesterol.txt
+    output: output/47UKBB/parsed_alphas/biochemistry_HDLcholesterol_alphas_parsed.txt
+    jobid: 0
+    wildcards: trait=biochemistry_HDLcholesterol
+
+[Tue Nov 26 15:57:31 2019]
+Error in rule parse_alphas_funct:
+    jobid: 0
+    output: output/47UKBB/parsed_alphas/biochemistry_HDLcholesterol_alphas_parsed.txt
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2019-11-26T155533.535797.snakemake.log

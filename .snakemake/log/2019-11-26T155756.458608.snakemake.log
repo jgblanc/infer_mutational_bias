@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	parse_alphas_funct
+	1
+
+[Tue Nov 26 15:57:56 2019]
+rule parse_alphas_funct:
+    input: data/47UKBB/biochemistry_HDLcholesterol.funct.alphas.parquet, data/47UKBB/biochemistry_HDLcholesterol.txt
+    output: output/47UKBB/parsed_alphas/biochemistry_HDLcholesterol_alphas_parsed.txt
+    jobid: 0
+    wildcards: trait=biochemistry_HDLcholesterol
+
+[Tue Nov 26 16:00:39 2019]
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2019-11-26T155756.458608.snakemake.log

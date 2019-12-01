@@ -1,0 +1,5 @@
+Building DAG of jobs...
+MissingInputException in line 2 of /Users/jenniferblanc/infer_mutational_bias/Snakefile:
+Missing input files for rule parse_alphas_funct:
+data/47UKBB/{biochemistry_Houtput/47UKBB/evo_info_added/biochemistry_HDLcholesterol.txt
+data/47UKBB/{biochemistry_Houtput/47UKBB/evo_info_added/biochemistry_HDLcholesterol.funct.alphas.parquet
