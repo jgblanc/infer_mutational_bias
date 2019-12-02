@@ -29,16 +29,12 @@ d. PIP>0.01
 
 The table below shows the number of SNPs in both the alpha and the released fine-mapping files for our traits:  
 
-\begin{table}[]
-\begin{tabular}{|l|l|l|}
-\hline
-Trait  & alphas   & gwas   \\ \hline
-HDL    & 15589643 & 402183 \\ \hline
-LDL    & 11708765 & 274585 \\ \hline
-Cardio & 15236185 & 381036 \\ \hline
-Height & 16820494 & 478839 \\ \hline
-\end{tabular}
-\end{table}  
+| Trait        | alphas           | gwas  |
+| ------------- |:-------------:| -----:|
+| HDL      | 15589643  | 402183 |
+| LDL      | 11708765      |   274585 |
+| Cardio | 15236185      |    381036 |
+| Height | 16820494 | 478839 |
 
 After I sorted the alpha files as described above, I simply joined that data frame to the released fine-mapping table. I kept all of SNPs from the alpha file that fell into a CS and just put NAs if that SNP was not in the released file (left_join). So the output of the parse_alphas_47UKBB.R script is a table with all the SNPs that I assigned to a CS with all their information and the GWAS information if it existed.  
 
