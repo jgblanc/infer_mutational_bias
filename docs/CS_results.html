@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Jennifer Blanc" />
+
+
+<title>CS_Results</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">infer_mutational_bias</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/jgblanc/infer_mutational_bias">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">CS_Results</h1>
+<h4 class="author">Jennifer Blanc</h4>
+<h4 class="date">12/2/2019</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2019-12-02
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>infer_mutational_bias/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.4.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20191108code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20191108)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20191108code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20191108)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree76aeb72ddd7f4a731525e51064b1d8a95d743e76targetblank76aeb72a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/76aeb72ddd7f4a731525e51064b1d8a95d743e76" target="_blank">76aeb72</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree76aeb72ddd7f4a731525e51064b1d8a95d743e76targetblank76aeb72a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    .snakemake/conda-archive/
+    Ignored:    .snakemake/conda/
+    Ignored:    .snakemake/locks/
+    Ignored:    .snakemake/scripts/
+    Ignored:    .snakemake/shadow/
+    Ignored:    .snakemake/singularity/
+    Ignored:    data/47UKBB/
+    Ignored:    output/.DS_Store
+
+Untracked files:
+    Untracked:  .snakemake/log/2019-12-01T171704.445769.snakemake.log
+    Untracked:  .snakemake/log/2019-12-01T171716.445658.snakemake.log
+    Untracked:  .snakemake/log/2019-12-01T171934.887885.snakemake.log
+    Untracked:  .snakemake/log/2019-12-01T172033.450339.snakemake.log
+    Untracked:  .snakemake/log/2019-12-01T172434.758514.snakemake.log
+    Untracked:  .snakemake/log/2019-12-01T172515.391178.snakemake.log
+    Untracked:  .snakemake/log/2019-12-01T172540.390292.snakemake.log
+    Untracked:  .snakemake/log/2019-12-01T172641.640050.snakemake.log
+    Untracked:  .snakemake/log/2019-12-01T173001.519786.snakemake.log
+    Untracked:  .snakemake/log/2019-12-01T173023.677145.snakemake.log
+    Untracked:  .snakemake/log/2019-12-01T193449.229760.snakemake.log
+    Untracked:  .snakemake/log/2019-12-02T102328.145936.snakemake.log
+    Untracked:  .snakemake/log/2019-12-02T140133.805553.snakemake.log
+    Untracked:  .snakemake/log/2019-12-02T140143.026074.snakemake.log
+    Untracked:  .snakemake/log/2019-12-02T143231.038420.snakemake.log
+    Untracked:  .snakemake/log/2019-12-02T145534.696725.snakemake.log
+    Untracked:  .snakemake/log/2019-12-02T145633.467935.snakemake.log
+    Untracked:  .snakemake/log/2019-12-02T153155.369261.snakemake.log
+    Untracked:  .snakemake/log/2019-12-02T160651.352894.snakemake.log
+    Untracked:  .snakemake/log/2019-12-02T161052.405589.snakemake.log
+    Untracked:  .snakemake/metadata/b3V0cHV0LzQ3VUtCQi9FQUZfaW5mb19hZGRlZC9iaW9jaGVtaXN0cnlfSERMY2hvbGVzdGVyb2xfRUFGLnR4dA==
+    Untracked:  .snakemake/metadata/b3V0cHV0LzQ3VUtCQi9SQUZfaW5mb19hZGRlZC9iaW9jaGVtaXN0cnlfSERMY2hvbGVzdGVyb2xfUkFGLnR4dA==
+    Untracked:  code/get_EAF_rsID.py
+    Untracked:  code/get_EAF_rsID.py~
+    Untracked:  code/get_RAF.R
+    Untracked:  code/get_RAF_rsID.py~
+    Untracked:  output/47UKBB/
+
+Unstaged changes:
+    Modified:   .snakemake/metadata/b3V0cHV0LzQ3VUtCQi9ldm9faW5mb19hZGRlZC9iaW9jaGVtaXN0cnlfSERMY2hvbGVzdGVyb2xfZXZvX2FkZGVkLnR4dA==
+    Modified:   .snakemake/metadata/b3V0cHV0LzQ3VUtCQi9wYXJzZWRfYWxwaGFzL2Jpb2NoZW1pc3RyeV9IRExjaG9sZXN0ZXJvbF9hbHBoYXNfcGFyc2VkLnR4dA==
+    Modified:   code/parse_alphas_47UKBB.R
+    Modified:   snakefile
+    Modified:   snakefile~
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the R Markdown and HTML files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view them.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/76aeb72ddd7f4a731525e51064b1d8a95d743e76/analysis/CS_results.Rmd" target="_blank">76aeb72</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-12-02
+</td>
+<td>
+Started analyzing cs results
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Here I will first outline the data processing I did on the data we got from this paper <a href="https://www.biorxiv.org/content/10.1101/807792v2">link</a>. After I outline all of the data processing, I will look at the data for HDL and see what we have.</p>
+<p>From Omer directly we recieved 8 .parquet files that had the alpha values from SUSIE for all of the SNPs used in the analysis. For each of the four traits we asked for (HDL, LDL, Height, and Cardiovascular disease) we got an .parquet alpha file for both functionally and non-functionally informed fine-mapping analysis. I wrote a script (code/parse_alphas_47UKBB.R) to create credible sets from each alpha file. The goal of this script is to create 95% credible sets from the alpha values. It loops through the SNPs on each chromosome and then loops through each region in the chromosome. While the 3Mb regions are overlapping, SNPs in the alpha file are only listed onece, in the regions for which they are most central to. Within each region I sorted all the SNPs on the alpha_1 column and calculated the cumulative sum, I took the first x number of SNPs until the cumulative sum was greater than 0.95 and assigned them a unique ID (chr:region:cs). I repeated this for all 10 alpha columns in the region.</p>
+<p>From the publically released data from the paper, I dowloaded the fine-mapping results for all 4 of our traits. These files has SNP information and beta_prior_var, beta_posterior_mean, beta_posterior_sd, pip causal_set, P_BOLT_LMM, and MAF. However not all analyzed SNPs are in the released file. According to their website SNPs were included in the file if they satisfied at least one of the following conditions:</p>
+<ol style="list-style-type: lower-alpha">
+<li>Posterior mean of beta^2 (i.e. squared effect size, in units of standardized genotypes) &gt; 1e-8<br />
+</li>
+<li>Resides in at least one 95% credible set<br />
+</li>
+<li>posterior mean of beta &gt; 1e-4 (in asbsolute value)<br />
+</li>
+<li>PIP&gt;0.01</li>
+</ol>
+<p>The table below shows the number of SNPs in both the alpha and the released fine-mapping files for our traits:</p>
+
+<p>After I sorted the alpha files as described above, I simply joined that data frame to the released fine-mapping table. I kept all of SNPs from the alpha file that fell into a CS and just put NAs if that SNP was not in the released file (left_join). So the output of the parse_alphas_47UKBB.R script is a table with all the SNPs that I assigned to a CS with all their information and the GWAS information if it existed.</p>
+<p>Next I used a series of scripts to figure out which allele is derived for each SNP and the frequencies of different alleles. First I recyled a script (code/get_evolutionary_information_from_1kg_rsID.py) which takes file I have from 1000 Genomes which lists which allele at each SNP is the derived one and the output of my parsed_alpha script and check if the A1 allele (the effect allele) is derived or not and records T or F in an additional column.</p>
+<p>Now we have evolutionary information but we still don’t know risk allele frequency because we only have MAF and we don’t know which allele is the minor allele. From Omer directly I got 4 files named (bolt_337K_unrelStringentBrit_MAF0.001_v3.{trait}.bgen.stats) that have a column with the effect allele (A1) frequency. The script (code/get_EAF_rsID.py) just matches rsIDs to add a column with the effect allele frequency from the other table.</p>
+<p>We now have all the information we need. The final script (code/get_RAF.R) just adds a bunch of columns we might be interested in. First it checks the sign of the beta_posterior_mean and assigns the SNP as risk or protective (postive beta = risk). It then calculates the risk allele frequency (1 - EAF, if a protective SNP) and derived allele frequency (1 - EAF, if EA ancestral). I also split up the unique ID into separate columns to make it easier to works with.</p>
+</div>
+<div id="summary-of-data" class="section level2">
+<h2>Summary of Data</h2>
+<p>Load processed data</p>
+<pre class="r"><code>data &lt;- fread(&quot;output/47UKBB/RAF_info_added/biochemistry_HDLcholesterol_RAF.txt&quot;)</code></pre>
+<p>How many SNPs do we have and how many SNPs fall into more than one CS?</p>
+<pre class="r"><code>nrow(data)</code></pre>
+<pre><code>[1] 109271</code></pre>
+<pre class="r"><code>table(duplicated(data$SNP))</code></pre>
+<pre><code>
+FALSE  TRUE 
+53783 55488 </code></pre>
+<pre class="r"><code>length(unique(data$SNP))</code></pre>
+<pre><code>[1] 53783</code></pre>
+<p>More than half the SNPs belong to 2 credible sets. That means we have 53,783 unique SNPs.</p>
+<p>How many unique credible sets did we make?</p>
+<pre class="r"><code>length(unique(data$UNIQ_ID))</code></pre>
+<pre><code>[1] 563</code></pre>
+<p>For how many SNPs do we have finemapping information?</p>
+<pre class="r"><code>table(!is.na(data$pip))</code></pre>
+<pre><code>
+FALSE  TRUE 
+90953 18318 </code></pre>
+<p>We have finemapping information for 18,318 SNPs.</p>
+<p>What is the distribution of number of SNPs in a credible set?</p>
+<pre class="r"><code>counts &lt;- data %&gt;% group_by(UNIQ_ID) %&gt;% tally() 
+ggplot(counts, aes(x = n)) + geom_histogram(bins=50) + theme_bw()</code></pre>
+<p><img src="figure/CS_results.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Most credible sets have less than 10 SNPs but a few of then have over 12,000 SNPs in them! The giant credible sets are 8:8:4, 8:8:7, 8:8:8, 8:8:9, and 8:8:10. I’m going to look at this region and see what is happening</p>
+<pre class="r"><code>giant_region &lt;- subset(data, data$CHR == 8 &amp; data$REGION_ID == 8)
+nrow(giant_region)</code></pre>
+<pre><code>[1] 67198</code></pre>
+<p>There at 67,198 SNPs that made it into credible sets in this region and we don’t have GWAS information for any of them. I think they must be part of the long range LD region that the paper says they took out (chr8 8M-12M). Let’s check the other long range LD regions they said they took out…just from scanning the data it looks like we don’t have any CS in the chr 6 LD region and we do have a set of cs’s in the chr 11 region, however they aren’t making giant cs like in the chromosome 8 region.</p>
+<p>How many of my CS SNPs fall into what the paper calls a causal set?</p>
+<pre class="r"><code>table(data$causal_set == -999)</code></pre>
+<pre><code>
+FALSE  TRUE 
+ 6941 11377 </code></pre>
+<p>Of the 18,318 SNPs for which we have fine-mapping SNPs for, 11,377 are in a causal set as determined by the paper.</p>
+</div>
+<div id="sample-analysis" class="section level2">
+<h2>Sample analysis</h2>
+<p>** RAF ** Using the data we have, I’m doing to try and look at a few thing that I think are interesting. The first thing I want to look at is the average risk allele frequency</p>
+<p>** Distribution of D/A alleles in CS **</p>
+<p>First let’s pick a few regions with multiple credible sets:</p>
+<pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 1 &amp; data$REGION_ID == 1)
+ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
+<p><img src="figure/CS_results.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 1 &amp; data$REGION_ID == 21)
+ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
+<p><img src="figure/CS_results.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 1 &amp; data$REGION_ID == 23)
+ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
+<p><img src="figure/CS_results.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Its hard to learn anything by just looking at a few regions…let’s try to group CS</p>
+<pre class="r"><code>#data %&gt;% group_by(UNIQ_ID) %&gt;% mutate(prop_rd = count(RISK_DERIVED == T))</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.5.1 (2018-07-02)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS High Sierra 10.13.6
+
+Matrix products: default
+BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] arrow_0.15.0      forcats_0.4.0     stringr_1.4.0    
+ [4] dplyr_0.8.1       purrr_0.3.2       readr_1.3.1      
+ [7] tidyr_0.8.3       tibble_2.1.3      ggplot2_3.2.1    
+[10] tidyverse_1.2.1   data.table_1.12.2
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_0.2.5 xfun_0.7         haven_2.1.0      lattice_0.20-38 
+ [5] colorspace_1.4-1 generics_0.0.2   htmltools_0.3.6  yaml_2.2.0      
+ [9] rlang_0.4.1      pillar_1.4.2     glue_1.3.1       withr_2.1.2     
+[13] bit64_0.9-7      modelr_0.1.4     readxl_1.3.1     lifecycle_0.1.0 
+[17] munsell_0.5.0    gtable_0.3.0     workflowr_1.4.0  cellranger_1.1.0
+[21] rvest_0.3.4      evaluate_0.14    labeling_0.3     knitr_1.23      
+[25] broom_0.5.2      Rcpp_1.0.3       scales_1.1.0     backports_1.1.5 
+[29] jsonlite_1.6     farver_2.0.1     fs_1.3.1         bit_1.1-14      
+[33] hms_0.4.2        digest_0.6.22    stringi_1.4.3    grid_3.5.1      
+[37] rprojroot_1.3-2  cli_1.1.0        tools_3.5.1      magrittr_1.5    
+[41] lazyeval_0.2.2   crayon_1.3.4     whisker_0.3-2    pkgconfig_2.0.3 
+[45] xml2_1.2.0       lubridate_1.7.4  assertthat_0.2.1 rmarkdown_1.13  
+[49] httr_1.4.0       rstudioapi_0.10  R6_2.4.1         nlme_3.1-140    
+[53] git2r_0.25.2     compiler_3.5.1  </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
