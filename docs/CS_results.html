@@ -535,10 +535,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree76aeb72ddd7f4a731525e51064b1d8a95d743e76targetblank76aeb72a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/76aeb72ddd7f4a731525e51064b1d8a95d743e76" target="_blank">76aeb72</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreef73f5ce459beb958ecdd4f6234187d9a3911e7b0targetblankf73f5cea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/f73f5ce459beb958ecdd4f6234187d9a3911e7b0" target="_blank">f73f5ce</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree76aeb72ddd7f4a731525e51064b1d8a95d743e76targetblank76aeb72a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreef73f5ce459beb958ecdd4f6234187d9a3911e7b0targetblankf73f5cea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -635,6 +635,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/f73f5ce459beb958ecdd4f6234187d9a3911e7b0/analysis/CS_results.Rmd" target="_blank">f73f5ce</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-12-02
+</td>
+<td>
+Fixed table
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/d501548d967ef91d377dfea94686709b0e4dbd6e/docs/CS_results.html" target="_blank">d501548</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-12-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/76aeb72ddd7f4a731525e51064b1d8a95d743e76/analysis/CS_results.Rmd" target="_blank">76aeb72</a>
 </td>
 <td>
@@ -669,7 +703,37 @@ Started analyzing cs results
 <li>PIP&gt;0.01</li>
 </ol>
 <p>The table below shows the number of SNPs in both the alpha and the released fine-mapping files for our traits:</p>
-
+<table>
+<thead>
+<tr class="header">
+<th>Trait</th>
+<th align="center">alphas</th>
+<th align="right">gwas</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HDL</td>
+<td align="center">15589643</td>
+<td align="right">402183</td>
+</tr>
+<tr class="even">
+<td>LDL</td>
+<td align="center">11708765</td>
+<td align="right">274585</td>
+</tr>
+<tr class="odd">
+<td>Cardio</td>
+<td align="center">15236185</td>
+<td align="right">381036</td>
+</tr>
+<tr class="even">
+<td>Height</td>
+<td align="center">16820494</td>
+<td align="right">478839</td>
+</tr>
+</tbody>
+</table>
 <p>After I sorted the alpha files as described above, I simply joined that data frame to the released fine-mapping table. I kept all of SNPs from the alpha file that fell into a CS and just put NAs if that SNP was not in the released file (left_join). So the output of the parse_alphas_47UKBB.R script is a table with all the SNPs that I assigned to a CS with all their information and the GWAS information if it existed.</p>
 <p>Next I used a series of scripts to figure out which allele is derived for each SNP and the frequencies of different alleles. First I recyled a script (code/get_evolutionary_information_from_1kg_rsID.py) which takes file I have from 1000 Genomes which lists which allele at each SNP is the derived one and the output of my parsed_alpha script and check if the A1 allele (the effect allele) is derived or not and records T or F in an additional column.</p>
 <p>Now we have evolutionary information but we still don’t know risk allele frequency because we only have MAF and we don’t know which allele is the minor allele. From Omer directly I got 4 files named (bolt_337K_unrelStringentBrit_MAF0.001_v3.{trait}.bgen.stats) that have a column with the effect allele (A1) frequency. The script (code/get_EAF_rsID.py) just matches rsIDs to add a column with the effect allele frequency from the other table.</p>
@@ -702,6 +766,43 @@ FALSE  TRUE
 <pre class="r"><code>counts &lt;- data %&gt;% group_by(UNIQ_ID) %&gt;% tally() 
 ggplot(counts, aes(x = n)) + geom_histogram(bins=50) + theme_bw()</code></pre>
 <p><img src="figure/CS_results.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d501548d967ef91d377dfea94686709b0e4dbd6e/docs/figure/CS_results.Rmd/unnamed-chunk-5-1.png" target="_blank">d501548</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-12-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Most credible sets have less than 10 SNPs but a few of then have over 12,000 SNPs in them! The giant credible sets are 8:8:4, 8:8:7, 8:8:8, 8:8:9, and 8:8:10. I’m going to look at this region and see what is happening</p>
 <pre class="r"><code>giant_region &lt;- subset(data, data$CHR == 8 &amp; data$REGION_ID == 8)
 nrow(giant_region)</code></pre>
@@ -722,12 +823,123 @@ FALSE  TRUE
 <pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 1 &amp; data$REGION_ID == 1)
 ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
 <p><img src="figure/CS_results.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d501548d967ef91d377dfea94686709b0e4dbd6e/docs/figure/CS_results.Rmd/unnamed-chunk-8-1.png" target="_blank">d501548</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-12-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 1 &amp; data$REGION_ID == 21)
 ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
 <p><img src="figure/CS_results.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d501548d967ef91d377dfea94686709b0e4dbd6e/docs/figure/CS_results.Rmd/unnamed-chunk-9-1.png" target="_blank">d501548</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-12-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 1 &amp; data$REGION_ID == 23)
 ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
 <p><img src="figure/CS_results.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
+Past versions of unnamed-chunk-10-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d501548d967ef91d377dfea94686709b0e4dbd6e/docs/figure/CS_results.Rmd/unnamed-chunk-10-1.png" target="_blank">d501548</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-12-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Its hard to learn anything by just looking at a few regions…let’s try to group CS</p>
 <pre class="r"><code>#data %&gt;% group_by(UNIQ_ID) %&gt;% mutate(prop_rd = count(RISK_DERIVED == T))</code></pre>
 <br>
