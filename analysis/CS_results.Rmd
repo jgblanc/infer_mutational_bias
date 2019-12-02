@@ -1,0 +1,127 @@
+---
+title: "CS_Results"
+author: "Jennifer Blanc"
+date: "12/2/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+rm(list = ls())
+knitr::opts_chunk$set(echo = TRUE)
+library(data.table)
+library(tidyverse)
+library(arrow)
+getwd()
+```
+
+## Introduction 
+
+Here I will first outline the data processing I did on the data we got from this paper [link](https://www.biorxiv.org/content/10.1101/807792v2). After I outline all of the data processing, I will look at the data for HDL and see what we have. 
+
+From Omer directly we recieved 8 .parquet files that had the alpha values from SUSIE for all of the SNPs used in the analysis. For each of the four traits we asked for (HDL, LDL, Height, and Cardiovascular disease) we got an .parquet alpha file for both functionally and non-functionally informed fine-mapping analysis. I wrote a script (code/parse_alphas_47UKBB.R) to create credible sets from each alpha file. The goal of this script is to create 95% credible sets from the alpha values. It loops through the SNPs on each chromosome and then loops through each region in the chromosome. While the 3Mb regions are overlapping, SNPs in the alpha file are only listed onece, in the regions for which they are most central to. Within each region I sorted all the SNPs on the alpha_1 column and calculated the cumulative sum, I took the first x number of SNPs until the cumulative sum was greater than 0.95 and assigned them a unique ID (chr:region:cs). I repeated this for all 10 alpha columns in the region. 
+
+From the publically released data from the paper, I dowloaded the fine-mapping results for all 4 of our traits. These files has SNP information and beta_prior_var, beta_posterior_mean, beta_posterior_sd, pip causal_set, P_BOLT_LMM, and MAF. However not all analyzed SNPs are in the released file. According to their website SNPs were included in the file if they satisfied at least one of the following conditions: 
+
+a. Posterior mean of beta^2 (i.e. squared effect size, in units of standardized genotypes) > 1e-8  
+b. Resides in at least one 95% credible set  
+c. posterior mean of beta > 1e-4 (in asbsolute value)  
+d. PIP>0.01  
+
+The table below shows the number of SNPs in both the alpha and the released fine-mapping files for our traits:  
+
+\begin{table}[]
+\begin{tabular}{|l|l|l|}
+\hline
+Trait  & alphas   & gwas   \\ \hline
+HDL    & 15589643 & 402183 \\ \hline
+LDL    & 11708765 & 274585 \\ \hline
+Cardio & 15236185 & 381036 \\ \hline
+Height & 16820494 & 478839 \\ \hline
+\end{tabular}
+\end{table}  
+
+After I sorted the alpha files as described above, I simply joined that data frame to the released fine-mapping table. I kept all of SNPs from the alpha file that fell into a CS and just put NAs if that SNP was not in the released file (left_join). So the output of the parse_alphas_47UKBB.R script is a table with all the SNPs that I assigned to a CS with all their information and the GWAS information if it existed.  
+
+Next I used a series of scripts to figure out which allele is derived for each SNP and the frequencies of different alleles. First I recyled a script (code/get_evolutionary_information_from_1kg_rsID.py) which takes file I have from 1000 Genomes which lists which allele at each SNP is the derived one and the output of my parsed_alpha script and check if the A1 allele (the effect allele) is derived or not and records T or F in an additional column. 
+
+Now we have evolutionary information but we still don't know risk allele frequency because we only have MAF and we don't know which allele is the minor allele. From Omer directly I got 4 files named (bolt_337K_unrelStringentBrit_MAF0.001_v3.{trait}.bgen.stats) that have a column with the effect allele (A1) frequency. The script (code/get_EAF_rsID.py) just matches rsIDs to add a column with the effect allele frequency from the other table. 
+
+We now have all the information we need. The final script (code/get_RAF.R) just adds a bunch of columns we might be interested in. First it checks the sign of the beta_posterior_mean and assigns the SNP as risk or protective (postive beta = risk). It then calculates the risk allele frequency (1 - EAF, if a protective SNP) and derived allele frequency (1 - EAF, if EA ancestral). I also split up the unique ID into separate columns to make it easier to works with.  
+
+## Summary of Data 
+
+Load processed data
+```{r}
+data <- fread("output/47UKBB/RAF_info_added/biochemistry_HDLcholesterol_RAF.txt")
+```
+
+How many SNPs do we have and how many SNPs fall into more than one CS?
+```{r}
+nrow(data)
+table(duplicated(data$SNP))
+length(unique(data$SNP))
+```
+More than half the SNPs belong to 2 credible sets. That means we have 53,783 unique SNPs.  
+
+How many unique credible sets did we make?  
+```{r}
+length(unique(data$UNIQ_ID))
+```
+
+For how many SNPs do we have finemapping information?  
+```{r}
+table(!is.na(data$pip))
+```
+We have finemapping information for 18,318 SNPs. 
+
+What is the distribution of number of SNPs in a credible set?  
+```{r}
+counts <- data %>% group_by(UNIQ_ID) %>% tally() 
+ggplot(counts, aes(x = n)) + geom_histogram(bins=50) + theme_bw()
+```
+
+Most credible sets have less than 10 SNPs but a few of then have over 12,000 SNPs in them! The giant credible sets are 8:8:4, 8:8:7, 8:8:8, 8:8:9, and 8:8:10. I'm going to look at this region and see what is happening 
+
+```{r}
+giant_region <- subset(data, data$CHR == 8 & data$REGION_ID == 8)
+nrow(giant_region)
+```
+
+There at 67,198 SNPs that made it into credible sets in this region and we don't have GWAS information for any of them. I think they must be part of the long range LD region that the paper says they took out (chr8 8M-12M). Let's check the other long range LD regions they said they took out...just from scanning the data it looks like we don't have any CS in the chr 6 LD region and we do have a set of cs's in the chr 11 region, however they aren't making giant cs like in the chromosome 8 region.   
+
+How many of my CS SNPs fall into what the paper calls a causal set? 
+```{r}
+table(data$causal_set == -999)
+```
+Of the 18,318 SNPs for which we have fine-mapping SNPs for, 11,377 are in a causal set as determined by the paper.  
+
+## Sample analysis 
+
+** RAF ** 
+Using the data we have, I'm doing to try and look at a few thing that I think are interesting. The first thing I want to look at is the average risk allele frequency  
+
+** Distribution of D/A alleles in CS **  
+
+First let's pick a few regions with multiple credible sets:  
+
+```{r}
+ms_region <- subset(data, data$CHR == 1 & data$REGION_ID == 1)
+ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
+```
+
+```{r}
+ms_region <- subset(data, data$CHR == 1 & data$REGION_ID == 21)
+ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
+```
+
+```{r}
+ms_region <- subset(data, data$CHR == 1 & data$REGION_ID == 23)
+ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
+```
+
+Its hard to learn anything by just looking at a few regions...let's try to group CS 
+```{r}
+#data %>% group_by(UNIQ_ID) %>% mutate(prop_rd = count(RISK_DERIVED == T))
+```
+
+
