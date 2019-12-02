@@ -89,7 +89,7 @@ How many of my CS SNPs fall into what the paper calls a causal set?
 ```{r}
 table(data$causal_set == -999)
 ```
-Of the 18,318 SNPs for which we have fine-mapping SNPs for, 11,377 are in a causal set as determined by the paper.  
+Of the 18,318 SNPs for which we have fine-mapping SNPs for, 6941 are in a causal set as determined by the paper.  
 
 ## Sample analysis 
 
