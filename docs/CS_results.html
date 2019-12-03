@@ -444,7 +444,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2019-12-02
+<strong>Last updated:</strong> 2019-12-03
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -535,10 +535,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreed847430f708142d68d168eeab95da6d116cb5914targetblankd847430a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/d847430f708142d68d168eeab95da6d116cb5914" target="_blank">d847430</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreed739aa78936451dc5cd51447146b885c0af5110btargetblankd739aa7a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/d739aa78936451dc5cd51447146b885c0af5110b" target="_blank">d739aa7</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreed847430f708142d68d168eeab95da6d116cb5914targetblankd847430a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreed739aa78936451dc5cd51447146b885c0af5110btargetblankd739aa7a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -630,6 +630,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d739aa78936451dc5cd51447146b885c0af5110b/analysis/CS_results.Rmd" target="_blank">d739aa7</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-12-03
+</td>
+<td>
+Worked on sample analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/b1c64207b927a16f586bd6a30fa51ac61f5ff25d/docs/CS_results.html" target="_blank">b1c6420</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-12-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -776,7 +810,8 @@ Started analyzing cs results
 <div id="summary-of-data" class="section level2">
 <h2>Summary of Data</h2>
 <p>Load processed data</p>
-<pre class="r"><code>data &lt;- fread(&quot;output/47UKBB/RAF_info_added/biochemistry_HDLcholesterol_RAF.txt&quot;)</code></pre>
+<pre class="r"><code>data &lt;- fread(&quot;output/47UKBB/RAF_info_added/biochemistry_HDLcholesterol_RAF.txt&quot;)
+data$ES &lt;- data$beta_posterior_mean / sqrt(2 * data$MAF * (1 - data$MAF)) # Convert to biologically meaningful effect size </code></pre>
 <p>How many SNPs do we have and how many SNPs fall into more than one CS?</p>
 <pre class="r"><code>nrow(data)</code></pre>
 <pre><code>[1] 109271</code></pre>
@@ -841,7 +876,7 @@ jgblanc
 <pre class="r"><code>giant_region &lt;- subset(data, data$CHR == 8 &amp; data$REGION_ID == 8)
 nrow(giant_region)</code></pre>
 <pre><code>[1] 67198</code></pre>
-<p>There at 67,198 SNPs that made it into credible sets in this region and we don’t have GWAS information for any of them. I think they must be part of the long range LD region that the paper says they took out (chr8 8M-12M). Let’s check the other long range LD regions they said they took out…just from scanning the data it looks like we don’t have any CS in the chr 6 LD region and we do have a set of cs’s in the chr 11 region, however they aren’t making giant cs like in the chromosome 8 region.</p>
+<p>There are 67,198 SNPs that made it into credible sets in this region and we don’t have GWAS information for any of them. I think they must be part of the long range LD region that the paper says they took out (chr8 8M-12M). Let’s check the other long range LD regions they said they took out…just from scanning the data it looks like we don’t have any CS in the chr 6 LD region and we do have a set of cs’s in the chr 11 region, however they aren’t making giant cs like in the chromosome 8 region.</p>
 <p>How many of my CS SNPs fall into what the paper calls a causal set?</p>
 <pre class="r"><code>table(data$causal_set == -999)</code></pre>
 <pre><code>
@@ -851,11 +886,10 @@ FALSE  TRUE
 </div>
 <div id="sample-analysis" class="section level2">
 <h2>Sample analysis</h2>
-<p>** RAF ** Using the data we have, I’m doing to try and look at a few thing that I think are interesting. The first thing I want to look at is the average risk allele frequency</p>
-<p>** Distribution of D/A alleles in CS **</p>
-<p>First let’s pick a few regions with multiple credible sets:</p>
-<pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 1 &amp; data$REGION_ID == 1)
-ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
+<p><em>RAF</em> Using the data we have, I’m doing to try and look at a few thing that I think are interesting. The first thing I want to look at is the average risk allele frequency. To do this I will take the weigted average of the risk allele freq in each of the 563 CS.</p>
+<pre class="r"><code>avg_RAF &lt;- data %&gt;% drop_na(RAF) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(wa = (sum(RAF * pip)/sum(pip)))
+ggplot(avg_RAF, aes(x=&quot;RAF&quot;, y=wa)) + geom_boxplot(fill = &quot;blue&quot;) + theme_bw() + coord_flip() + ylab(&quot;RAF&quot;)</code></pre>
+<pre><code>Warning: Removed 4 rows containing non-finite values (stat_boxplot).</code></pre>
 <p><img src="figure/CS_results.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
@@ -894,8 +928,9 @@ jgblanc
 </table>
 </div>
 </div>
-<pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 1 &amp; data$REGION_ID == 21)
-ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
+<p>Now lets look at the plot of RAF vs effect size. To do this we will eliminate SNPs that don’t have GWAS information. First let’s just try to plot all the SNPs</p>
+<pre class="r"><code>data %&gt;% drop_na(beta_posterior_mean) %&gt;% ggplot(aes(x=RAF,y=abs(ES), color = RISK_DERIVED)) + geom_point() + theme_bw()</code></pre>
+<pre><code>Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="figure/CS_results.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
@@ -934,8 +969,10 @@ jgblanc
 </table>
 </div>
 </div>
-<pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 1 &amp; data$REGION_ID == 23)
-ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
+<p>Now let’s use a weighted average of the effect size within each CS</p>
+<pre class="r"><code>avg_beta &lt;- data %&gt;% drop_na(beta_posterior_mean) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(ES = (sum(ES * pip)/sum(pip)), raf = (sum(RAF * pip)/sum(pip)))
+ggplot(avg_beta, aes(x=raf,y=abs(ES))) + geom_point() + theme_bw()</code></pre>
+<pre><code>Warning: Removed 5 rows containing missing values (geom_point).</code></pre>
 <p><img src="figure/CS_results.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
@@ -974,8 +1011,38 @@ jgblanc
 </table>
 </div>
 </div>
+<p>We can’t really color by the derived ancestral status because there are multiple SNPs with different status’s in each set.</p>
+<p>** Distribution of D/A alleles in CS **</p>
+<p>First let’s pick a few regions with multiple credible sets:</p>
+<pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 1 &amp; data$REGION_ID == 1)
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
+<p><img src="figure/CS_results.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 1 &amp; data$REGION_ID == 21)
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
+<p><img src="figure/CS_results.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 1 &amp; data$REGION_ID == 23)
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
+<p><img src="figure/CS_results.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Its hard to learn anything by just looking at a few regions…let’s try to group CS</p>
-<pre class="r"><code>#data %&gt;% group_by(UNIQ_ID) %&gt;% mutate(prop_rd = count(RISK_DERIVED == T))</code></pre>
+<pre class="r"><code>da_distribution &lt;- data %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum(RISK_DERIVED == T)/n()))
+
+ggplot(da_distribution, aes(x=prop_ad)) + geom_histogram() + theme_bw()</code></pre>
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="figure/CS_results.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>table(da_distribution$prop_ad == 0 | da_distribution$prop_ad == 1)</code></pre>
+<pre><code>
+FALSE  TRUE 
+  292   242 </code></pre>
+<p>It looks like about half the credible sets are either completely derived or ancestral.</p>
+<p>Let’s look at a few sets where ~half the risk alleles are derived and half are ancestral.</p>
+<pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 5 &amp; data$REGION_ID == 76 &amp; data$CS_ID == 2)
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
+<pre><code>Warning: Removed 859 rows containing missing values (geom_point).</code></pre>
+<p><img src="figure/CS_results.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ms_region &lt;- subset(data, data$CHR == 2 &amp; data$REGION_ID == 95 &amp; data$CS_ID == 1)
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()</code></pre>
+<pre><code>Warning: Removed 2085 rows containing missing values (geom_point).</code></pre>
+<p><img src="figure/CS_results.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
