@@ -11,7 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 library(data.table)
 library(tidyverse)
 library(arrow)
-getwd()
 ```
 
 ## Introduction 
@@ -49,6 +48,7 @@ We now have all the information we need. The final script (code/get_RAF.R) just 
 Load processed data
 ```{r}
 data <- fread("output/47UKBB/RAF_info_added/biochemistry_HDLcholesterol_RAF.txt")
+data$ES <- data$beta_posterior_mean / sqrt(2 * data$MAF * (1 - data$MAF)) # Convert to biologically meaningful effect size 
 ```
 
 How many SNPs do we have and how many SNPs fall into more than one CS?
@@ -83,7 +83,7 @@ giant_region <- subset(data, data$CHR == 8 & data$REGION_ID == 8)
 nrow(giant_region)
 ```
 
-There at 67,198 SNPs that made it into credible sets in this region and we don't have GWAS information for any of them. I think they must be part of the long range LD region that the paper says they took out (chr8 8M-12M). Let's check the other long range LD regions they said they took out...just from scanning the data it looks like we don't have any CS in the chr 6 LD region and we do have a set of cs's in the chr 11 region, however they aren't making giant cs like in the chromosome 8 region.   
+There are 67,198 SNPs that made it into credible sets in this region and we don't have GWAS information for any of them. I think they must be part of the long range LD region that the paper says they took out (chr8 8M-12M). Let's check the other long range LD regions they said they took out...just from scanning the data it looks like we don't have any CS in the chr 6 LD region and we do have a set of cs's in the chr 11 region, however they aren't making giant cs like in the chromosome 8 region.   
 
 How many of my CS SNPs fall into what the paper calls a causal set? 
 ```{r}
@@ -93,8 +93,25 @@ Of the 18,318 SNPs for which we have fine-mapping SNPs for, 6941 are in a causal
 
 ## Sample analysis 
 
-** RAF ** 
-Using the data we have, I'm doing to try and look at a few thing that I think are interesting. The first thing I want to look at is the average risk allele frequency  
+*RAF* 
+Using the data we have, I'm doing to try and look at a few thing that I think are interesting. The first thing I want to look at is the average risk allele frequency. To do this I will take the weigted average of the risk allele freq in each of the 563 CS. 
+
+```{r}
+avg_RAF <- data %>% drop_na(RAF) %>% group_by(UNIQ_ID) %>% summarise(wa = (sum(RAF * pip)/sum(pip)))
+ggplot(avg_RAF, aes(x="RAF", y=wa)) + geom_boxplot(fill = "blue") + theme_bw() + coord_flip() + ylab("RAF")
+```
+
+Now lets look at the plot of RAF vs effect size. To do this we will eliminate SNPs that don't have GWAS information. First let's just try to plot all the SNPs   
+```{r}
+data %>% drop_na(beta_posterior_mean) %>% ggplot(aes(x=RAF,y=abs(ES), color = RISK_DERIVED)) + geom_point() + theme_bw()
+```
+
+Now let's use a weighted average of the effect size within each CS  
+```{r}
+avg_beta <- data %>% drop_na(beta_posterior_mean) %>% group_by(UNIQ_ID) %>% summarise(ES = (sum(ES * pip)/sum(pip)), raf = (sum(RAF * pip)/sum(pip)))
+ggplot(avg_beta, aes(x=raf,y=abs(ES))) + geom_point() + theme_bw()
+```
+We can't really color by the derived ancestral status because there are multiple SNPs with different status's in each set.  
 
 ** Distribution of D/A alleles in CS **  
 
@@ -102,22 +119,36 @@ First let's pick a few regions with multiple credible sets:
 
 ```{r}
 ms_region <- subset(data, data$CHR == 1 & data$REGION_ID == 1)
-ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
 ```
 
 ```{r}
 ms_region <- subset(data, data$CHR == 1 & data$REGION_ID == 21)
-ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
 ```
 
 ```{r}
 ms_region <- subset(data, data$CHR == 1 & data$REGION_ID == 23)
-ggplot(ms_region, aes(x=BP, y=beta_posterior_mean, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
 ```
 
 Its hard to learn anything by just looking at a few regions...let's try to group CS 
 ```{r}
-#data %>% group_by(UNIQ_ID) %>% mutate(prop_rd = count(RISK_DERIVED == T))
+da_distribution <- data %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n()))
+
+ggplot(da_distribution, aes(x=prop_ad)) + geom_histogram() + theme_bw()
+table(da_distribution$prop_ad == 0 | da_distribution$prop_ad == 1)
 ```
 
+It looks like about half the credible sets are either completely derived or ancestral.   
 
+Let's look at a few sets where ~half the risk alleles are derived and half are ancestral.  
+```{r}
+ms_region <- subset(data, data$CHR == 5 & data$REGION_ID == 76 & data$CS_ID == 2)
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
+```
+
+```{r}
+ms_region <- subset(data, data$CHR == 2 & data$REGION_ID == 95 & data$CS_ID == 1)
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
+```
