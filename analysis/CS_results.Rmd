@@ -11,6 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 library(data.table)
 library(tidyverse)
 library(arrow)
+library(ggpubr)
+library(rowr)
+library(ggbeeswarm)
 ```
 
 ## Introduction 
@@ -19,136 +22,208 @@ Here I will first outline the data processing I did on the data we got from this
 
 From Omer directly we recieved 8 .parquet files that had the alpha values from SUSIE for all of the SNPs used in the analysis. For each of the four traits we asked for (HDL, LDL, Height, and Cardiovascular disease) we got an .parquet alpha file for both functionally and non-functionally informed fine-mapping analysis. I wrote a script (code/parse_alphas_47UKBB.R) to create credible sets from each alpha file. The goal of this script is to create 95% credible sets from the alpha values. It loops through the SNPs on each chromosome and then loops through each region in the chromosome. While the 3Mb regions are overlapping, SNPs in the alpha file are only listed onece, in the regions for which they are most central to. Within each region I sorted all the SNPs on the alpha_1 column and calculated the cumulative sum, I took the first x number of SNPs until the cumulative sum was greater than 0.95 and assigned them a unique ID (chr:region:cs). I repeated this for all 10 alpha columns in the region. 
 
-From the publically released data from the paper, I dowloaded the fine-mapping results for all 4 of our traits. These files has SNP information and beta_prior_var, beta_posterior_mean, beta_posterior_sd, pip causal_set, P_BOLT_LMM, and MAF. However not all analyzed SNPs are in the released file. According to their website SNPs were included in the file if they satisfied at least one of the following conditions: 
+ 
 
-a. Posterior mean of beta^2 (i.e. squared effect size, in units of standardized genotypes) > 1e-8  
-b. Resides in at least one 95% credible set  
-c. posterior mean of beta > 1e-4 (in asbsolute value)  
-d. PIP>0.01  
+The table below shows the number of SNPs in the alpha files:  
 
-The table below shows the number of SNPs in both the alpha and the released fine-mapping files for our traits:  
+| Trait        | alphas           | 
+| ------------- |:-------------:|
+| HDL      | 15589643  |
+| LDL      | 11708765      |
+| Cardio | 15236185      |
+| Height | 16820494 |  
 
-| Trait        | alphas           | gwas  |
-| ------------- |:-------------:| -----:|
-| HDL      | 15589643  | 402183 |
-| LDL      | 11708765      |   274585 |
-| Cardio | 15236185      |    381036 |
-| Height | 16820494 | 478839 |
-
-After I sorted the alpha files as described above, I simply joined that data frame to the released fine-mapping table. I kept all of SNPs from the alpha file that fell into a CS and just put NAs if that SNP was not in the released file (left_join). So the output of the parse_alphas_47UKBB.R script is a table with all the SNPs that I assigned to a CS with all their information and the GWAS information if it existed.  
+From Omer I also recieved 4 files (one per trait) named bolt_337K_unrelStringentBrit_MAF0.001_v3.{trait}.bgen.stats that contains the bolt summary statistics for all the SNPs listed in the alpha files (and more). This file also includes the frequency of the effect allele (A1).  
+After I sorted the alpha files as described above, I simply joined that data frame to the bolt data. I kept all of SNPs from the alpha file that fell into a CS and just added the bolt info for those SNPs (left_join). So the output of the parse_alphas_47UKBB.R script is a table with all the SNPs that I assigned to a CS with all their information and the bolt GWAS information.    
 
 Next I used a series of scripts to figure out which allele is derived for each SNP and the frequencies of different alleles. First I recyled a script (code/get_evolutionary_information_from_1kg_rsID.py) which takes file I have from 1000 Genomes which lists which allele at each SNP is the derived one and the output of my parsed_alpha script and check if the A1 allele (the effect allele) is derived or not and records T or F in an additional column. 
 
-Now we have evolutionary information but we still don't know risk allele frequency because we only have MAF and we don't know which allele is the minor allele. From Omer directly I got 4 files named (bolt_337K_unrelStringentBrit_MAF0.001_v3.{trait}.bgen.stats) that have a column with the effect allele (A1) frequency. The script (code/get_EAF_rsID.py) just matches rsIDs to add a column with the effect allele frequency from the other table. 
-
-We now have all the information we need. The final script (code/get_RAF.R) just adds a bunch of columns we might be interested in. First it checks the sign of the beta_posterior_mean and assigns the SNP as risk or protective (postive beta = risk). It then calculates the risk allele frequency (1 - EAF, if a protective SNP) and derived allele frequency (1 - EAF, if EA ancestral). I also split up the unique ID into separate columns to make it easier to works with.  
+We now have all the information we need. The final script (code/get_RAF.R) just adds a bunch of columns we might be interested in. First it checks the sign of the BETA column and assigns the SNP as risk or protective (postive beta = risk). It then calculates the risk allele frequency (1 - EAF, if a protective SNP) and derived allele frequency (1 - EAF, if EA ancestral), and MAF (1 - EAF, if EAF >= 0.5). I also split up the unique ID into separate columns to make it easier to works with. I also transform the BETA (calculated from a standardized genotype matrix) to a biologically meaningful effect size, by dividing the BETA column by sqrt(2 x MAF x (1 - MAF)), I call this column ES for effect size.  
 
 ## Summary of Data 
 
 Load processed data
 ```{r}
-data <- fread("output/47UKBB/RAF_info_added/biochemistry_HDLcholesterol_RAF.txt")
-data$ES <- data$beta_posterior_mean / sqrt(2 * data$MAF * (1 - data$MAF)) # Convert to biologically meaningful effect size 
+height <- fread("../output/47UKBB/RAF_info_added/body_HEIGHTz_RAF.txt")
+HDL <- fread("../output/47UKBB/RAF_info_added/biochemistry_HDLcholesterol_RAF.txt")
+LDL <- fread("../output/47UKBB/RAF_info_added/biochemistry_LDLdirect_RAF.txt")
+cardio <- fread("../output/47UKBB/RAF_info_added/disease_CARDIOVASCULAR_RAF.txt")
 ```
 
-How many SNPs do we have and how many SNPs fall into more than one CS?
+**How many SNPs do we have and how many SNPs fall into more than one CS?**  
+
+Height - We have 379,600 SNPs, 19883 of them fall in more than one CS
 ```{r}
-nrow(data)
-table(duplicated(data$SNP))
-length(unique(data$SNP))
+nrow(height)
+table(duplicated(height$SNP))
 ```
-More than half the SNPs belong to 2 credible sets. That means we have 53,783 unique SNPs.  
-
-How many unique credible sets did we make?  
+ 
+HDL - We have 109,271 SNPs, 55,488 of them fall in more than one CS
 ```{r}
-length(unique(data$UNIQ_ID))
+nrow(HDL)
+table(duplicated(HDL$SNP))
 ```
 
-For how many SNPs do we have finemapping information?  
+LDL - We have 129,616 SNPs, 86,623 of them fall in more than one CS
 ```{r}
-table(!is.na(data$pip))
+nrow(LDL)
+table(duplicated(LDL$SNP))
 ```
-We have finemapping information for 18,318 SNPs. 
 
-What is the distribution of number of SNPs in a credible set?  
+Cardio - We have 39,662 SNPs, 43 of them fall in more than one CS
 ```{r}
-counts <- data %>% group_by(UNIQ_ID) %>% tally() 
-ggplot(counts, aes(x = n)) + geom_histogram(bins=50) + theme_bw()
+nrow(cardio)
+table(duplicated(cardio$SNP))
 ```
 
-Most credible sets have less than 10 SNPs but a few of then have over 12,000 SNPs in them! The giant credible sets are 8:8:4, 8:8:7, 8:8:8, 8:8:9, and 8:8:10. I'm going to look at this region and see what is happening 
+**How many unique credible sets did we make?**  
 
+Height 
 ```{r}
-giant_region <- subset(data, data$CHR == 8 & data$REGION_ID == 8)
-nrow(giant_region)
+length(unique(height$UNIQ_ID))
 ```
 
-There are 67,198 SNPs that made it into credible sets in this region and we don't have GWAS information for any of them. I think they must be part of the long range LD region that the paper says they took out (chr8 8M-12M). Let's check the other long range LD regions they said they took out...just from scanning the data it looks like we don't have any CS in the chr 6 LD region and we do have a set of cs's in the chr 11 region, however they aren't making giant cs like in the chromosome 8 region.   
-
-How many of my CS SNPs fall into what the paper calls a causal set? 
+HDL
 ```{r}
-table(data$causal_set == -999)
+length(unique(HDL$UNIQ_ID))
 ```
-Of the 18,318 SNPs for which we have fine-mapping SNPs for, 6941 are in a causal set as determined by the paper.  
+
+LDL
+```{r}
+length(unique(LDL$UNIQ_ID))
+```
+
+Cardio
+```{r}
+length(unique(cardio$UNIQ_ID))
+```
+
+We have the bolt summary statistics for the all the SNPs in all of our credible sets in all 4 of our traits.  
+
+**What is the distribution of number of SNPs in a credible set?**    
+```{r}
+counts_height <- height %>% group_by(UNIQ_ID) %>% tally() 
+counts_HDL <- HDL %>% group_by(UNIQ_ID) %>% tally()
+counts_LDL <- LDL %>% group_by(UNIQ_ID) %>% tally()
+counts_cardio <- cardio %>% group_by(UNIQ_ID) %>% tally()
+
+p1 <- ggplot(counts_height, aes(x = n)) + geom_histogram(bins=50, fill = "darkred") + theme_bw() + ggtitle("Height") + theme(plot.title = element_text(hjust = 0.5))
+p2 <- ggplot(counts_HDL, aes(x = n)) + geom_histogram(bins=50, fill = "gold") + theme_bw() + ggtitle("HDL") + theme(plot.title = element_text(hjust = 0.5))
+p3 <- ggplot(counts_LDL, aes(x = n)) + geom_histogram(bins=50, fill = "darkgreen") + theme_bw() + ggtitle("LDL") + theme(plot.title = element_text(hjust = 0.5))
+p4 <- ggplot(counts_cardio, aes(x = n)) + geom_histogram(bins=50, fill = "darkblue") + theme_bw() + ggtitle("Cardio") + theme(plot.title = element_text(hjust = 0.5))
+
+
+ggarrange(p1, p2, p3, p4)
+```
+
+Height: The largest CS's are on chromosome 5 (n~17,000), the are also CS's (n~11,000) that look like they are in the long range LD region of chromosome 8.  
+HDL: The largest CS's (n~13,000) are in the long range chr 8 LD region   
+LDL: The largest CS's (n~14,000) are in the long range chr 8 LD region  
+Cardio: The largest CS (n~11,000) is on chromosome 16 and the next largest is on chromosome 11 near (2 megabases before) the long range LD listed in the paper   
+
+Let's remove all credible sets with more than 100 SNPs and look at the distribution of number of SNPs in CS's again:  
+```{r}
+counts_height <- subset(counts_height, counts_height$n <= 100) 
+counts_HDL <- subset(counts_HDL, counts_HDL$n <= 100) 
+counts_LDL <- subset(counts_LDL, counts_LDL$n <= 100) 
+counts_cardio <- subset(counts_cardio, counts_cardio$n <= 100) 
+
+p1 <- ggplot(counts_height, aes(x = n)) + geom_histogram(bins=50, fill = "darkred") + theme_bw() + ggtitle("Height") + theme(plot.title = element_text(hjust = 0.5))
+p2 <- ggplot(counts_HDL, aes(x = n)) + geom_histogram(bins=50, fill = "gold") + theme_bw() + ggtitle("HDL") + theme(plot.title = element_text(hjust = 0.5))
+p3 <- ggplot(counts_LDL, aes(x = n)) + geom_histogram(bins=50, fill = "darkgreen") + theme_bw() + ggtitle("LDL") + theme(plot.title = element_text(hjust = 0.5))
+p4 <- ggplot(counts_cardio, aes(x = n)) + geom_histogram(bins=50, fill = "darkblue") + theme_bw() + ggtitle("Cardio") + theme(plot.title = element_text(hjust = 0.5))
+
+
+ggarrange(p1, p2, p3, p4)
+```
+
 
 ## Sample analysis 
 
-*RAF* 
-Using the data we have, I'm doing to try and look at a few thing that I think are interesting. The first thing I want to look at is the average risk allele frequency. To do this I will take the weigted average of the risk allele freq in each of the 563 CS. 
+**RAF**  
+
+Using the data we have, I'm doing to try and look at a few thing that I think are interesting. The first thing I want to look at is the average risk allele frequency. To do this I will take the weigted average of the risk allele freq in all of the CS's for each trait.  
 
 ```{r}
-avg_RAF <- data %>% drop_na(RAF) %>% group_by(UNIQ_ID) %>% summarise(wa = (sum(RAF * pip)/sum(pip)))
-ggplot(avg_RAF, aes(x="RAF", y=wa)) + geom_boxplot(fill = "blue") + theme_bw() + coord_flip() + ylab("RAF")
+avg_height <- height%>% group_by(UNIQ_ID) %>% summarise(height = (sum(RAF * ALPHA)/sum(ALPHA))) %>% select(height)
+avg_HDL <- HDL %>% group_by(UNIQ_ID) %>% summarise(HDL = (sum(RAF * ALPHA)/sum(ALPHA))) %>% select(HDL)
+avg_LDL <- LDL %>% group_by(UNIQ_ID) %>% summarise(LDL = (sum(RAF * ALPHA)/sum(ALPHA))) %>% select(LDL)
+avg_cardio <- cardio %>% group_by(UNIQ_ID) %>% summarise(cardio = (sum(RAF * ALPHA)/sum(ALPHA))) %>% select(cardio)
+
+avg_RAF <- cbind.fill(avg_height, avg_HDL, avg_LDL, avg_cardio, fill = NA)
+avg_RAF <- melt(avg_RAF)
+
+cols <- c("darkred", "gold", "darkgreen", "darkblue")
+ggplot(avg_RAF, aes(y=value, x=variable, color = variable)) + geom_beeswarm() + scale_color_manual(values = cols) + theme_bw() + ylab("RAF")
 ```
 
-Now lets look at the plot of RAF vs effect size. To do this we will eliminate SNPs that don't have GWAS information. First let's just try to plot all the SNPs   
-```{r}
-data %>% drop_na(beta_posterior_mean) %>% ggplot(aes(x=RAF,y=abs(ES), color = RISK_DERIVED)) + geom_point() + theme_bw()
+All four traits have an average risk allele frequency of ~0.5 and have a fairly even distribution across all possible risk allele frequencies.  
+
+**Distribution of derived alleles**  
+ 
+We are also interested in the distribution of derived risk allels vs ancestral risk alleles. First we wil plot the absolute value of the effect size vs risk allele frequency colored by the evolutionary status of the risk allele for all SNPs that are in credible sets (note I remove duplicated SNPs that fall in multiple credible sets)  
+```{r, warning=F}
+p1 <- height %>%  distinct(SNP, .keep_all = TRUE) %>% ggplot(aes(x=RAF,y=abs(ES), color = RISK_DERIVED)) + geom_point(alpha = 0.5) + theme_bw() + scale_color_manual(values = c("darkred","navy")) + ggtitle("Height") + theme(plot.title = element_text(hjust = 0.5))
+p2 <- HDL %>% distinct(SNP, .keep_all = TRUE) %>% ggplot(aes(x=RAF,y=abs(ES), color = RISK_DERIVED)) + geom_point(alpha = 0.5) + theme_bw() + scale_color_manual(values = c("darkred","navy")) + ggtitle("HDL") + theme(plot.title = element_text(hjust = 0.5))
+p3 <- LDL %>% distinct(SNP, .keep_all = TRUE) %>% ggplot(aes(x=RAF,y=abs(ES), color = RISK_DERIVED)) + geom_point(alpha = 0.5) + theme_bw() + scale_color_manual(values = c("darkred","navy")) + ggtitle("LDL") + theme(plot.title = element_text(hjust = 0.5))
+p4 <- cardio %>% distinct(SNP, .keep_all = TRUE) %>% ggplot(aes(x=RAF,y=abs(ES), color = RISK_DERIVED)) + geom_point(alpha = 0.5) + theme_bw() + scale_color_manual(values = c("darkred","navy")) + ggtitle("Cardio") + theme(plot.title = element_text(hjust = 0.5))
+
+ggarrange(p1,p2,p3,p4, common.legend = T, legend = "bottom")
 ```
+
+What I'm confused about in these plots is the shape - they look less U shaped and instead have sharp conrners. I'm thinking its because we don't actually have a 'threshold' for calling a single variant significant. So we have a bunch of variants with very small effect sizes that are included in large CS's? I'm not sure about the variants with effect sizes > 100, is that normal?      
+
 
 Now let's use a weighted average of the effect size within each CS  
 ```{r}
-avg_beta <- data %>% drop_na(beta_posterior_mean) %>% group_by(UNIQ_ID) %>% summarise(ES = (sum(ES * pip)/sum(pip)), raf = (sum(RAF * pip)/sum(pip)))
-ggplot(avg_beta, aes(x=raf,y=abs(ES))) + geom_point() + theme_bw()
+p1 <- height %>% group_by(UNIQ_ID) %>% summarise(ES = (sum(ES * ALPHA)/sum(ALPHA)), raf = (sum(RAF *ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf,y=abs(ES))) + geom_point(color = "darkred") + theme_bw() +  ggtitle("Height") + theme(plot.title = element_text(hjust = 0.5))
+p2 <- HDL %>% group_by(UNIQ_ID) %>% summarise(ES = (sum(ES * ALPHA)/sum(ALPHA)), raf = (sum(RAF *ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf,y=abs(ES))) + geom_point(color = "gold") + theme_bw() +  ggtitle("HDL") + theme(plot.title = element_text(hjust = 0.5))
+p3 <- LDL %>% group_by(UNIQ_ID) %>% summarise(ES = (sum(ES * ALPHA)/sum(ALPHA)), raf = (sum(RAF *ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf,y=abs(ES))) + geom_point(color = "darkgreen") + theme_bw() +  ggtitle("LDL") + theme(plot.title = element_text(hjust = 0.5))
+p4 <- cardio %>% group_by(UNIQ_ID) %>% summarise(ES = (sum(ES * ALPHA)/sum(ALPHA)), raf = (sum(RAF *ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf,y=abs(ES))) + geom_point(color = "darkblue") + theme_bw() +  ggtitle("Cardio") + theme(plot.title = element_text(hjust = 0.5))
+
+ggarrange(p1,p2,p3,p4, common.legend = T, legend = "bottom")
 ```
-We can't really color by the derived ancestral status because there are multiple SNPs with different status's in each set.  
+We can't really color by the derived ancestral status because there are multiple SNPs with different status's in each set - we will compare proportion of derived/ancestral alleles within each set in the next section.  
 
 ** Distribution of D/A alleles in CS **  
 
 First let's pick a few regions with multiple credible sets:  
 
 ```{r}
-ms_region <- subset(data, data$CHR == 1 & data$REGION_ID == 1)
-ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
+ms_region <- subset(height, height$CHR == 1 & height$REGION_ID == 2)
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw() +  ggtitle("Height") + theme(plot.title = element_text(hjust = 0.5))
 ```
 
 ```{r}
-ms_region <- subset(data, data$CHR == 1 & data$REGION_ID == 21)
-ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
+ms_region <- subset(HDL, HDL$CHR == 1 & HDL$REGION_ID == 21)
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw() +  ggtitle("HDL") + theme(plot.title = element_text(hjust = 0.5))
 ```
+
+
+Its hard to learn anything by just looking at a few regions...let's try to group CS and look at the proportion of risk alleles that are derived within a credible set.  
+```{r}
+p1 <- height %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n())) %>% ggplot(aes(x=prop_ad)) + geom_histogram(fill = "darkred", bins = 40) + theme_bw() +  ggtitle("Height") + theme(plot.title = element_text(hjust = 0.5))
+p2 <- HDL %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n())) %>% ggplot(aes(x=prop_ad)) + geom_histogram(fill = "gold", bins = 40) + theme_bw() +  ggtitle("HDL") + theme(plot.title = element_text(hjust = 0.5))
+p3 <- LDL %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n())) %>% ggplot(aes(x=prop_ad)) + geom_histogram(fill = "darkgreen", bins = 40) + theme_bw() +  ggtitle("LDL") + theme(plot.title = element_text(hjust = 0.5))
+p4 <- cardio %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n())) %>% ggplot(aes(x=prop_ad)) + geom_histogram(fill = "darkblue", bins = 40) + theme_bw() +  ggtitle("Cardio") + theme(plot.title = element_text(hjust = 0.5))
+
+ggarrange(p1,p2,p3,p4, common.legend = T, legend = "bottom")
+```
+
+For all traits approximately half of the credible sets have either all derived or all ancestral alleles, now we will compare the proportion of derived risk alleles within a credible set to the average RAF within the set.  
 
 ```{r}
-ms_region <- subset(data, data$CHR == 1 & data$REGION_ID == 23)
-ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
+p1 <- height %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n()), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = "darkred") + theme_bw() + ylab("Proportion of derived risk alleles") + ggtitle("Height") + theme(plot.title = element_text(hjust = 0.5))
+p2 <- HDL %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n()), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = "gold") + theme_bw() + ylab("Proportion of derived risk alleles") + ggtitle("HDL") + theme(plot.title = element_text(hjust = 0.5))
+p3 <- LDL %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n()), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = "darkgreen") + theme_bw() + ylab("Proportion of derived risk alleles") + ggtitle("LDL") + theme(plot.title = element_text(hjust = 0.5))
+p4 <- cardio %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n()), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = "darkblue") + theme_bw() + ylab("Proportion of derived risk alleles") + ggtitle("Cardio") + theme(plot.title = element_text(hjust = 0.5))
+
+ggarrange(p1,p2,p3,p4, common.legend = T, legend = "bottom" )
 ```
 
-Its hard to learn anything by just looking at a few regions...let's try to group CS 
-```{r}
-da_distribution <- data %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n()))
 
-ggplot(da_distribution, aes(x=prop_ad)) + geom_histogram() + theme_bw()
-table(da_distribution$prop_ad == 0 | da_distribution$prop_ad == 1)
-```
 
-It looks like about half the credible sets are either completely derived or ancestral.   
 
-Let's look at a few sets where ~half the risk alleles are derived and half are ancestral.  
-```{r}
-ms_region <- subset(data, data$CHR == 5 & data$REGION_ID == 76 & data$CS_ID == 2)
-ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
-```
 
-```{r}
-ms_region <- subset(data, data$CHR == 2 & data$REGION_ID == 95 & data$CS_ID == 1)
-ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw()
-```
+
+
