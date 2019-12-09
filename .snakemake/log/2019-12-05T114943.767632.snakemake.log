@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	parse_alphas_funct
+	1
+
+[Thu Dec  5 11:49:43 2019]
+rule parse_alphas_funct:
+    input: data/47UKBB/body_HEIGHTz.funct.alphas.parquet, data/47UKBB/bolt_337K_unrelStringentBrit_MAF0.001_v3.body_HEIGHTz.bgen.stats
+    output: output/47UKBB/parsed_alphas/body_HEIGHTz_alphas_parsed.txt
+    jobid: 0
+    wildcards: trait=body_HEIGHTz
+
+[Thu Dec  5 12:12:12 2019]
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2019-12-05T114943.767632.snakemake.log

@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_evo_info
+	1
+
+[Thu Dec  5 13:13:39 2019]
+rule add_evo_info:
+    input: output/47UKBB/parsed_alphas/body_HEIGHTz_alphas_parsed.txt
+    output: output/47UKBB/evo_info_added/body_HEIGHTz_evo_added.txt
+    jobid: 0
+    wildcards: trait=body_HEIGHTz
+
+[Thu Dec  5 13:16:19 2019]
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2019-12-05T131339.704902.snakemake.log

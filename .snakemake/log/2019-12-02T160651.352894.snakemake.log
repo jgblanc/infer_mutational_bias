@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_RAF_info
+	1
+
+[Mon Dec  2 16:06:51 2019]
+rule add_RAF_info:
+    input: output/47UKBB/EAF_info_added/biochemistry_HDLcholesterol_EAF.txt
+    output: output/47UKBB/RAF_info_added/biochemistry_HDLcholesterol_RAF.txt
+    jobid: 0
+    wildcards: trait=biochemistry_HDLcholesterol
+
+[Mon Dec  2 16:06:54 2019]
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2019-12-02T160651.352894.snakemake.log

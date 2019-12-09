@@ -1,0 +1,44 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_RAF_info
+	1	add_evo_info
+	1	parse_alphas_funct
+	3
+
+[Thu Dec  5 16:30:51 2019]
+rule parse_alphas_funct:
+    input: data/47UKBB/biochemistry_HDLcholesterol.funct.alphas.parquet, data/47UKBB/bolt_337K_unrelStringentBrit_MAF0.001_v3.biochemistry_HDLcholesterol.bgen.stats
+    output: output/47UKBB/parsed_alphas/biochemistry_HDLcholesterol_alphas_parsed.txt
+    jobid: 2
+    wildcards: trait=biochemistry_HDLcholesterol
+
+[Thu Dec  5 16:44:41 2019]
+Finished job 2.
+1 of 3 steps (33%) done
+
+[Thu Dec  5 16:44:41 2019]
+rule add_evo_info:
+    input: output/47UKBB/parsed_alphas/biochemistry_HDLcholesterol_alphas_parsed.txt
+    output: output/47UKBB/evo_info_added/biochemistry_HDLcholesterol_evo_added.txt
+    jobid: 1
+    wildcards: trait=biochemistry_HDLcholesterol
+
+[Thu Dec  5 16:47:15 2019]
+Finished job 1.
+2 of 3 steps (67%) done
+
+[Thu Dec  5 16:47:15 2019]
+rule add_RAF_info:
+    input: output/47UKBB/evo_info_added/biochemistry_HDLcholesterol_evo_added.txt
+    output: output/47UKBB/RAF_info_added/biochemistry_HDLcholesterol_RAF.txt
+    jobid: 0
+    wildcards: trait=biochemistry_HDLcholesterol
+
+[Thu Dec  5 16:47:19 2019]
+Finished job 0.
+3 of 3 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2019-12-05T163051.151332.snakemake.log

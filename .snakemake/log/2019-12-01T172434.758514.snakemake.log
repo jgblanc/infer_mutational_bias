@@ -1,0 +1,24 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_EAF_info
+	1
+
+[Sun Dec  1 17:24:34 2019]
+rule add_EAF_info:
+    input: output/47UKBB/evo_info_added/biochemistry_HDLcholesterol_evo_added.txt, data/47UKBB/bolt_337K_unrelStringentBrit_MAF0.001_v3.biochemistry_HDLcholesterol.bgen.stats
+    output: output/47UKBB/EAF_info_added/biochemistry_HDLcholesterol_EAF.txt
+    jobid: 0
+    wildcards: trait=biochemistry_HDLcholesterol
+
+[Sun Dec  1 17:24:35 2019]
+Error in rule add_EAF_info:
+    jobid: 0
+    output: output/47UKBB/EAF_info_added/biochemistry_HDLcholesterol_EAF.txt
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2019-12-01T172434.758514.snakemake.log

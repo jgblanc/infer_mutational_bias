@@ -1,0 +1,44 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_RAF_info
+	1	add_evo_info
+	1	parse_alphas_funct
+	3
+
+[Fri Dec  6 10:02:56 2019]
+rule parse_alphas_funct:
+    input: data/47UKBB/disease_CARDIOVASCULAR.funct.alphas.parquet, data/47UKBB/bolt_337K_unrelStringentBrit_MAF0.001_v3.disease_CARDIOVASCULAR.bgen.stats
+    output: output/47UKBB/parsed_alphas/disease_CARDIOVASCULAR_alphas_parsed.txt
+    jobid: 2
+    wildcards: trait=disease_CARDIOVASCULAR
+
+[Fri Dec  6 10:14:32 2019]
+Finished job 2.
+1 of 3 steps (33%) done
+
+[Fri Dec  6 10:14:32 2019]
+rule add_evo_info:
+    input: output/47UKBB/parsed_alphas/disease_CARDIOVASCULAR_alphas_parsed.txt
+    output: output/47UKBB/evo_info_added/disease_CARDIOVASCULAR_evo_added.txt
+    jobid: 1
+    wildcards: trait=disease_CARDIOVASCULAR
+
+[Fri Dec  6 10:17:15 2019]
+Finished job 1.
+2 of 3 steps (67%) done
+
+[Fri Dec  6 10:17:15 2019]
+rule add_RAF_info:
+    input: output/47UKBB/evo_info_added/disease_CARDIOVASCULAR_evo_added.txt
+    output: output/47UKBB/RAF_info_added/disease_CARDIOVASCULAR_RAF.txt
+    jobid: 0
+    wildcards: trait=disease_CARDIOVASCULAR
+
+[Fri Dec  6 10:17:17 2019]
+Finished job 0.
+3 of 3 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2019-12-06T100256.617380.snakemake.log
