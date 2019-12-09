@@ -185,7 +185,7 @@ ggarrange(p1,p2,p3,p4, common.legend = T, legend = "bottom")
 ```
 We can't really color by the derived ancestral status because there are multiple SNPs with different status's in each set - we will compare proportion of derived/ancestral alleles within each set in the next section.  
 
-** Distribution of D/A alleles in CS **  
+**Distribution of D/A alleles in CS**  
 
 First let's pick a few regions with multiple credible sets:  
 
@@ -212,11 +212,13 @@ ggarrange(p1,p2,p3,p4, common.legend = T, legend = "bottom")
 
 For all traits approximately half of the credible sets have either all derived or all ancestral alleles, now we will compare the proportion of derived risk alleles within a credible set to the average RAF within the set.  
 
+
+**weight by ALPHA**  
 ```{r}
-p1 <- height %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n()), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = "darkred") + theme_bw() + ylab("Proportion of derived risk alleles") + ggtitle("Height") + theme(plot.title = element_text(hjust = 0.5))
-p2 <- HDL %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n()), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = "gold") + theme_bw() + ylab("Proportion of derived risk alleles") + ggtitle("HDL") + theme(plot.title = element_text(hjust = 0.5))
-p3 <- LDL %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n()), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = "darkgreen") + theme_bw() + ylab("Proportion of derived risk alleles") + ggtitle("LDL") + theme(plot.title = element_text(hjust = 0.5))
-p4 <- cardio %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum(RISK_DERIVED == T)/n()), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = "darkblue") + theme_bw() + ylab("Proportion of derived risk alleles") + ggtitle("Cardio") + theme(plot.title = element_text(hjust = 0.5))
+p1 <- height %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum((RISK_DERIVED == T) * ALPHA)/sum(ALPHA)), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = "darkred") + theme_bw() + ylab("Proportion of derived risk alleles") + ggtitle("Height") + theme(plot.title = element_text(hjust = 0.5))
+p2 <- HDL %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum((RISK_DERIVED == T) * ALPHA)/sum(ALPHA)), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = "gold") + theme_bw() + ylab("Proportion of derived risk alleles") + ggtitle("HDL") + theme(plot.title = element_text(hjust = 0.5))
+p3 <- LDL %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum((RISK_DERIVED == T) * ALPHA)/sum(ALPHA)), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = "darkgreen") + theme_bw() + ylab("Proportion of derived risk alleles") + ggtitle("LDL") + theme(plot.title = element_text(hjust = 0.5))
+p4 <- cardio %>% drop_na(RISK_DERIVED) %>% group_by(UNIQ_ID) %>% summarise(prop_ad = (sum((RISK_DERIVED == T) * ALPHA)/sum(ALPHA)), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %>% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = "darkblue") + theme_bw() + ylab("Proportion of derived risk alleles") + ggtitle("Cardio") + theme(plot.title = element_text(hjust = 0.5))
 
 ggarrange(p1,p2,p3,p4, common.legend = T, legend = "bottom" )
 ```
