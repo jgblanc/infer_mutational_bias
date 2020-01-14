@@ -1,0 +1,94 @@
+---
+title: "PRF"
+author: "Jennifer Blanc"
+date: "1/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Intro  
+
+This document contains my notes on the poisson random field and how I will apply it to my project. First I will outline the general model based on these three papers:  
+
+1. Directional Selection and the Site-Frequency Spectrum  
+2. Population  Genetics of Polymorphism and Divergence  
+3. Population Genetics of Polymorphism and Divergence for Diploid SelectionModels With Arbitrary Dominance  
+
+I will also use this [tutorial](http://downloads.hindawi.com/archive/2008/257864.pdf) to outline the model.  
+
+Then I will try to outline how I will use the model for my own inference problem.  
+
+## Derivation of the Poisson Random Field Model    
+
+The original Sawyer and Hartl poisson random field model was designed to quantitively test the intensity of selection on a gene/genomic region.  
+
+**The Wright-Fisher Model**  
+
+The WF model describes the change in frequency of a single dreived allele in a population over time under the assumption of (1) non-overlapping generations, (2) constant population, and size (3) random mating. In a diploid WF model with no recurrent mutation, we can think of the process as binomially sampling alleles from the current generation to get the probability of of observing j copies of the derived alleles in the next generation $(p_{ij})$:  
+
+$$p_{ij} = {2N\choose j} (\Psi_i)^j(1-\Psi_i)^{2N - j}$$  
+
+Here $\Psi$ depends on the relative fitness of the derived allele compared to the ancestral allele (fitness = 1). 
+
+$$\Psi_i = \frac{x(1+s)}{x(1+s) + (1-x)}$$  
+
+We can see that if the derived allele is neutral, $s = 0$, then $\Psi_i = x$ and the frequency of the derived allele in the next generation is simply binomially sampling based on the frequency in the current generation. If the derived allele has a higher relative fitness compared to the ancestral allele, $\Psi_i > x$ and the allele is more likely to increase in frequency.  
+
+**Diffusion Theory**  
+
+(See notebook and Rice Chp 5 for a detailed derivation)
+
+The WF process is a discrete Markov chain, often in population genetics we want to work with a continous-time and continous-space diffusion process in order to derive quantities of interest. To do this we take the limits of the WF process as $N \rightarrow \infty$ and the scaled mutation ($N\mu$) and selection coefficient ($Ns$) remain constant.  
+
+In order to derive the diffusion, let's return to the discrete WF case and write the probability of observing j copies of the derived allele at time t+1 given that it started with k copies at time 0:  
+
+$$p_{kj}^{(t+1)} = \sum\limits_i p_{ki}^{(t)}p_{ij}$$  
+
+We can think of this probability of moving from i copies to j copies, summed over all possible values of i. For convience we can change the notation to that of a continous function:  
+
+$$f(j ; k, t+1)=\sum_{i} f(i ; k, t) p_{i j}$$  
+
+Here $f(j ; k, t+1)$ is again the probability of observing j copies of the derived allele at time t+1, starting with k copies at t=0. Now we can approximate this with our continous-time, continuous-space diffusion process shown below:  
+
+$$f(x+\delta x ; p, t+\delta t)=\int_{0}^{1} f(y ; p, t) f(x+\delta x ; y, \delta t) d y$$
+
+Now we are intergrating over all possible derived allele frequencies at $\delta t$ (y). We can perform a taylor series expansion to derived the Kolmogorov forward equation.  
+
+$$
+\frac{\partial f(x ; p, t)}{\partial t}=\frac{\partial^{2}[b(x) f(x ; p, t)]}{2 \partial x^{2}}-\frac{\partial[a(x) f(x ; p, t)]}{\partial x}
+$$
+
+Here a(x) is the expected change in in x due to directional forces like selection, mutation, migration, and recombination. The exact form of a(x) is chosed based on which forces we want to capture and how we choose to model those forces. b(x) is the change in variance due to genetic drift. The forward equation predicts the change in the distribution of allele frequencies as a function of the current distribution. We can also write down the Kolmogorov backward equation which tries to predict the distribution of allele frequencies give that the allele started at intial frequency of p. The backward equation is:  
+
+$$
+\frac{\partial f(x ; p, t)}{\partial t}=b(p) \frac{\partial^{2}[f(x ; p, t)]}{2 \partial p^{2}}+a(p) \frac{\partial[f(x ; p, t)]}{\partial p}
+$$
+
+**Derivations of Formulas Desribing Evolutionary Processes of Interest**  
+
+__Probability of Extinction__  
+
+$$
+P_{0}(p)=\frac{\int_{p}^{1} \psi(y) d y}{\int_{0}^{1} \psi(y) d y}
+$$
+
+__Probability of Fixation__  
+
+$$
+\begin{aligned}
+P_{1}(p) &=\frac{\int_{0}^{p} e^{-2 \int^{y}[a(z) / b(z)] d z} d y}{\int_{0}^{1} e^{-2 \int^{y}[a(z) / b(z)] d z} d z d y} \\
+&=\frac{\int_{0}^{p} e^{-4 N s y} d y}{\int_{0}^{1} e^{-4 N s y} d y}=\frac{1-e^{-4 N s p}}{1-e^{-4 N s}}
+\end{aligned}
+$$
+
+
+
+
+
+
+
+
+

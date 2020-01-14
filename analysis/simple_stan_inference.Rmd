@@ -92,7 +92,7 @@ B <- 1
 m <- 500 # Number of causal snps 
 
 # Value of W for simuation 
-W <- 1e-5
+W <- 1e-3
 
 # Simulate data 
 x_freqs <- simulate_data(N, B, W, m)
