@@ -444,7 +444,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2019-12-09
+<strong>Last updated:</strong> 2020-01-14
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -535,10 +535,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreef80bb2ee2e18e8f00af33c6faa8682ca47ed491btargetblankf80bb2ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/f80bb2ee2e18e8f00af33c6faa8682ca47ed491b" target="_blank">f80bb2e</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree7bfd1996bd9dba31b503ce791aed3012976ba5a3targetblank7bfd199a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/7bfd1996bd9dba31b503ce791aed3012976ba5a3" target="_blank">7bfd199</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreef80bb2ee2e18e8f00af33c6faa8682ca47ed491btargetblankf80bb2ea" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree7bfd1996bd9dba31b503ce791aed3012976ba5a3targetblank7bfd199a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -554,9 +554,19 @@ Ignored files:
     Ignored:    .snakemake/scripts/
     Ignored:    .snakemake/shadow/
     Ignored:    .snakemake/singularity/
+    Ignored:    analysis/.DS_Store
     Ignored:    data/47UKBB/
+    Ignored:    docs/.DS_Store
     Ignored:    output/.DS_Store
     Ignored:    output/47UKBB/
+
+Untracked files:
+    Untracked:  docs/assets/
+    Untracked:  docs/figure/simple_inference_PRF.Rmd/
+
+Unstaged changes:
+    Deleted:    analysis/figure_out_cs.Rmd
+    Deleted:    analysis/model_overvieew.Rmd
 
 </code></pre>
 <p>
@@ -595,6 +605,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/7bfd1996bd9dba31b503ce791aed3012976ba5a3/analysis/CS_results.Rmd" target="_blank">7bfd199</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-01-14
+</td>
+<td>
+Worked on inference problem
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/a28082d1e28ee2960fe255c1b833096611ee07ca/docs/CS_results.html" target="_blank">a28082d</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-12-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1138,6 +1182,27 @@ jgblanc
 </div>
 </div>
 <p>What I’m confused about in these plots is the shape - they look less U shaped and instead have sharp conrners. I’m thinking its because we don’t actually have a ‘threshold’ for calling a single variant significant. So we have a bunch of variants with very small effect sizes that are included in large CS’s? I’m not sure about the variants with effect sizes &gt; 100, is that normal?</p>
+<pre class="r"><code>t1 &lt;- subset(height, height$EAF &gt; 0.5)
+t1$MA_ES &lt;- -(t1$ES)
+t2 &lt;- subset(height, height$EAF &lt;= 0.5)
+t2$MA_ES &lt;- t2$ES
+test1 &lt;- rbind(t1,t2)
+test &lt;- test1 %&gt;%  mutate(bin = cut_number(MAF, n=100, labels= seq(1,100,1))) %&gt;% group_by(bin) %&gt;% summarise(mean_ES = (sum(MA_ES * ALPHA)/sum(ALPHA)), mean_MAF = mean(MAF))
+
+p1 &lt;- ggplot(test, aes(x=mean_MAF, y=mean_ES)) + geom_point() + scale_x_log10() + theme_bw() + xlab(&quot;Log(Mean MAF)&quot;) + ylab(&quot;Mean minor allele effect&quot;) + ggtitle(&quot;Height&quot;) +  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(&quot;~/Desktop/Height.png&quot;, p1)</code></pre>
+<pre><code>Saving 7 x 5 in image</code></pre>
+<pre class="r"><code>t1 &lt;- subset(cardio, cardio$EAF &gt; 0.5)
+t1$MA_ES &lt;- -(t1$ES)
+t2 &lt;- subset(cardio, cardio$EAF &lt;= 0.5)
+t2$MA_ES &lt;- t2$ES
+test &lt;- rbind(t1,t2)
+test &lt;- test %&gt;%  mutate(bin = cut_number(MAF, n=100, labels= seq(1,100,1))) %&gt;% group_by(bin) %&gt;% summarise(mean_ES = (sum(MA_ES * ALPHA)/sum(ALPHA)), mean_MAF = mean(MAF))
+p2 &lt;- ggplot(test, aes(x=mean_MAF, y=mean_ES)) + geom_point() + scale_x_log10() + theme_bw() + xlab(&quot;Log(Mean MAF)&quot;) + ylab(&quot;Mean minor allele effect&quot;) + ggtitle(&quot;Cardiovascular disease&quot;) +  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(&quot;~/Desktop/Cardio.png&quot;, p2)</code></pre>
+<pre><code>Saving 7 x 5 in image</code></pre>
 <p>Now let’s use a weighted average of the effect size within each CS</p>
 <pre class="r"><code>p1 &lt;- height %&gt;% group_by(UNIQ_ID) %&gt;% summarise(ES = (sum(ES * ALPHA)/sum(ALPHA)), raf = (sum(RAF *ALPHA)/sum(ALPHA))) %&gt;% ggplot(aes(x=raf,y=abs(ES))) + geom_point(color = &quot;darkred&quot;) + theme_bw() +  ggtitle(&quot;Height&quot;) + theme(plot.title = element_text(hjust = 0.5))
 p2 &lt;- HDL %&gt;% group_by(UNIQ_ID) %&gt;% summarise(ES = (sum(ES * ALPHA)/sum(ALPHA)), raf = (sum(RAF *ALPHA)/sum(ALPHA))) %&gt;% ggplot(aes(x=raf,y=abs(ES))) + geom_point(color = &quot;gold&quot;) + theme_bw() +  ggtitle(&quot;HDL&quot;) + theme(plot.title = element_text(hjust = 0.5))
@@ -1145,111 +1210,6 @@ p3 &lt;- LDL %&gt;% group_by(UNIQ_ID) %&gt;% summarise(ES = (sum(ES * ALPHA)/sum
 p4 &lt;- cardio %&gt;% group_by(UNIQ_ID) %&gt;% summarise(ES = (sum(ES * ALPHA)/sum(ALPHA)), raf = (sum(RAF *ALPHA)/sum(ALPHA))) %&gt;% ggplot(aes(x=raf,y=abs(ES))) + geom_point(color = &quot;darkblue&quot;) + theme_bw() +  ggtitle(&quot;Cardio&quot;) + theme(plot.title = element_text(hjust = 0.5))
 
 ggarrange(p1,p2,p3,p4, common.legend = T, legend = &quot;bottom&quot;)</code></pre>
-<p><img src="figure/CS_results.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
-Past versions of unnamed-chunk-14-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-14-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/20ae584e6082f36520d9c7ba44bebcee7b7990a7/docs/figure/CS_results.Rmd/unnamed-chunk-14-1.png" target="_blank">20ae584</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-12-09
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/76ee01773c578a2d7d5c80032769d9564276d07d/docs/figure/CS_results.Rmd/unnamed-chunk-14-1.png" target="_blank">76ee017</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-12-03
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>We can’t really color by the derived ancestral status because there are multiple SNPs with different status’s in each set - we will compare proportion of derived/ancestral alleles within each set in the next section.</p>
-<p><strong>Distribution of D/A alleles in CS</strong></p>
-<p>First let’s pick a few regions with multiple credible sets:</p>
-<pre class="r"><code>ms_region &lt;- subset(height, height$CHR == 1 &amp; height$REGION_ID == 2)
-ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw() +  ggtitle(&quot;Height&quot;) + theme(plot.title = element_text(hjust = 0.5))</code></pre>
-<p><img src="figure/CS_results.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-15-1">
-Past versions of unnamed-chunk-15-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-15-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/20ae584e6082f36520d9c7ba44bebcee7b7990a7/docs/figure/CS_results.Rmd/unnamed-chunk-15-1.png" target="_blank">20ae584</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-12-09
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/76ee01773c578a2d7d5c80032769d9564276d07d/docs/figure/CS_results.Rmd/unnamed-chunk-15-1.png" target="_blank">76ee017</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-12-03
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>ms_region &lt;- subset(HDL, HDL$CHR == 1 &amp; HDL$REGION_ID == 21)
-ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw() +  ggtitle(&quot;HDL&quot;) + theme(plot.title = element_text(hjust = 0.5))</code></pre>
 <p><img src="figure/CS_results.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-1">
@@ -1299,13 +1259,12 @@ jgblanc
 </table>
 </div>
 </div>
-<p>Its hard to learn anything by just looking at a few regions…let’s try to group CS and look at the proportion of risk alleles that are derived within a credible set.</p>
-<pre class="r"><code>p1 &lt;- height %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum(RISK_DERIVED == T)/n())) %&gt;% ggplot(aes(x=prop_ad)) + geom_histogram(fill = &quot;darkred&quot;, bins = 40) + theme_bw() +  ggtitle(&quot;Height&quot;) + theme(plot.title = element_text(hjust = 0.5))
-p2 &lt;- HDL %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum(RISK_DERIVED == T)/n())) %&gt;% ggplot(aes(x=prop_ad)) + geom_histogram(fill = &quot;gold&quot;, bins = 40) + theme_bw() +  ggtitle(&quot;HDL&quot;) + theme(plot.title = element_text(hjust = 0.5))
-p3 &lt;- LDL %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum(RISK_DERIVED == T)/n())) %&gt;% ggplot(aes(x=prop_ad)) + geom_histogram(fill = &quot;darkgreen&quot;, bins = 40) + theme_bw() +  ggtitle(&quot;LDL&quot;) + theme(plot.title = element_text(hjust = 0.5))
-p4 &lt;- cardio %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum(RISK_DERIVED == T)/n())) %&gt;% ggplot(aes(x=prop_ad)) + geom_histogram(fill = &quot;darkblue&quot;, bins = 40) + theme_bw() +  ggtitle(&quot;Cardio&quot;) + theme(plot.title = element_text(hjust = 0.5))
-
-ggarrange(p1,p2,p3,p4, common.legend = T, legend = &quot;bottom&quot;)</code></pre>
+<p>We can’t really color by the derived ancestral status because there are multiple SNPs with different status’s in each set - we will compare proportion of derived/ancestral alleles within each set in the next section.</p>
+<p>Height - the set with avg ES = 160 consists of 3 SNPs (rs77124641, rs73928558, rs369199454) with alphas (0.66981660, 0.26821524, 0.04392604). None of these SNPs turn up anything interesting when I googled them.</p>
+<p><strong>Distribution of D/A alleles in CS</strong></p>
+<p>First let’s pick a few regions with multiple credible sets:</p>
+<pre class="r"><code>ms_region &lt;- subset(height, height$CHR == 1 &amp; height$REGION_ID == 2)
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw() +  ggtitle(&quot;Height&quot;) + theme(plot.title = element_text(hjust = 0.5))</code></pre>
 <p><img src="figure/CS_results.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-17-1">
@@ -1344,14 +1303,8 @@ jgblanc
 </table>
 </div>
 </div>
-<p>For all traits approximately half of the credible sets have either all derived or all ancestral alleles, now we will compare the proportion of derived risk alleles within a credible set to the average RAF within the set.</p>
-<p><strong>weight by ALPHA</strong></p>
-<pre class="r"><code>p1 &lt;- height %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum((RISK_DERIVED == T) * ALPHA)/sum(ALPHA)), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %&gt;% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = &quot;darkred&quot;) + theme_bw() + ylab(&quot;Proportion of derived risk alleles&quot;) + ggtitle(&quot;Height&quot;) + theme(plot.title = element_text(hjust = 0.5))
-p2 &lt;- HDL %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum((RISK_DERIVED == T) * ALPHA)/sum(ALPHA)), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %&gt;% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = &quot;gold&quot;) + theme_bw() + ylab(&quot;Proportion of derived risk alleles&quot;) + ggtitle(&quot;HDL&quot;) + theme(plot.title = element_text(hjust = 0.5))
-p3 &lt;- LDL %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum((RISK_DERIVED == T) * ALPHA)/sum(ALPHA)), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %&gt;% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = &quot;darkgreen&quot;) + theme_bw() + ylab(&quot;Proportion of derived risk alleles&quot;) + ggtitle(&quot;LDL&quot;) + theme(plot.title = element_text(hjust = 0.5))
-p4 &lt;- cardio %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum((RISK_DERIVED == T) * ALPHA)/sum(ALPHA)), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %&gt;% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = &quot;darkblue&quot;) + theme_bw() + ylab(&quot;Proportion of derived risk alleles&quot;) + ggtitle(&quot;Cardio&quot;) + theme(plot.title = element_text(hjust = 0.5))
-
-ggarrange(p1,p2,p3,p4, common.legend = T, legend = &quot;bottom&quot; )</code></pre>
+<pre class="r"><code>ms_region &lt;- subset(HDL, HDL$CHR == 1 &amp; HDL$REGION_ID == 21)
+ggplot(ms_region, aes(x=BP, y=ES, color = RISK_DERIVED, shape = as.factor(CS_ID))) + geom_point() + theme_bw() +  ggtitle(&quot;HDL&quot;) + theme(plot.title = element_text(hjust = 0.5))</code></pre>
 <p><img src="figure/CS_results.Rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-1">
@@ -1377,6 +1330,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/a28082d1e28ee2960fe255c1b833096611ee07ca/docs/figure/CS_results.Rmd/unnamed-chunk-18-1.png" target="_blank">a28082d</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2019-12-09
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/20ae584e6082f36520d9c7ba44bebcee7b7990a7/docs/figure/CS_results.Rmd/unnamed-chunk-18-1.png" target="_blank">20ae584</a>
 </td>
 <td>
@@ -1390,6 +1354,23 @@ jgblanc
 </table>
 </div>
 </div>
+<p>Its hard to learn anything by just looking at a few regions…let’s try to group CS and look at the proportion of risk alleles that are derived within a credible set.</p>
+<pre class="r"><code>p1 &lt;- height %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum(RISK_DERIVED == T)/n())) %&gt;% ggplot(aes(x=prop_ad)) + geom_histogram(fill = &quot;darkred&quot;, bins = 40) + theme_bw() +  ggtitle(&quot;Height&quot;) + theme(plot.title = element_text(hjust = 0.5))
+p2 &lt;- HDL %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum(RISK_DERIVED == T)/n())) %&gt;% ggplot(aes(x=prop_ad)) + geom_histogram(fill = &quot;gold&quot;, bins = 40) + theme_bw() +  ggtitle(&quot;HDL&quot;) + theme(plot.title = element_text(hjust = 0.5))
+p3 &lt;- LDL %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum(RISK_DERIVED == T)/n())) %&gt;% ggplot(aes(x=prop_ad)) + geom_histogram(fill = &quot;darkgreen&quot;, bins = 40) + theme_bw() +  ggtitle(&quot;LDL&quot;) + theme(plot.title = element_text(hjust = 0.5))
+p4 &lt;- cardio %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum(RISK_DERIVED == T)/n())) %&gt;% ggplot(aes(x=prop_ad)) + geom_histogram(fill = &quot;darkblue&quot;, bins = 40) + theme_bw() +  ggtitle(&quot;Cardio&quot;) + theme(plot.title = element_text(hjust = 0.5))
+
+ggarrange(p1,p2,p3,p4, common.legend = T, legend = &quot;bottom&quot;)</code></pre>
+<p><img src="figure/CS_results.Rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>For all traits approximately half of the credible sets have either all derived or all ancestral alleles, now we will compare the proportion of derived risk alleles within a credible set to the average RAF within the set.</p>
+<p><strong>weight by ALPHA</strong></p>
+<pre class="r"><code>p1 &lt;- height %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum((RISK_DERIVED == T) * ALPHA)/sum(ALPHA)), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %&gt;% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = &quot;darkred&quot;) + theme_bw() + ylab(&quot;Proportion of derived risk alleles&quot;) + ggtitle(&quot;Height&quot;) + theme(plot.title = element_text(hjust = 0.5))
+p2 &lt;- HDL %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum((RISK_DERIVED == T) * ALPHA)/sum(ALPHA)), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %&gt;% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = &quot;gold&quot;) + theme_bw() + ylab(&quot;Proportion of derived risk alleles&quot;) + ggtitle(&quot;HDL&quot;) + theme(plot.title = element_text(hjust = 0.5))
+p3 &lt;- LDL %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum((RISK_DERIVED == T) * ALPHA)/sum(ALPHA)), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %&gt;% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = &quot;darkgreen&quot;) + theme_bw() + ylab(&quot;Proportion of derived risk alleles&quot;) + ggtitle(&quot;LDL&quot;) + theme(plot.title = element_text(hjust = 0.5))
+p4 &lt;- cardio %&gt;% drop_na(RISK_DERIVED) %&gt;% group_by(UNIQ_ID) %&gt;% summarise(prop_ad = (sum((RISK_DERIVED == T) * ALPHA)/sum(ALPHA)), raf = (sum(RAF * ALPHA)/sum(ALPHA))) %&gt;% ggplot(aes(x=raf, y=prop_ad)) + geom_point(color = &quot;darkblue&quot;) + theme_bw() + ylab(&quot;Proportion of derived risk alleles&quot;) + ggtitle(&quot;Cardio&quot;) + theme(plot.title = element_text(hjust = 0.5))
+
+ggarrange(p1,p2,p3,p4, common.legend = T, legend = &quot;bottom&quot; )</code></pre>
+<p><img src="figure/CS_results.Rmd/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">

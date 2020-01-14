@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Jennifer Blanc" />
+
+
+<title>Polygenic-Mut-Sel-Bal_model_desrciption</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">infer_mutational_bias</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/jgblanc/infer_mutational_bias">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Polygenic-Mut-Sel-Bal_model_desrciption</h1>
+<h4 class="author">Jennifer Blanc</h4>
+<h4 class="date">12/3/2019</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-01-14
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>infer_mutational_bias/analysis/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.4.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20191108code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20191108)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20191108code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20191108)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree7bfd1996bd9dba31b503ce791aed3012976ba5a3targetblank7bfd199a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/7bfd1996bd9dba31b503ce791aed3012976ba5a3" target="_blank">7bfd199</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree7bfd1996bd9dba31b503ce791aed3012976ba5a3targetblank7bfd199a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    .snakemake/conda-archive/
+    Ignored:    .snakemake/conda/
+    Ignored:    .snakemake/locks/
+    Ignored:    .snakemake/scripts/
+    Ignored:    .snakemake/shadow/
+    Ignored:    .snakemake/singularity/
+    Ignored:    analysis/.DS_Store
+    Ignored:    data/47UKBB/
+    Ignored:    docs/.DS_Store
+    Ignored:    output/.DS_Store
+    Ignored:    output/47UKBB/
+
+Untracked files:
+    Untracked:  docs/assets/
+    Untracked:  docs/figure/simple_inference_PRF.Rmd/
+
+Unstaged changes:
+    Deleted:    analysis/figure_out_cs.Rmd
+    Deleted:    analysis/model_overvieew.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the R Markdown and HTML files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view them.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/7bfd1996bd9dba31b503ce791aed3012976ba5a3/analysis/model_overview.Rmd" target="_blank">7bfd199</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-01-14
+</td>
+<td>
+Worked on inference problem
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="set-up" class="section level2">
+<h2>Set-up</h2>
+<p>In this document I am going to outline the whole polygenic mutation selection balance model. These notes are based on the explanation Jeremy gave on 11/27. First, I will outline the general set-up and then I will go through how to solve different parts of the model.</p>
+<p>This model is based on the liability threshold model where every individual has a liability for the disease, <span class="math inline">\(Z_i\)</span>, that is the sum of their genetic libability, <span class="math inline">\(G_i\)</span> and their libability due to the environment, <span class="math inline">\(E_i\)</span>.</p>
+<p><span class="math display">\[Z_i = G_i + E_i \;\;\;\;\; E_i\sim N(0, V_e)\]</span></p>
+<p>The genetic component of liability can be further decomposed into the sum of an the number of liability increasing alleles at a site multiplied by the effect size of the liability increasing allele. For now we assume there is some distribution from which effect sizes are drawn, <span class="math inline">\(p(\alpha)\)</span>.</p>
+<p><span class="math display">\[G_i = \sum_{l=1}^{L} \alpha_l *g_{i,l} \;\;\;\;\;\;\;\; g_{i,l} \subset \{0,1,2\}\]</span></p>
+<p>Both genetic and environmental liability are normally distributed, meaning that the overall liability is also normally distributed. In the threshold model, there is a threshold beyond which individuals have the disease and have reduced fitness as a consequence. Specifically individuals who are beyond the threshold have fitness <span class="math inline">\(1-S\)</span>. <strong>Check: is S the reduction in relative fitness for everyone who is across the threshold? Mean reduction in offspring?</strong></p>
+<p><br> <br> <img src="assets/LTM.png" width="50%" height="50%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="mutation-selection-balance" class="section level2">
+<h2>Mutation-Selection Balance</h2>
+<p>If a population is in long-term mutation selection balance, the change in the average genetic liability per generation due to mutations must be equal and opposite the change in the average genetic liability per generation due to selection. Here we are assuming that the <span class="math inline">\(V_e\)</span> is constant each generation (<strong>check</strong>). <strong>I need to ask about why we only care about the mean genetic libability? We are assuming the shape of the distribution stays the same and we can capture all dynamics by the mean</strong> Below is the detailed mutation selection balance equation where <span class="math inline">\(&lt;G&gt; = \frac{1}{N}\sum\limits_i^NG_i\)</span> is used to denote the mean genetic liability of the popultion.</p>
+<p><span class="math display">\[\Delta\mu^{(\langle G \rangle)} = \Delta s^{(\langle G \rangle)}\]</span></p>
+<p>Here the superscript <span class="math inline">\((&lt;G&gt;)\)</span> is used to make it clear that these are the per generation changes in mean genetic liability due to mutation and selection. Now we will derive expressions for both sides of this equation that will allow us to solve for quantities of interest in the population.</p>
+</div>
+<div id="mutation" class="section level2">
+<h2>Mutation</h2>
+<p>We will start with the per generation change in the mean genetic liability due to mutation. Our mutation model is state dependent which means that the probability of mutating to a specific “type” depends on the current state of the site. In practical terms, this means that at each of our bi-allelic sites, the only possible mutations are from the risk increasing allele to the risk decreasing allele and visa versa. Therefore we can breakdown the change due to mutation into the mean change in genetic liability due to risk increasing mutations minus the change due to risk decreasing mutations.</p>
+<p><span class="math display">\[\Delta\mu^{(\langle G \rangle)} = \Delta\mu_+^{(&lt;G&gt;)} - \Delta\mu_-^{(&lt;G&gt;)}\]</span></p>
+<p>First we will focus on <span class="math inline">\(\Delta\mu_+^{(\langle G \rangle)}\)</span>, the change in the mean genotype due to liability increaing mutations. This amounts to multiplying the per base mutation rate by the total number of sites that currently have a liability decreasing allele, <span class="math inline">\(\sum\limits_l^L\alpha_l(2 - g_{i,l})\)</span>, averaged over the total number of individuals:</p>
+<p><span class="math display">\[\Delta\mu_+^{(\langle G \rangle)} = \mu \frac{1}{N}\sum\limits_i^N \sum\limits_l^L \alpha_l(2 - g_{i,l})\]</span></p>
+<p>Now we will go through a few steps of algebra to get the above equation into a form that is easier to work with. First we will just mutiply through by <span class="math inline">\(\alpha_l\)</span> and separate the inside sum.</p>
+<p><span class="math display">\[\Delta\mu_+^{(\langle G \rangle)} =  \mu \frac{1}{N}\sum\limits_i^N \big(\sum\limits_l^L 2 \alpha_l- \sum\limits_l^L\alpha_l g_{i,l}\big)\]</span></p>
+<p>Now we recognize that the sum of <span class="math inline">\(\alpha_l\)</span> over L is equivalent to the average <span class="math inline">\(\alpha\)</span> multiplied by L and that by definition <span class="math inline">\(G_i = \sum_l \alpha_l g_{i,l}\)</span></p>
+<p><span class="math display">\[\Delta\mu_+^{(\langle G \rangle)} =   \mu \frac{1}{N}\sum\limits_i^N (2\langle\alpha\rangle L - G_i) \]</span></p>
+<p>Finally, we average over individuals, recognizing that <span class="math inline">\(2\langle\alpha\rangle L\)</span> does not depend on i.</p>
+<p><span class="math display">\[\Delta\mu_+^{(\langle G \rangle)} =  \mu (2 \langle\alpha\rangle L-\langle G \rangle)\]</span></p>
+<p>We have solved for the increase in mean liability in one generation due to mutation. We can use a similar process (below) to solve for the decrease in mean liability due to mutation. In this case the number of possible alleles than can be mutated from liability increasing to decreasing is <span class="math inline">\(\sum\limits_l^L g_{i,l}\)</span>.</p>
+<p><span class="math display">\[\Delta\mu_-^{(\langle G \rangle)} =  \mu \frac{1}{N} \sum\limits_i^N \sum\limits_l^L \alpha_l g_{i,l} \]</span></p>
+<p><span class="math display">\[\Delta\mu_-^{(\langle G \rangle)} =  \mu \frac{1}{N} \sum\limits_i^N G_i\]</span></p>
+<p><span class="math display">\[\Delta\mu_-^{(\langle G \rangle)} = \mu \langle G \rangle\]</span></p>
+<p>Now we can re-write the full expression for change in mean genetic liability due to mutation and do some easy algebra.</p>
+<p><span class="math display">\[\Delta\mu^{(\langle G \rangle)} = \Delta\mu_+^{(\langle G \rangle)} - \Delta\mu_-^{(\langle G \rangle)}\]</span></p>
+<p><span class="math display">\[ = \mu (2 \langle\alpha\rangle L-\langle G \rangle) - \mu \langle G \rangle\]</span></p>
+<p><span class="math display">\[ = \mu(2 \langle\alpha\rangle L -2\langle G \rangle) \]</span></p>
+<p>Next, we want to manipulate this equation in a way that allows us to pull out the constants from the (). It is important to remember that <span class="math inline">\(\langle\alpha\rangle\)</span> is a constant and not a random varaible because the effect size for each locus is a fixed value determined by biology that is not changing over the generations.</p>
+<p><span class="math display">\[ = 4\langle\alpha\rangle L \mu \big(\frac{1}{2} - \frac{\langle G \rangle}{2 \langle\alpha\rangle L}\big)\]</span></p>
+<p>We should stop here and try to build some intuition for how this mutational process is working from this equation. We can think about the distribution of genetic liability as existing somewhere between 0 and <span class="math inline">\(2\langle\alpha\rangle L\)</span> and mutational pressure moving the population along this scale. For example if the average genetic liability, <span class="math inline">\(\langle G \rangle\)</span> is equal to <span class="math inline">\(\langle\alpha\rangle L\)</span>, then the equation above will equal zero. This corresponds to the population being centered at <span class="math inline">\(\langle\alpha\rangle L\)</span> and there being the same number of liability increasing and liability decreasing mutations (if the effect sizes are the same). In this case there is no mutational pressure and the population will stay there (again, we are forgetting about selection for now).</p>
+<p>On the other hand, the closer to 0 <span class="math inline">\(\langle G \rangle\)</span> is, the more mutational pressure there will be. When the mean genetic liability is near zero, most sites will be fixed for the liability decreaseing allele and all new mutations will be ability increasing and move the population towards the equilibrium point of <span class="math inline">\(\langle\alpha\rangle L\)</span>.</p>
+<p><br> <br> <img src="assets/scale.png" width="50%" height="50%" style="display: block; margin: auto;" /></p>
+<p>Next, we are going to manipulat this equation even more. First, we will simply re-write it, adding and subtracting a constant, <span class="math inline">\(\frac{T}{2\langle\alpha\rangle L}\)</span>, where T is the the liability threshold which lies somewhere on the same scale of 0 to <span class="math inline">\(2 \langle\alpha\rangle L\)</span>. Another interpretation is the number of average size liability increasing you can have before you cross the threshold and get the disease.</p>
+<p><span class="math display">\[\Delta\mu^{(\langle G \rangle)} = 4\langle\alpha\rangle L \mu \big( \frac{1}{2} - \frac{\langle G\rangle }{2 \langle\alpha\rangle L} + \frac{T}{2 \langle\alpha\rangle L} - \frac{T}{2 \langle\alpha\rangle  L}\big)\]</span></p>
+<p>Rearrage:<br />
+<span class="math display">\[\Delta\mu^{(\langle G \rangle)} = 4\langle\alpha\rangle L \mu \big( \frac{1}{2} + \frac{T - \langle G\rangle }{2 \langle\alpha\rangle L}  - \frac{T}{2 \langle\alpha\rangle  L}\big)\]</span></p>
+<p><strong>CHECK this part</strong> By assuming that the mean genetic liability is close to the threshold, we can say that <span class="math inline">\(T - \langle G\rangle \approx 0\)</span> and drop that term entirely.</p>
+<p><span class="math display">\[\Delta\mu^{(\langle G \rangle)} = 4\langle\alpha\rangle L \mu \big( \frac{1}{2}   - \frac{T}{2 \langle\alpha\rangle  L}\big)\]</span></p>
+<p>This is the final expression we have for the change in mean genetic liability due to mutation. This means that <span class="math inline">\(\frac{T}{2 \langle\alpha\rangle L}\)</span> is measure of the mutational bias. If the threshold is close to <span class="math inline">\(\langle\alpha\rangle L\)</span> then there is no mutational bias and if it is close to zero, there is a high degress of mutational bias and nearly all new mutations are liability increasing.</p>
+</div>
+<div id="selection" class="section level2">
+<h2>Selection</h2>
+<p>So far we have derived an expression for the mean change in genetic liability due to mutation in one generation. For long term equilibrium to hold, this change must be equal and opposite to the change due to selection. In this section we will derived an expression for mean change in genetic liability due to selection, because selection always acts against the risk alleles the change in mean genetic liability per generation due to selection will be negative.</p>
+<p>To start with, we can write the change as the difference between the average genetic liability of the current popultion (before selection), t, and the mean genetic liability after selection, t’.</p>
+<p><span class="math display">\[\Delta_s^{(\langle G \rangle)} = \langle G \rangle_{t&#39;} - \langle G \rangle_t\]</span></p>
+<p>We know the mean of the genetic liability of the current population, <span class="math inline">\(\langle G \rangle_t\)</span>, so we need a way to solve for the mean genetic liability of the next generation, <span class="math inline">\(t&#39;\)</span>. To do this, we need to consider the fitness of each possible genotypee. Genreally we can write <span class="math inline">\(\langle G \rangle_{t&#39;}\)</span> as a weighted average where the weights are the number of offpring produced by each individuals i <span class="math inline">\(W_i\)</span>.</p>
+<p><span class="math display">\[\langle G \rangle_{t&#39;} = \frac{\sum\limits_i G_i\langle W_i|G_i\rangle}{\sum\limits_i \langle W_i|G_i\rangle}\]</span></p>
+<p>In order to calculate the above equation, we need to introduce the concept of the risk. Risk is a function of genotype liability given the threshold and the <span class="math inline">\(V_E\)</span>. We can think about risk of an individual as the probability of drawing the an environmental variable that pushes them across the threshold given their genetic liability. Using this intuition, we can write an individual’s risk as:</p>
+<p><span class="math display">\[R_i = 1 - \Phi(T|G_i, V_E)\]</span></p>
+<p><br> <br> <img src="assets/risk.JPG" width="50%" height="50%" style="display: block; margin: auto;" /></p>
+<p>As illustrated in the picture above, an individuals risk is the area under the normal distribution that falls on the right side of the threshold where the normal disibution has a mean of <span class="math inline">\(G_i\)</span> and variance of <span class="math inline">\(V_E\)</span>. We use this formula across the entire distribution of genetic liabilities to get a smooth risk curve that is a function of genetic liability.</p>
+<p>We can use risk</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.5.1 (2018-07-02)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS High Sierra 10.13.6
+
+Matrix products: default
+BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] knitr_1.23
+
+loaded via a namespace (and not attached):
+ [1] workflowr_1.4.0 Rcpp_1.0.3      digest_0.6.22   rprojroot_1.3-2
+ [5] backports_1.1.5 git2r_0.25.2    magrittr_1.5    evaluate_0.14  
+ [9] stringi_1.4.3   fs_1.3.1        whisker_0.3-2   rmarkdown_1.13 
+[13] tools_3.5.1     stringr_1.4.0   glue_1.3.1      xfun_0.7       
+[17] yaml_2.2.0      compiler_3.5.1  htmltools_0.3.6</code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
