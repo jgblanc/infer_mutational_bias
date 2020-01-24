@@ -1,0 +1,87 @@
+---
+title: "GWAS_ATLAS_results"
+author: "Jennifer Blanc"
+date: "1/23/2020"
+output: html_document
+---
+
+```{r, warning=FALSE}
+library(data.table)
+library(ggplot2)
+library(ggpubr)
+getwd()
+```
+
+
+# Intro 
+
+Write overview 
+
+# Results 
+
+Schizophrenia 
+```{r, warning=FALSE}
+cols <- c("deeppink4", "navy")
+derive <- c("springgreen4", "purple1")
+schizophrenia <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_3982_evo.txt")
+colnames(schizophrenia) <- c(colnames(schizophrenia)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+
+p1 <- ggplot(data=schizophrenia, aes(x=RAF,y=OR,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
+p2 <- ggplot(data=schizophrenia, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(schizophrenia$RAF)
+```
+
+Chronic Kidney Disease
+```{r, warning=FALSE}
+CKD <- fread("../output/GWAS_ATLAS/evo_added/CKD_4210_evo.txt")
+colnames(CKD) <- c(colnames(CKD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+
+p1 <- ggplot(data=CKD, aes(x=RAF,y=BETA,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("BETA")
+p2 <- ggplot(data=CKD, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(CKD$RAF)
+```
+
+Atrial Fibrilation
+```{r, warning=FALSE}
+AF <- fread("../output/GWAS_ATLAS/evo_added/AF_4361_evo.txt")
+colnames(AF) <- c(colnames(AF)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+
+p1 <- ggplot(data=AF, aes(x=RAF,y=EFFECT,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("EFFECT")
+p2 <- ggplot(data=AF, aes(x=RAF,y=abs(EFFECT),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(AF$RAF)
+```
+
+Type 2 Diabetes
+```{r, warning=FALSE}
+T2D <- fread("../output/GWAS_ATLAS/evo_added/T2D_4085_evo.txt")
+colnames(T2D) <- c(colnames(T2D)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+
+p1 <- ggplot(data=T2D, aes(x=RAF,y=BETA,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("EFFECT")
+p2 <- ggplot(data=T2D, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(T2D$RAF)
+```
+
+
+```{r}
+crohns <- fread("../output/GWAS_ATLAS/evo_added/crohns_2029_evo.txt")
+colnames(crohns) <- c(colnames(crohns)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+
+p1 <- ggplot(data=crohns, aes(x=RAF,y=BETA)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("BETA")
+p2 <- ggplot(data=crohns, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(crohns$RAF, na.rm = T)
+```
+
+
+
+
+

@@ -10,7 +10,8 @@ editor_options:
 
 Welcome to my research website. 
 
-To see my inference of selection using the poisson random field model, click here [link](simple_inference_PRF.html)
-To see my simple inference of W using STAN, click here [link](simple_stan_inference.html)  
-To see the results of data processing, click here [link](CS_results.html)  
+To see my inference of selection using the poisson random field model, click here [link](simple_inference_PRF.html)  
+To see my simple inference of W using STAN, click here [link](simple_stan_inference.html)   
+To see the results of data processing, click here [link](CS_results.html)   
+To see the results of my data processing from the GWAS Atlas, click here [link](GWAS_ATLAS.Rmd)  
 
