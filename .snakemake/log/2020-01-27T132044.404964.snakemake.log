@@ -1,0 +1,25 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_evo_atlas
+	1	parse_gwas_atlas
+	2
+
+[Mon Jan 27 13:20:44 2020]
+rule parse_gwas_atlas:
+    input: data/GWAS_ATLAS/schizophrenia_PGC.txt
+    output: output/GWAS_ATLAS/parsed_gwas/schizophrenia_PGC_parsed.txt
+    jobid: 1
+    wildcards: trait=schizophrenia_PGC
+
+[Mon Jan 27 13:21:05 2020]
+Error in rule parse_gwas_atlas:
+    jobid: 1
+    output: output/GWAS_ATLAS/parsed_gwas/schizophrenia_PGC_parsed.txt
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-01-27T132044.404964.snakemake.log

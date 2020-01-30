@@ -9,6 +9,7 @@ output: html_document
 library(data.table)
 library(ggplot2)
 library(ggpubr)
+library(latex2exp)
 getwd()
 ```
 
@@ -26,12 +27,33 @@ derive <- c("springgreen4", "purple1")
 schizophrenia <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_3982_evo.txt")
 colnames(schizophrenia) <- c(colnames(schizophrenia)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 
-p1 <- ggplot(data=schizophrenia, aes(x=RAF,y=OR,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
-p2 <- ggplot(data=schizophrenia, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+p1 <- ggplot(data=schizophrenia, aes(x=RAF,y=OR,color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
+
+dat <- subset(schizophrenia, schizophrenia$Risk_Derived == 'T' | schizophrenia$Risk_Derived == 'F')
+p2 <- ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive, name = "Risk Allele Derived", labels = c("False", "True")) + theme(plot.title = element_text(hjust = 0.5)) + ylab(TeX('$\\hat{\\beta}$')) + xlab("Risk Alllele Frequency (RAF)") + theme(axis.text.x = element_text(size = 11), axis.text.y = element_text(size = 11), axis.title.y = element_text(size = 15))
+
+p3 <- ggplot(data=dat, aes(x=RAF,y=abs(log(OR)))) + geom_point(alpha=0.5) + theme_bw() + theme(plot.title = element_text(hjust = 0.5)) + ylab(TeX('$\\hat{\\beta}$')) + xlab("Risk Alllele Frequency (RAF)") + theme(axis.text.x = element_text(size = 11), axis.text.y = element_text(size = 11), axis.title.y = element_text(size = 15))
+p3
+ggsave("~/Desktop/schizophrenia.png",p2, width = 12)
 
 ggarrange(p1,p2, nrow = 2)
 mean(schizophrenia$RAF)
 ```
+
+Schizophrenia PGC  
+```{r, warning=FALSE}
+cols <- c("deeppink4", "navy")
+derive <- c("springgreen4", "purple1")
+scz_pgc <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_PGC_evo.txt")
+colnames(scz_pgc) <- c(colnames(scz_pgc)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+
+p1 <- ggplot(data=scz_pgc, aes(x=RAF,y=OR,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
+p2 <- ggplot(data=scz_pgc, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(scz_pgc$RAF)
+```
+
 
 Chronic Kidney Disease
 ```{r, warning=FALSE}
@@ -81,7 +103,19 @@ ggarrange(p1,p2, nrow = 2)
 mean(crohns$RAF, na.rm = T)
 ```
 
+Schizophrenia EAS  
+```{r, warning=FALSE}
+cols <- c("deeppink4", "navy")
+derive <- c("springgreen4", "purple1")
+scz_eas <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_EAS_evo.txt")
+colnames(scz_eas) <- c(colnames(scz_eas)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 
+p1 <- ggplot(data=scz_eas, aes(x=RAF,y=OR,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
+p2 <- ggplot(data=scz_eas, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(scz_eas$RAF)
+```
 
 
 

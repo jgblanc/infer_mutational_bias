@@ -18,9 +18,24 @@ rule add_evo_info:
 
 rule add_RAF_info:
     input:
-        "output/47UKBB/EAF_info_added/{trait}_EAF.txt"
+        "output/47UKBB/evo_info_added/{trait}_evo_added.txt"
     output:
         "output/47UKBB/RAF_info_added/{trait}_RAF.txt"
     script:
         "code/get_RAF.R"
-     	
+
+rule parse_gwas_atlas:
+    input:
+        "data/GWAS_ATLAS/{trait}.txt"
+    output:
+        "output/GWAS_ATLAS/parsed_gwas/{trait}_parsed.txt"
+    script:
+        "code/parse_gwas_atlas/{wildcards.trait}.R"
+
+rule add_evo_atlas:
+    input:
+        "output/GWAS_ATLAS/parsed_gwas/{trait}_parsed.txt"
+    output:
+        "output/GWAS_ATLAS/evo_added/{trait}_evo.txt"
+    script:
+        "code/test.py"

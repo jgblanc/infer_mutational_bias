@@ -1,0 +1,32 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_evo_atlas
+	1	parse_gwas_atlas
+	2
+
+[Thu Jan 23 18:14:13 2020]
+rule parse_gwas_atlas:
+    input: data/GWAS_ATLAS/CAD_3925.txt
+    output: output/GWAS_ATLAS/parsed_gwas/CAD_3925_parsed.txt
+    jobid: 1
+    wildcards: trait=CAD_3925
+
+[Thu Jan 23 18:14:41 2020]
+Finished job 1.
+1 of 2 steps (50%) done
+
+[Thu Jan 23 18:14:41 2020]
+rule add_evo_atlas:
+    input: output/GWAS_ATLAS/parsed_gwas/CAD_3925_parsed.txt
+    output: output/GWAS_ATLAS/evo_added/CAD_3925_evo.txt
+    jobid: 0
+    wildcards: trait=CAD_3925
+
+[Thu Jan 23 18:17:17 2020]
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-01-23T181413.903551.snakemake.log

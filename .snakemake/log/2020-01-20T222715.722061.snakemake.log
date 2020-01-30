@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	parse_gwas_atlas
+	1
+
+[Mon Jan 20 22:27:15 2020]
+rule parse_gwas_atlas:
+    input: data/GWAS_ATLAS/SLE_4018.txt
+    output: output/GWAS_ATLAS/parsed_gwas/SLE_4018_parsed.txt
+    jobid: 0
+    wildcards: trait=SLE_4018
+
+[Mon Jan 20 22:27:38 2020]
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-01-20T222715.722061.snakemake.log

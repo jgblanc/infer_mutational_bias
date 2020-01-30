@@ -235,7 +235,7 @@ table(status)
 
 Now our data is comprised of RAF stored in "x_freqs" and whether the risk allele is derived stored in "status". We are ready to compute the likelihood:  
 
-$$L = \prod\limits_{i=1}^M \frac{e^{4N\beta eta}-e^{4N\beta eta x_i}}{-1 + e^{4N\beta eta}}$$  
+$$L = \prod\limits_{i=1}^M \frac{e^{4N\beta \eta}-e^{4N\beta eta x_i}}{-1 + e^{4N\beta \eta}}$$  
 
 ```{r}
 log_like_status <- function(eta, data_freq, data_status, N, B, m) {

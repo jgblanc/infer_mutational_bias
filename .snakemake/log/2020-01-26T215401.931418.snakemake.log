@@ -1,0 +1,23 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_evo_atlas
+	1
+
+[Sun Jan 26 21:54:01 2020]
+rule add_evo_atlas:
+    input: output/GWAS_ATLAS/parsed_gwas/SLE_4018_parsed.txt
+    output: output/GWAS_ATLAS/evo_added/SLE_4018_evo.txt
+    jobid: 0
+    wildcards: trait=SLE_4018
+
+Terminating processes on user request, this might take some time.
+[Sun Jan 26 21:54:05 2020]
+Error in rule add_evo_atlas:
+    jobid: 0
+    output: output/GWAS_ATLAS/evo_added/SLE_4018_evo.txt
+
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-01-26T215401.931418.snakemake.log

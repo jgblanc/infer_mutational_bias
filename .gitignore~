@@ -12,3 +12,6 @@ analysis/site_libs
 data/
 output/47UKBB/parsed_alphas/
 output/47UKBB/evo_info_added/
+output/47UKBB/RAF_info_added/
+output/GWAS_ATLAS/parsed_gwas/
+output/GWAS_ATLAD/evo_added/
