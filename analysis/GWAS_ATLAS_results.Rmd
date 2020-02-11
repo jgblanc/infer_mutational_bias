@@ -10,6 +10,7 @@ library(data.table)
 library(ggplot2)
 library(ggpubr)
 library(latex2exp)
+library(dplyr)
 getwd()
 ```
 
@@ -21,29 +22,29 @@ Write overview
 # Results 
 
 Schizophrenia 
-```{r, warning=FALSE}
+```{r, warning=FALSE, echo=FALSE}
 cols <- c("deeppink4", "navy")
 derive <- c("springgreen4", "purple1")
 schizophrenia <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_3982_evo.txt")
 colnames(schizophrenia) <- c(colnames(schizophrenia)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+schizophrenia$disease <- "Schizophenria"
 
 p1 <- ggplot(data=schizophrenia, aes(x=RAF,y=OR,color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
 
 dat <- subset(schizophrenia, schizophrenia$Risk_Derived == 'T' | schizophrenia$Risk_Derived == 'F')
 p2 <- ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive, name = "Risk Allele Derived", labels = c("False", "True")) + theme(plot.title = element_text(hjust = 0.5)) + ylab(TeX('$\\hat{\\beta}$')) + xlab("Risk Alllele Frequency (RAF)") + theme(axis.text.x = element_text(size = 11), axis.text.y = element_text(size = 11), axis.title.y = element_text(size = 15))
 
-p3 <- ggplot(data=dat, aes(x=RAF,y=abs(log(OR)))) + geom_point(alpha=0.5) + theme_bw() + theme(plot.title = element_text(hjust = 0.5)) + ylab(TeX('$\\hat{\\beta}$')) + xlab("Risk Alllele Frequency (RAF)") + theme(axis.text.x = element_text(size = 11), axis.text.y = element_text(size = 11), axis.title.y = element_text(size = 15))
-
 ggarrange(p1,p2, nrow = 2)
 mean(schizophrenia$RAF)
 ```
 
-Schizophrenia PGC  
-```{r, warning=FALSE}
+Schizophrenia - Psychiatric Genomic Consortium 
+```{r, warning=FALSE,echo=FALSE}
 cols <- c("deeppink4", "navy")
 derive <- c("springgreen4", "purple1")
 scz_pgc <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_PGC_evo.txt")
 colnames(scz_pgc) <- c(colnames(scz_pgc)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+scz_pgc$disease <- "Schizophenria PGC"
 
 p1 <- ggplot(data=scz_pgc, aes(x=RAF,y=OR,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
 p2 <- ggplot(data=scz_pgc, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
@@ -52,11 +53,24 @@ ggarrange(p1,p2, nrow = 2)
 mean(scz_pgc$RAF)
 ```
 
+Schizophrenia EAS  
+```{r, warning=FALSE, echo=FALSE}
+scz_eas <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_EAS_evo.txt")
+colnames(scz_eas) <- c(colnames(scz_eas)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+scz_eas$disease <- "Schizophrenia EAS"
+
+p1 <- ggplot(data=scz_eas, aes(x=RAF,y=OR,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
+p2 <- ggplot(data=scz_eas, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(scz_eas$RAF)
+```
 
 Chronic Kidney Disease
-```{r, warning=FALSE}
+```{r, warning=FALSE,echo=FALSE}
 CKD <- fread("../output/GWAS_ATLAS/evo_added/CKD_4210_evo.txt")
 colnames(CKD) <- c(colnames(CKD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+CKD$disease <- "Chronic Kidney Disease"
 
 p1 <- ggplot(data=CKD, aes(x=RAF,y=BETA,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("BETA")
 p2 <- ggplot(data=CKD, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
@@ -66,9 +80,10 @@ mean(CKD$RAF)
 ```
 
 Atrial Fibrilation
-```{r, warning=FALSE}
+```{r, warning=FALSE, echo=FALSE}
 AF <- fread("../output/GWAS_ATLAS/evo_added/AF_4361_evo.txt")
 colnames(AF) <- c(colnames(AF)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+AF$disease <- "Atrial Fibrilation"
 
 p1 <- ggplot(data=AF, aes(x=RAF,y=EFFECT,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("EFFECT")
 p2 <- ggplot(data=AF, aes(x=RAF,y=abs(EFFECT),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
@@ -78,11 +93,12 @@ mean(AF$RAF)
 ```
 
 Type 2 Diabetes
-```{r, warning=FALSE}
+```{r, warning=FALSE,echo=FALSE}
 T2D <- fread("../output/GWAS_ATLAS/evo_added/T2D_4085_evo.txt")
 colnames(T2D) <- c(colnames(T2D)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+T2D$disease <- "Type 2 Diabetes"
 
-p1 <- ggplot(data=T2D, aes(x=RAF,y=BETA,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("EFFECT")
+p1 <- ggplot(data=T2D, aes(x=RAF,y=BETA,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("BETA")
 p2 <- ggplot(data=T2D, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
 
 ggarrange(p1,p2, nrow = 2)
@@ -90,9 +106,10 @@ mean(T2D$RAF)
 ```
 
 Crohns
-```{r}
+```{r, warning=F, echo=FALSE}
 crohns <- fread("../output/GWAS_ATLAS/evo_added/crohns_2029_evo.txt")
 colnames(crohns) <- c(colnames(crohns)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+crohns$disease <- "Crohns"
 
 p1 <- ggplot(data=crohns, aes(x=RAF,y=BETA, color = RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("BETA")
 p2 <- ggplot(data=crohns, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
@@ -101,24 +118,13 @@ ggarrange(p1,p2, nrow = 2)
 mean(crohns$RAF, na.rm = T)
 ```
 
-Schizophrenia EAS  
-```{r, warning=FALSE}
-cols <- c("deeppink4", "navy")
-derive <- c("springgreen4", "purple1")
-scz_eas <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_EAS_evo.txt")
-colnames(scz_eas) <- c(colnames(scz_eas)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 
-p1 <- ggplot(data=scz_eas, aes(x=RAF,y=OR,color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
-p2 <- ggplot(data=scz_eas, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
-
-ggarrange(p1,p2, nrow = 2)
-mean(scz_eas$RAF)
-```
 
 Breast Cancer
-```{r}
+```{r,warning=FALSE,echo=FALSE}
 bc <- fread("../output/GWAS_ATLAS/evo_added/breastcancer_3659_evo.txt")
 colnames(bc) <- c(colnames(bc)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+bc$disease <- "Breast Cancer"
 
 dat <- subset(bc, bc$Risk_Derived == 'T' | bc$Risk_Derived == 'F')
 p1 <- ggplot(data=dat, aes(x=RAF,y=OR, color =RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
@@ -131,9 +137,10 @@ mean(bc$RAF, na.rm = T)
 
 
 Alzheimer's
-```{r}
+```{r,warning=FALSE,echo=FALSE}
 AD<- fread("../output/GWAS_ATLAS/evo_added/AD_4094_evo.txt")
 colnames(AD) <- c(colnames(AD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+AD$disease <- "Alzheimers"
 
 dat <- subset(AD, AD$Risk_Derived == 'T' | AD$Risk_Derived == 'F')
 p1 <- ggplot(data=AD, aes(x=RAF,y=BETA, color =RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
@@ -146,12 +153,13 @@ mean(AD$RAF, na.rm = T)
 
 
 Parkinson
-```{r}
+```{r,warning=FALSE,echo=FALSE}
 PD<- fread("../output/GWAS_ATLAS/evo_added/parkinson_4167_evo.txt")
 colnames(PD) <- c(colnames(PD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+PD$disease <- "Parkinson"
 
 dat <- subset(PD, PD$Risk_Derived == 'T' | PD$Risk_Derived == 'F')
-p1 <- ggplot(data=PD, aes(x=RAF,y=BETA, color =RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
+p1 <- ggplot(data=PD, aes(x=RAF,y=BETA, color =RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("BETA")
 p2 <- ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
 
 ggarrange(p1,p2, nrow = 2)
@@ -161,9 +169,10 @@ mean(PD$RAF, na.rm = T)
 
 
 IBD 
-```{r}
+```{r, warning=FALSE, echo=FALSE}
 IBD<- fread("../output/GWAS_ATLAS/evo_added/IBD_2031_evo.txt")
 colnames(IBD) <- c(colnames(IBD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+IBD$disease <- "Inflamatory Bowel Disease"
 
 dat <- subset(IBD, IBD$Risk_Derived == 'T' | IBD$Risk_Derived == 'F')
 p1 <- ggplot(data=IBD, aes(x=RAF,y=BETA, color =RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
@@ -174,17 +183,135 @@ mean(IBD$RAF, na.rm = T)
 ```
 
 
-UC
-```{r}
+Ulcerativ Colitis
+```{r,warning=F,echo=FALSE}
 UC<- fread("../output/GWAS_ATLAS/evo_added/UC_2030_evo.txt")
 colnames(UC) <- c(colnames(UC)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+UC$disease <- "Ulcerative Colitis"
 
 dat <- subset(UC, UC$Risk_Derived == 'T' | UC$Risk_Derived == 'F')
-p1 <- ggplot(data=UC, aes(x=RAF,y=BETA, color =RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
+p1 <- ggplot(data=UC, aes(x=RAF,y=BETA, color =RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("BETA")
 p2 <- ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
 
 ggarrange(p1,p2, nrow = 2)
 mean(UC$RAF, na.rm = T)
+```
+
+Childhood Onset Asthma
+```{r,warning=F,echo=FALSE}
+CO<- fread("../output/GWAS_ATLAS/evo_added/COasthma_4266_evo.txt")
+colnames(CO) <- c(colnames(CO)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+CO$disease <- "Childhood Onset Asthma"
+
+dat <- subset(CO, CO$Risk_Derived == 'T' | CO$Risk_Derived == 'F')
+p1 <- ggplot(data=CO, aes(x=RAF,y=OR, color =RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
+p2 <- ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(CO$RAF, na.rm = T)
+```
+
+
+Adult Onset Asthma
+```{r,warning=F,echo=FALSE}
+AO<- fread("../output/GWAS_ATLAS/evo_added/AOasthma_4267_evo.txt")
+colnames(AO) <- c(colnames(AO)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+AO$disease <- "Adult Onset Asthma"
+
+dat <- subset(AO, AO$Risk_Derived == 'T' | AO$Risk_Derived == 'F')
+p1 <- ggplot(data=AO, aes(x=RAF,y=OR, color =RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
+p2 <- ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(AO$RAF, na.rm = T)
+```
+
+Multiple Sclerosis
+```{r,warning=F,echo=FALSE}
+MS <- fread("../output/GWAS_ATLAS/evo_added/MS_24076602_evo.txt")
+colnames(MS) <- c(colnames(MS)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+MS$disease <- "Multiple Sclerosis"
+
+dat <- subset(MS, MS$Risk_Derived == 'T' | MS$Risk_Derived == 'F')
+p1 <- ggplot(data=dat, aes(x=RAF,y=BETA, color =RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("BETA")
+p2 <- ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(MS$RAF, na.rm = T)
+```
+
+
+
+Myopia 
+```{r,warning=F,echo=FALSE}
+myopia<- fread("../output/GWAS_ATLAS/evo_added/myopia_3539_evo.txt")
+colnames(myopia) <- c(colnames(myopia)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+myopia$disease <- "Myopia"
+
+dat <- subset(myopia, myopia$Risk_Derived == 'T' | myopia$Risk_Derived == 'F')
+p1 <- ggplot(data=dat, aes(x=RAF,y=OR, color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR")
+p2 <- ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(myopia$RAF, na.rm = T)
+```
+
+Educational Attainment - UKBB only 
+```{r,warning=F,echo=FALSE}
+EAukbb <- fread("../output/GWAS_ATLAS/evo_added/EAukbb_3409_evo.txt")
+colnames(EAukbb) <- c(colnames(EAukbb)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+EAukbb$disease <- "Educational Attainment UKBB"
+
+dat <- subset(EAukbb, EAukbb$Risk_Derived == 'T' | EAukbb$Risk_Derived == 'F')
+p1 <- ggplot(data=dat, aes(x=RAF,y=BETA, color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("BETA") + labs(color= "Increasing")
+p2 <- ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("EA Increasing Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(EAukbb$RAF, na.rm = T)
+```
+
+
+Educational Attainment - meta-analysis
+```{r,warning=F,echo=FALSE}
+EAmeta<- fread("../output/GWAS_ATLAS/evo_added/EAmeta_4066_evo.txt")
+colnames(EAmeta) <- c(colnames(EAmeta)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+EAmeta$disease <- "Educational Attainment Meta"
+
+dat <- subset(EAmeta, EAmeta$Risk_Derived == 'T' | EAmeta$Risk_Derived == 'F')
+p1 <- ggplot(data=dat, aes(x=RAF,y=BETA, color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR") + labs(color = "Increasing")
+p2 <- ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(EAmeta$RAF, na.rm = T)
+```
+
+Educational Attainment - meta-analysis
+```{r,warning=F,echo=FALSE}
+BMI <- fread("../output/GWAS_ATLAS/evo_added/BMI_4074_evo.txt")
+colnames(BMI) <- c(colnames(BMI)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+BMI$disease <- "Educational Attainment Meta"
+
+dat <- subset(BMI, BMI$Risk_Derived == 'T' | BMI$Risk_Derived == 'F')
+p1 <- ggplot(data=dat, aes(x=RAF,y=BETA, color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR") + labs(color = "Increasing")
+p2 <- ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(BMI$RAF, na.rm = T)
+```
+
+
+
+## Median RAF 
+```{r,warning=FALSE,echo=FALSE}
+combined <- bind_rows(AD,AF,AO,bc,BMI,CKD,CO,crohns,EAmeta,EAukbb,IBD,MS,myopia,PD,schizophrenia,scz_eas,scz_pgc,T2D,UC)
+
+fig4 <- combined %>% select(RAF, disease) 
+meds <- fig4 %>% group_by(disease) %>% summarise(med = median(RAF, na.rm = T))
+ord <- meds[order(meds$med),]
+fig4$disease <- as.factor(fig4$disease)
+fig4$disease <- factor(fig4$disease, levels = ord$disease)
+
+ggplot(data=fig4, aes(x=disease , y=RAF)) + geom_boxplot(col = "navy", fill = "lightblue") + coord_flip() + ylab("Risk Allele Frequency") + xlab("Trait") + theme_bw()
 ```
 
 
@@ -192,5 +319,35 @@ mean(UC$RAF, na.rm = T)
 
 
 
+
+
+
+```{r,echo=FALSE}
+# good <- fread("~/Downloads/Within-family_GWAS_of_height_based_on_sib_regression_using_data_from_Robinson_et_al_2015_LYMRR.txt")
+# 
+# top_good <- good %>% filter(PVAL <= 1e-3)
+# risk <- subset(top_good, top_good$BETA > 0)
+# risk$RAF <- risk$FREQ_A1
+# protective <- subset(top_good, top_good$BETA < 0)
+# protective$RAF <- 1 - protective$FREQ_A1
+# dat <- rbind(risk, protective)
+# 
+# plot(dat$RAF, abs(dat$BETA))
+# plot(top_good$FREQ_A1, top_good$BETA)
+```
+
+```{r,echo=F}
+# strat <- fread("~/Downloads/withinfam_summary_ht_bmi_release_March2016/qfam_sibpair_height_March2016.ma")
+# 
+# top <- strat %>% filter(p >= 0.999)
+# risk <- subset(top, top$b > 0)
+# risk$RAF <- risk$freq
+# protective <- subset(top, top$b < 0)
+# protective$RAF <- 1 - protective$freq
+# dat <- rbind(risk, protective)
+# 
+# plot(dat$RAF, abs(dat$b))
+# plot(top$freq, top$b)
+```
 
 
