@@ -535,10 +535,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreef28be1131a253c938a890792e6d90d49c77e3bb4targetblankf28be11a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/f28be1131a253c938a890792e6d90d49c77e3bb4" target="_blank">f28be11</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree2a67023a2d4643b6bda5422f206e2246052f9b43targetblank2a67023a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/2a67023a2d4643b6bda5422f206e2246052f9b43" target="_blank">2a67023</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreef28be1131a253c938a890792e6d90d49c77e3bb4targetblankf28be11a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree2a67023a2d4643b6bda5422f206e2246052f9b43targetblank2a67023a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -741,6 +741,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/2a67023a2d4643b6bda5422f206e2246052f9b43/analysis/BBJvUKKBB.Rmd" target="_blank">2a67023</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+<td>
+Fix plots
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/BBJvUKKBB.html" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/f28be1131a253c938a890792e6d90d49c77e3bb4/analysis/BBJvUKKBB.Rmd" target="_blank">f28be11</a>
 </td>
 <td>
@@ -783,113 +817,635 @@ bin_data &lt;- function(df) {
 }
 
 group_dat &lt;- function(df) {
-  dat &lt;- df %&gt;% group_by(BIN) %&gt;% summarise(AVG = mean(ES), MAX = max(MAF))
-}</code></pre>
+  dat &lt;- df %&gt;% group_by(BIN) %&gt;% summarise(AVG = mean(ES), MAX = max(MAF), NUM_SNPS = n(), SE = sd(ES))
+}
+
+#geom_pointrange(aes(ymin=AVG-SE, ymax=AVG+SE))</code></pre>
 <p><strong>Height</strong></p>
 <pre class="r"><code>uk_height &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/UKBB/parsed_gwas/Height_50_parsed.txt&quot;))))
 jb_height &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/BBJ/parsed_gwas/Height_135_parsed.txt&quot;))))
 
-pl1 &lt;- ggplot(uk_height, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_height, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 &lt;- ggplot(uk_height, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;, alpha = 0.5, size = 1.5) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-3,0.1))
+pl2 &lt;- ggplot(jb_height, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-3,0.1))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-2-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Remove the lowest frequnecy bin</p>
-<pre class="r"><code>pl1 &lt;- ggplot(uk_height[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_height[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+<pre class="r"><code>pl1 &lt;- ggplot(uk_height[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1,0.175))
+pl2 &lt;- ggplot(jb_height[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1, 0.175))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-3-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><strong>BMI</strong></p>
 <pre class="r"><code>uk_BMI &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/UKBB/parsed_gwas/BMI_23104_parsed.txt&quot;))))
 jb_BMI &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/BBJ/parsed_gwas/BMI_1_parsed.txt&quot;))))
 
-pl1 &lt;- ggplot(uk_BMI, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_BMI, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 &lt;- ggplot(uk_BMI, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1,0.6))
+pl2 &lt;- ggplot(jb_BMI, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1,0.6))
 
 ggarrange(pl1, pl2)</code></pre>
+<pre><code>Warning: Removed 1 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-4-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Remove lowest frequency bin</p>
-<pre class="r"><code>pl1 &lt;- ggplot(uk_BMI[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_BMI[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+<pre class="r"><code>pl1 &lt;- ggplot(uk_BMI[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1,0.1))
+pl2 &lt;- ggplot(jb_BMI[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-.1, 0.1))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-5-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><strong>HDL</strong></p>
 <pre class="r"><code>uk_HDL &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/UKBB/parsed_gwas/HDL_30760_parsed.txt&quot;))))
 jb_HDL &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/BBJ/parsed_gwas/HDL_47_parsed.txt&quot;))))
 
-pl1 &lt;- ggplot(uk_HDL, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_HDL, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 &lt;- ggplot(uk_HDL, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1,0.12))
+pl2 &lt;- ggplot(jb_HDL, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1,0.12))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-6-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Remove lowest frequency bin</p>
-<pre class="r"><code>pl1 &lt;- ggplot(uk_HDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_HDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+<pre class="r"><code>pl1 &lt;- ggplot(uk_HDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1,0.12))
+pl2 &lt;- ggplot(jb_HDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1,0.12))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-7-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><strong>LDL</strong></p>
 <pre class="r"><code>uk_LDL &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/UKBB/parsed_gwas/LDL_30780_parsed.txt&quot;))))
 jb_LDL &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/BBJ/parsed_gwas/LDL_61_parsed.txt&quot;))))
 
-pl1 &lt;- ggplot(uk_LDL, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_LDL, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 &lt;- ggplot(uk_LDL, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.2,0.1))
+pl2 &lt;- ggplot(jb_LDL, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.2,0.1))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-8-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Remove lowest frequency bin</p>
-<pre class="r"><code>pl1 &lt;- ggplot(uk_LDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_LDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+<pre class="r"><code>pl1 &lt;- ggplot(uk_LDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.2,0.075))
+pl2 &lt;- ggplot(jb_LDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.2,0.075))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-9-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><strong>Triglycerides</strong></p>
 <pre class="r"><code>uk_TG &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/UKBB/parsed_gwas/TG_30870_parsed.txt&quot;))))
 jb_TG &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/BBJ/parsed_gwas/TG_109_parsed.txt&quot;))))
 
-pl1 &lt;- ggplot(uk_TG, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_TG, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 &lt;- ggplot(uk_TG, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.15,0.1))
+pl2 &lt;- ggplot(jb_TG, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.15,0.1))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
+Past versions of unnamed-chunk-10-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-10-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Remove lowest frequency bin</p>
-<pre class="r"><code>pl1 &lt;- ggplot(uk_TG[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_TG[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+<pre class="r"><code>pl1 &lt;- ggplot(uk_TG[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.15,0.075))
+pl2 &lt;- ggplot(jb_TG[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.15,0.075))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
+Past versions of unnamed-chunk-11-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-11-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><strong>Hemoglobin</strong></p>
 <pre class="r"><code>uk_Hb &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/UKBB/parsed_gwas/Hb_30050_parsed.txt&quot;))))
 jb_Hb &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/BBJ/parsed_gwas/Hb_49_parsed.txt&quot;))))
 
-pl1 &lt;- ggplot(uk_Hb, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_Hb, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 &lt;- ggplot(uk_Hb, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1,0.07))
+pl2 &lt;- ggplot(jb_Hb, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1,0.07))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
+Past versions of unnamed-chunk-12-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-12-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Remove lowest frequency bin</p>
-<pre class="r"><code>pl1 &lt;- ggplot(uk_Hb[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_Hb[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+<pre class="r"><code>pl1 &lt;- ggplot(uk_Hb[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1,0.07))
+pl2 &lt;- ggplot(jb_Hb[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.1,0.07))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-1">
+Past versions of unnamed-chunk-13-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-13-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-13-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p><strong>Platelet Count</strong></p>
 <pre class="r"><code>uk_Plt &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/UKBB/parsed_gwas/Plt_30080_parsed.txt&quot;))))
 jb_Plt &lt;- group_dat(bin_data(get_ES(fread(&quot;../output/BBJ/parsed_gwas/Plt_97_parsed.txt&quot;))))
 
-pl1 &lt;- ggplot(uk_Plt, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_Plt, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 &lt;- ggplot(uk_Plt, aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.07,0.05))
+pl2 &lt;- ggplot(jb_Plt, aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.07,0.05))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
+Past versions of unnamed-chunk-14-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-14-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Remove lowest frequency bin</p>
-<pre class="r"><code>pl1 &lt;- ggplot(uk_Plt[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 &lt;- ggplot(jb_Plt[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) 
+<pre class="r"><code>pl1 &lt;- ggplot(uk_Plt[-1,], aes(x=MAX, y=AVG)) + geom_point(color = &quot;darkviolet&quot;) + theme_bw() + xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;UKBB&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.07,0.05))
+pl2 &lt;- ggplot(jb_Plt[-1,], aes(x=MAX, y=AVG)) + geom_point(color= &quot;darkgreen&quot;) + theme_bw()+ xlab(&quot;Frequency&quot;) + ylab(&quot;Mean Effect Size&quot;) + ggtitle(&quot;BBJ&quot;) + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = &quot;darkred&quot;, size = 1) + geom_smooth(method = &quot;loess&quot;, size = 0.75, color = &quot;navy&quot;) + lims(y=c(-0.07,0.05))
 
 ggarrange(pl1, pl2)</code></pre>
 <p><img src="figure/BBJvUKKBB.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-15-1">
+Past versions of unnamed-chunk-15-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-15-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/figure/BBJvUKKBB.Rmd/unnamed-chunk-15-1.png" target="_blank">c3ab5d6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
