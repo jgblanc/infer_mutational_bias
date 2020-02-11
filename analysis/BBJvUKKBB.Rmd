@@ -39,26 +39,29 @@ bin_data <- function(df) {
 }
 
 group_dat <- function(df) {
-  dat <- df %>% group_by(BIN) %>% summarise(AVG = mean(ES), MAX = max(MAF))
+  dat <- df %>% group_by(BIN) %>% summarise(AVG = mean(ES), MAX = max(MAF), NUM_SNPS = n(), SE = sd(ES))
 }
+
+#geom_pointrange(aes(ymin=AVG-SE, ymax=AVG+SE))
 ```
 
 
 **Height**  
-```{r}
+```{r, warning=FALSE}
 uk_height <- group_dat(bin_data(get_ES(fread("../output/UKBB/parsed_gwas/Height_50_parsed.txt"))))
 jb_height <- group_dat(bin_data(get_ES(fread("../output/BBJ/parsed_gwas/Height_135_parsed.txt"))))
 
-pl1 <- ggplot(uk_height, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_height, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_height, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet", alpha = 0.5, size = 1.5) + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-3,0.1))
+pl2 <- ggplot(jb_height, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-3,0.1))
 
 ggarrange(pl1, pl2)
 ```
 
+
 Remove the lowest frequnecy bin 
-```{r}
-pl1 <- ggplot(uk_height[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_height[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+```{r, warning=FALSE}
+pl1 <- ggplot(uk_height[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1,0.175))
+pl2 <- ggplot(jb_height[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1, 0.175))
 
 ggarrange(pl1, pl2)
 ```
@@ -70,16 +73,16 @@ ggarrange(pl1, pl2)
 uk_BMI <- group_dat(bin_data(get_ES(fread("../output/UKBB/parsed_gwas/BMI_23104_parsed.txt"))))
 jb_BMI <- group_dat(bin_data(get_ES(fread("../output/BBJ/parsed_gwas/BMI_1_parsed.txt"))))
 
-pl1 <- ggplot(uk_BMI, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_BMI, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_BMI, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1,0.6))
+pl2 <- ggplot(jb_BMI, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1,0.6))
 
 ggarrange(pl1, pl2)
 ```
 
 Remove lowest frequency bin 
 ```{r}
-pl1 <- ggplot(uk_BMI[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_BMI[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_BMI[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1,0.1))
+pl2 <- ggplot(jb_BMI[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-.1, 0.1))
 
 ggarrange(pl1, pl2)
 ```
@@ -91,16 +94,16 @@ ggarrange(pl1, pl2)
 uk_HDL <- group_dat(bin_data(get_ES(fread("../output/UKBB/parsed_gwas/HDL_30760_parsed.txt"))))
 jb_HDL <- group_dat(bin_data(get_ES(fread("../output/BBJ/parsed_gwas/HDL_47_parsed.txt"))))
 
-pl1 <- ggplot(uk_HDL, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_HDL, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_HDL, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1,0.12))
+pl2 <- ggplot(jb_HDL, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1,0.12))
 
 ggarrange(pl1, pl2)
 ```
 
 Remove lowest frequency bin 
 ```{r}
-pl1 <- ggplot(uk_HDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_HDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_HDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1,0.12))
+pl2 <- ggplot(jb_HDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1,0.12))
 
 ggarrange(pl1, pl2)
 ```
@@ -111,16 +114,16 @@ ggarrange(pl1, pl2)
 uk_LDL <- group_dat(bin_data(get_ES(fread("../output/UKBB/parsed_gwas/LDL_30780_parsed.txt"))))
 jb_LDL <- group_dat(bin_data(get_ES(fread("../output/BBJ/parsed_gwas/LDL_61_parsed.txt"))))
 
-pl1 <- ggplot(uk_LDL, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_LDL, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_LDL, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.2,0.1))
+pl2 <- ggplot(jb_LDL, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.2,0.1))
 
 ggarrange(pl1, pl2)
 ```
 
 Remove lowest frequency bin 
 ```{r}
-pl1 <- ggplot(uk_LDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_LDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_LDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.2,0.075))
+pl2 <- ggplot(jb_LDL[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.2,0.075))
 
 ggarrange(pl1, pl2)
 ```
@@ -131,16 +134,16 @@ ggarrange(pl1, pl2)
 uk_TG <- group_dat(bin_data(get_ES(fread("../output/UKBB/parsed_gwas/TG_30870_parsed.txt"))))
 jb_TG <- group_dat(bin_data(get_ES(fread("../output/BBJ/parsed_gwas/TG_109_parsed.txt"))))
 
-pl1 <- ggplot(uk_TG, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_TG, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_TG, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.15,0.1))
+pl2 <- ggplot(jb_TG, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.15,0.1))
 
 ggarrange(pl1, pl2)
 ```
 
 Remove lowest frequency bin 
 ```{r}
-pl1 <- ggplot(uk_TG[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_TG[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_TG[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.15,0.075))
+pl2 <- ggplot(jb_TG[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.15,0.075))
 
 ggarrange(pl1, pl2)
 ```
@@ -150,16 +153,16 @@ ggarrange(pl1, pl2)
 uk_Hb <- group_dat(bin_data(get_ES(fread("../output/UKBB/parsed_gwas/Hb_30050_parsed.txt"))))
 jb_Hb <- group_dat(bin_data(get_ES(fread("../output/BBJ/parsed_gwas/Hb_49_parsed.txt"))))
 
-pl1 <- ggplot(uk_Hb, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_Hb, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_Hb, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1,0.07))
+pl2 <- ggplot(jb_Hb, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1,0.07))
 
 ggarrange(pl1, pl2)
 ```
 
 Remove lowest frequency bin  
 ```{r}
-pl1 <- ggplot(uk_Hb[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_Hb[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_Hb[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1,0.07))
+pl2 <- ggplot(jb_Hb[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.1,0.07))
 
 ggarrange(pl1, pl2)
 ```
@@ -169,16 +172,16 @@ ggarrange(pl1, pl2)
 uk_Plt <- group_dat(bin_data(get_ES(fread("../output/UKBB/parsed_gwas/Plt_30080_parsed.txt"))))
 jb_Plt <- group_dat(bin_data(get_ES(fread("../output/BBJ/parsed_gwas/Plt_97_parsed.txt"))))
 
-pl1 <- ggplot(uk_Plt, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_Plt, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_Plt, aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.07,0.05))
+pl2 <- ggplot(jb_Plt, aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.07,0.05))
 
 ggarrange(pl1, pl2)
 ```
 
 Remove lowest frequency bin 
 ```{r}
-pl1 <- ggplot(uk_Plt[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) 
-pl2 <- ggplot(jb_Plt[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) 
+pl1 <- ggplot(uk_Plt[-1,], aes(x=MAX, y=AVG)) + geom_point(color = "darkviolet") + theme_bw() + xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("UKBB") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.07,0.05))
+pl2 <- ggplot(jb_Plt[-1,], aes(x=MAX, y=AVG)) + geom_point(color= "darkgreen") + theme_bw()+ xlab("Frequency") + ylab("Mean Effect Size") + ggtitle("BBJ") + theme(plot.title = element_text(hjust = 0.5)) + geom_hline(yintercept = 0, color = "darkred", size = 1) + geom_smooth(method = "loess", size = 0.75, color = "navy") + lims(y=c(-0.07,0.05))
 
 ggarrange(pl1, pl2)
 ```
