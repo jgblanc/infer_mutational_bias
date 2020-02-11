@@ -14,4 +14,5 @@ To see my inference of selection using the poisson random field model, click her
 To see my simple inference of W using STAN, click here [link](simple_stan_inference.html)   
 To see the results of data processing, click here [link](CS_results.html)   
 To see the results of my data processing from the GWAS Atlas, click here [link](GWAS_ATLAS_results.html)  
+To see the results of my UKBB vs BBJ data processing, click here [link](BBJvUKKBB.html)
 
