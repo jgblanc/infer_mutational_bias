@@ -1,0 +1,100 @@
+---
+title: "Stratification"
+author: "Jennifer Blanc"
+date: "2/13/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(data.table)
+library(dplyr)
+library(ggpubr)
+```
+
+
+## Intro
+
+Here we are interested in detecting the correlation of derived alleles and individual level PCs. Recall that the singular value decomposition of the genotype matrix can be written as:  
+
+$$G_{n\times L} = U_{n \times n} \space \Lambda_{n \times n}^{1/2} \space V_{n \times L}$$  
+
+Here G is the genotype matrix. The columns of $U$ are the left Eigenvectors, the rows of of $V$ are the right eigenvectors and the diagonals of $\Lambda^{1/2}$ are the square root of the eigenvalues. We can connect this to the eigen decomposition of the genotype covariance matrix:  
+
+$$K_{n\times n} = GG^T = U \Lambda^{1/2}V \space G^T$$ 
+$$ = U \Lambda^{1/2}V \space V^T\Lambda^{1/2}U^T$$ 
+$$ = U \Lambda^{1/2} I \Lambda^{1/2}U^T$$ 
+$$ = U_{n \times n} \Lambda_{n \times n} U^T_{n \times n}$$ 
+
+Here we are generating the square covariance matrix $K$ by multiplying $G G^T$. Now we can substitute the SVD decomposition of $G$ from above. We can also transpose this SVD to get $G^T$. Finally we can cancel things out until we get $U \Lambda U^T$, the eigen decomposition. Here $U$ (the same as above) contains the eigenvectors in the columns and the diagonals have the eigen values (amount of variance explained by each eigenvector). An important thing to remember is that these eigenvectors describe the axes of variance for the individuals, not SNPs. 
+
+Similarly we can write the LD matrix, $R$ in terms of its SVD components:  
+
+$$R_{L\times L} = G^TG$$
+$$ = V^T \Lambda^{1/2} U^T \space U \Lambda^{1/2}V$$
+$$ = V_{L \times n}^T \Lambda_{n \times n}V_{n \times L}$$
+
+Here we are interested in the right eigenvectors (the columns of $V^T$) that represent the correlation of each SNP with the individual eigenvector. In other words, the covariance of SNP $l$ with the an individual eigenvector $k$ is given by the dot product of the eigenvector and the genotypes at the SNP:  
+
+$$\vec{U_k} \cdot \vec{g_l} = V_{k,l}$$  
+
+These $V_{k,l}$ entries represent the correlation of each SNP with the individual PC, also called the SNP "loadings". Here we are interested if derived alleles are correlated with PC's in the data set. For instance, the first PC in the 1kg EUR individuals corresponds geographically to the latitude. We are interested in the sum of the SNP loadings for this PC where the loading is positive if the coded allele is derived and negative if the coded allele is ancestral. This will tell us if there is a relationship between derived alleles and this PC (if there is no relationship then the sum is 0).  
+
+## Method  
+
+1. Took 1kg BCF files from the 4th floor comp bio data  
+2. Used plink to run PCA on only the EUR samples (n = 503)  
+plink -bcf ../../../data/1kg/bcf/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.bcf --keep ../../../data/1kg/bcf/EUR_IDS.txt --double-id --pca var-wts --out ../output/PCA/chr1_EUR --allow-extra-chr  
+3. Plink outputs the SNP "loadings" for the first 20 PC's in an .eigenvec.var file  
+4. I used the 1kg_snps.tsv from Joe to add a column to the .eigenvec.var that says 1 if the coded allele (A2) is derived and -1 if the coded allele is ancestral. I was only able to annotate SNPs that had rsID's and had derived/ancestral info in the table - the rest have NA in that column.  
+
+
+## Get ID's of European individuals 
+```{r}
+pop_info <- fread("../data/STRAT/20130606_sample_info.csv")
+EUR <- pop_info %>% filter(Population %in% c("CEU", "TSI", "FIN", "GBR","IBS"))
+id_list <- cbind(0,EUR$Sample)
+id_only <- cbind(EUR$Sample,EUR$Sample)
+#write.table(id_only, "../data/STRAT/EUR_IDS.txt", row.names = F, quote = F, col.names = F)
+```
+
+
+## PCA 
+```{r}
+vecs <- fread("../data/STRAT/chr1_EUR_0.01.eigenvec")
+pop_info <- fread("../data/STRAT/20130606_sample_info.csv")
+dat <- inner_join(vecs, pop_info, by = c("V2"= "Sample"))
+p1 <- ggplot(data = dat, aes(x=V3, y=V4, color = Population)) + geom_point() + xlab("PC1") + ylab("PC2")
+p2 <- ggplot(data = dat, aes(x=V5, y=V6, color = Population)) + geom_point() + xlab("PC3") + ylab("PC4")
+p3 <- ggplot(data = dat, aes(x=V7, y=V8, color = Population)) + geom_point() + xlab("PC5") + ylab("PC6")
+p4 <- ggplot(data = dat, aes(x=V9, y=V10, color = Population)) + geom_point() + xlab("PC7") + ylab("PC8")
+ggarrange(p1,p2,p3,p4, common.legend = T)
+```
+
+## SNP Loadings 
+
+```{r}
+loading <- fread("../data/STRAT/chr1_EUR_0.01_DA.txt")
+loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
+only_num <- loading[,5:24]
+sums <- colSums(only_num, na.rm = T)
+
+df <- as.data.frame(cbind(sums,seq(1,20)))
+ggplot(df, aes(x=sums,y=V2)) + geom_point() + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1))
+```
+
+
+
+
+
+
+
+
+
+
+
+
