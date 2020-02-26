@@ -9,9 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Jennifer Blanc" />
 
 
-<title>Home</title>
+<title>Stratification</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +20,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -262,6 +266,90 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -269,6 +357,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -319,7 +417,9 @@ div.section {
 
 
 
-<h1 class="title toc-ignore">Home</h1>
+<h1 class="title toc-ignore">Stratification</h1>
+<h4 class="author">Jennifer Blanc</h4>
+<h4 class="date">2/13/2020</h4>
 
 </div>
 
@@ -347,7 +447,7 @@ div.section {
 <strong>Last updated:</strong> 2020-02-26
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>infer_mutational_bias/analysis/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -369,6 +469,66 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
 <p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20191108code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20191108)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20191108code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20191108)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
@@ -525,7 +685,6 @@ Untracked files:
     Untracked:  code/parse_gwas_atlas/myopia_3539.R
     Untracked:  code/parse_gwas_atlas/myopic_3539.R
     Untracked:  code/parse_gwas_atlas/parkinson_4167.R
-    Untracked:  docs/figure/Stratification.Rmd/
     Untracked:  output/BBJ/
     Untracked:  output/UKBB/
 
@@ -583,7 +742,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9e721a39f5426ac5b7ee5f76fe2d12a5237e694c/analysis/index.Rmd" target="_blank">9e721a3</a>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9e721a39f5426ac5b7ee5f76fe2d12a5237e694c/analysis/Stratification.Rmd" target="_blank">9e721a3</a>
 </td>
 <td>
 jgblanc
@@ -595,312 +754,6 @@ jgblanc
 Added PCA results
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/index.html" target="_blank">c3ab5d6</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-02-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/f28be1131a253c938a890792e6d90d49c77e3bb4/analysis/index.Rmd" target="_blank">f28be11</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-02-11
-</td>
-<td>
-Did comparisons
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/eb46920ea1ca4f47b62c87e6dfc2b896f3259a2f/docs/index.html" target="_blank">eb46920</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/75fc4f09786930c22163257fb11b424b750d29f9/docs/index.html" target="_blank">75fc4f0</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/f3aca4497294619fe053d187d28fadb1ebf1312f/analysis/index.Rmd" target="_blank">f3aca44</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Start of GWAS atlas analysis
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/f507bb5022d5669a96a901f53dd6bdcc1683c254/docs/index.html" target="_blank">f507bb5</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/fcf86504b6ca802d1c5e4b3adb4555d6fa9c4ffd/analysis/index.Rmd" target="_blank">fcf8650</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Start of GWAS atlas analysis
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/7694f8a39f9a13a323bb8113570cf6e8a212d8b7/docs/index.html" target="_blank">7694f8a</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/e9fc5ca03b196ffb3fbcc24b363631169ef35ad2/analysis/index.Rmd" target="_blank">e9fc5ca</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Start of GWAS atlas analysis
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/b86e80772e5699cee034960c90a70c63cd19fd3f/docs/index.html" target="_blank">b86e807</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-14
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/7bfd1996bd9dba31b503ce791aed3012976ba5a3/analysis/index.Rmd" target="_blank">7bfd199</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-14
-</td>
-<td>
-Worked on inference problem
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/d501548d967ef91d377dfea94686709b0e4dbd6e/docs/index.html" target="_blank">d501548</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-12-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/76aeb72ddd7f4a731525e51064b1d8a95d743e76/analysis/index.Rmd" target="_blank">76aeb72</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-12-02
-</td>
-<td>
-Started analyzing cs results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/ba34a9c894904c7a3bf668707026918e07318da7/docs/index.html" target="_blank">ba34a9c</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-26
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/548c5f30e2be63906b6f28123ffe0cc508a6ba6f/docs/index.html" target="_blank">548c5f3</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-12
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/2c7bc48d122b8b25403bea947eb99c616c375fda/analysis/index.Rmd" target="_blank">2c7bc48</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-12
-</td>
-<td>
-Publish simple stan inference
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/fa94f8e3d53c4b704290aef88111c63f4b37387d/docs/index.html" target="_blank">fa94f8e</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-08
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/001ead2785e17ee071c08c4e3a557fc1f62fbbc8/analysis/index.Rmd" target="_blank">001ead2</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-08
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -908,13 +761,105 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>Welcome to my research website.</p>
-<p>To see my inference of selection using the poisson random field model, click here <a href="simple_inference_PRF.html">link</a><br />
-To see my simple inference of W using STAN, click here <a href="simple_stan_inference.html">link</a><br />
-To see the results of data processing, click here <a href="CS_results.html">link</a><br />
-To see the results of my data processing from the GWAS Atlas, click here <a href="GWAS_ATLAS_results.html">link</a><br />
-To see the results of my UKBB vs BBJ data processing, click here <a href="BBJvUKKBB.html">link</a><br />
-To see the results of PCA on 1kg data, click here <a href="Stratification.html">link</a></p>
+<pre class="r"><code>library(ggplot2)
+library(data.table)
+library(dplyr)
+library(ggpubr)</code></pre>
+<div id="intro" class="section level2">
+<h2>Intro</h2>
+<p>Here we are interested in detecting the correlation of derived alleles and individual level PCs. Recall that the singular value decomposition of the genotype matrix can be written as:</p>
+<p><span class="math display">\[G_{n\times L} = U_{n \times n} \space \Lambda_{n \times n}^{1/2} \space V_{n \times L}\]</span></p>
+<p>Here G is the genotype matrix. The columns of <span class="math inline">\(U\)</span> are the left Eigenvectors, the rows of of <span class="math inline">\(V\)</span> are the right eigenvectors and the diagonals of <span class="math inline">\(\Lambda^{1/2}\)</span> are the square root of the eigenvalues. We can connect this to the eigen decomposition of the genotype covariance matrix:</p>
+<p><span class="math display">\[K_{n\times n} = GG^T = U \Lambda^{1/2}V \space G^T\]</span> <span class="math display">\[ = U \Lambda^{1/2}V \space V^T\Lambda^{1/2}U^T\]</span> <span class="math display">\[ = U \Lambda^{1/2} I \Lambda^{1/2}U^T\]</span> <span class="math display">\[ = U_{n \times n} \Lambda_{n \times n} U^T_{n \times n}\]</span></p>
+<p>Here we are generating the square covariance matrix <span class="math inline">\(K\)</span> by multiplying <span class="math inline">\(G G^T\)</span>. Now we can substitute the SVD decomposition of <span class="math inline">\(G\)</span> from above. We can also transpose this SVD to get <span class="math inline">\(G^T\)</span>. Finally we can cancel things out until we get <span class="math inline">\(U \Lambda U^T\)</span>, the eigen decomposition. Here <span class="math inline">\(U\)</span> (the same as above) contains the eigenvectors in the columns and the diagonals have the eigen values (amount of variance explained by each eigenvector). An important thing to remember is that these eigenvectors describe the axes of variance for the individuals, not SNPs.</p>
+<p>Similarly we can write the LD matrix, <span class="math inline">\(R\)</span> in terms of its SVD components:</p>
+<p><span class="math display">\[R_{L\times L} = G^TG\]</span> <span class="math display">\[ = V^T \Lambda^{1/2} U^T \space U \Lambda^{1/2}V\]</span> <span class="math display">\[ = V_{L \times n}^T \Lambda_{n \times n}V_{n \times L}\]</span></p>
+<p>Here we are interested in the right eigenvectors (the columns of <span class="math inline">\(V^T\)</span>) that represent the correlation of each SNP with the individual eigenvector. In other words, the covariance of SNP <span class="math inline">\(l\)</span> with the an individual eigenvector <span class="math inline">\(k\)</span> is given by the dot product of the eigenvector and the genotypes at the SNP:</p>
+<p><span class="math display">\[\vec{U_k} \cdot \vec{g_l} = V_{k,l}\]</span></p>
+<p>These <span class="math inline">\(V_{k,l}\)</span> entries represent the correlation of each SNP with the individual PC, also called the SNP “loadings”. Here we are interested if derived alleles are correlated with PC’s in the data set. For instance, the first PC in the 1kg EUR individuals corresponds geographically to the latitude. We are interested in the sum of the SNP loadings for this PC where the loading is positive if the coded allele is derived and negative if the coded allele is ancestral. This will tell us if there is a relationship between derived alleles and this PC (if there is no relationship then the sum is 0).</p>
+</div>
+<div id="method" class="section level2">
+<h2>Method</h2>
+<ol style="list-style-type: decimal">
+<li>Took 1kg BCF files from the 4th floor comp bio data<br />
+</li>
+<li>Used plink to run PCA on only the EUR samples (n = 503)<br />
+plink -bcf ../../../data/1kg/bcf/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.bcf –keep ../../../data/1kg/bcf/EUR_IDS.txt –double-id –pca var-wts –out ../output/PCA/chr1_EUR –allow-extra-chr<br />
+</li>
+<li>Plink outputs the SNP “loadings” for the first 20 PC’s in an .eigenvec.var file<br />
+</li>
+<li>I used the 1kg_snps.tsv from Joe to add a column to the .eigenvec.var that says 1 if the coded allele (A2) is derived and -1 if the coded allele is ancestral. I was only able to annotate SNPs that had rsID’s and had derived/ancestral info in the table - the rest have NA in that column.</li>
+</ol>
+</div>
+<div id="get-ids-of-european-individuals" class="section level2">
+<h2>Get ID’s of European individuals</h2>
+<pre class="r"><code>pop_info &lt;- fread(&quot;../data/STRAT/20130606_sample_info.csv&quot;)
+EUR &lt;- pop_info %&gt;% filter(Population %in% c(&quot;CEU&quot;, &quot;TSI&quot;, &quot;FIN&quot;, &quot;GBR&quot;,&quot;IBS&quot;))
+id_list &lt;- cbind(0,EUR$Sample)
+id_only &lt;- cbind(EUR$Sample,EUR$Sample)
+#write.table(id_only, &quot;../data/STRAT/EUR_IDS.txt&quot;, row.names = F, quote = F, col.names = F)</code></pre>
+</div>
+<div id="pca" class="section level2">
+<h2>PCA</h2>
+<pre class="r"><code>vecs &lt;- fread(&quot;../data/STRAT/chr1_EUR_0.01.eigenvec&quot;)
+pop_info &lt;- fread(&quot;../data/STRAT/20130606_sample_info.csv&quot;)
+dat &lt;- inner_join(vecs, pop_info, by = c(&quot;V2&quot;= &quot;Sample&quot;))
+p1 &lt;- ggplot(data = dat, aes(x=V3, y=V4, color = Population)) + geom_point() + xlab(&quot;PC1&quot;) + ylab(&quot;PC2&quot;)
+p2 &lt;- ggplot(data = dat, aes(x=V5, y=V6, color = Population)) + geom_point() + xlab(&quot;PC3&quot;) + ylab(&quot;PC4&quot;)
+p3 &lt;- ggplot(data = dat, aes(x=V7, y=V8, color = Population)) + geom_point() + xlab(&quot;PC5&quot;) + ylab(&quot;PC6&quot;)
+p4 &lt;- ggplot(data = dat, aes(x=V9, y=V10, color = Population)) + geom_point() + xlab(&quot;PC7&quot;) + ylab(&quot;PC8&quot;)
+ggarrange(p1,p2,p3,p4, common.legend = T)</code></pre>
+<p><img src="figure/Stratification.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="snp-loadings" class="section level2">
+<h2>SNP Loadings</h2>
+<pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/chr1_EUR_0.01_DA.txt&quot;)
+loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
+only_num &lt;- loading[,5:24]
+sums &lt;- colSums(only_num, na.rm = T)
+
+df &lt;- as.data.frame(cbind(sums,seq(1,20)))
+ggplot(df, aes(x=sums,y=V2)) + geom_point() + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1))</code></pre>
+<p><img src="figure/Stratification.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.5.1 (2018-07-02)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS High Sierra 10.13.6
+
+Matrix products: default
+BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] ggpubr_0.2        magrittr_1.5      dplyr_0.8.1       data.table_1.12.2
+[5] ggplot2_3.2.1    
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.3       compiler_3.5.1   pillar_1.4.2     git2r_0.25.2    
+ [5] workflowr_1.4.0  tools_3.5.1      digest_0.6.22    evaluate_0.14   
+ [9] lifecycle_0.1.0  tibble_2.1.3     gtable_0.3.0     pkgconfig_2.0.3 
+[13] rlang_0.4.1      yaml_2.2.0       xfun_0.7         gridExtra_2.3   
+[17] withr_2.1.2      stringr_1.4.0    knitr_1.23       fs_1.3.1        
+[21] cowplot_0.9.4    rprojroot_1.3-2  grid_3.5.1       tidyselect_0.2.5
+[25] glue_1.3.1       R6_2.4.1         rmarkdown_1.13   farver_2.0.1    
+[29] purrr_0.3.2      whisker_0.3-2    backports_1.1.5  scales_1.1.0    
+[33] htmltools_0.3.6  assertthat_0.2.1 colorspace_1.4-1 labeling_0.3    
+[37] stringi_1.4.3    lazyeval_0.2.2   munsell_0.5.0    crayon_1.3.4    </code></pre>
+</div>
+</div>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
@@ -930,6 +875,8 @@ footer is added to webpages before the MathJax javascript. -->
 </script>
 
 
+</div>
+</div>
 
 </div>
 
