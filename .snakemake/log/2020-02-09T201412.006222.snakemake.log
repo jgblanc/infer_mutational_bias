@@ -1,0 +1,18 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	parse_neal
+	1
+
+[Sun Feb  9 20:14:12 2020]
+rule parse_neal:
+    input: data/UKBB/BMI_23104.txt
+    output: output/UKBB/parsed_gwas/BMI_23104_parsed.txt
+    jobid: 0
+    wildcards: trait=BMI_23104
+
+Terminating processes on user request, this might take some time.
+Cancelling snakemake on user request.

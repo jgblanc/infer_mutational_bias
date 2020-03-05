@@ -81,13 +81,19 @@ ggarrange(p1,p2,p3,p4, common.legend = T)
 loading <- fread("../data/STRAT/chr1_EUR_0.01_DA.txt")
 loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
 only_num <- loading[,5:24]
-sums <- colSums(only_num, na.rm = T)
+sums <- colMeans(only_num, na.rm = T)
 
 df <- as.data.frame(cbind(sums,seq(1,20)))
-ggplot(df, aes(x=sums,y=V2)) + geom_point() + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1))
+pl <- ggplot(df, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw()
+ggsave("~/Desktop/loading.png",pl, height = 5, width = 6)
 ```
 
 
+
+```{r}
+p1 <- ggplot(data = dat, aes(x=V3, y=V4, color = Population)) + geom_point() + xlab("PC1") + ylab("PC2") + theme_classic()
+ggsave("~/Desktop/PCA.png",p1, height = 5, width = 6)
+```
 
 
 

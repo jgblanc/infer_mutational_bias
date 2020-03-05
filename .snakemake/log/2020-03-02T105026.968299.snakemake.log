@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 27 of /Users/jenniferblanc/infer_mutational_bias/Snakefile:
+Missing input files for rule parse_gwas_atlas:
+data/GWAS_ATLAS/BMI_4074\.txt

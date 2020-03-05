@@ -1,0 +1,15 @@
+
+./plink \
+--noweb \
+--bfile ../data/1000G_20101123_v3_GIANT_chr1_23_minimacnamesifnotRS_CEU_MAF0.01/1000G_20101123_v3_GIANT_chr1_23_minimacnamesifnotRS_CEU_MAF0.01_VARID \
+--clump ../output/GWAS_ATLAS/parsed_gwas/schizophrenia_3982_parsed.txt \
+--clump-field P \
+--clump-p1 1 \
+--clump-p2 1 \
+--clump-r2 0.5 \
+--clump-kb 250 \
+--out test4
+
+awk '{ print $3 }' test4.clumped > test4.SNPs.txt  
+rm 
+

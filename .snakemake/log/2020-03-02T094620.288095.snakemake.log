@@ -1,0 +1,44 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	Extract_clumped_SNPs_GWAS_ATLAS
+	1	LD_clumping_GWAS_atlas
+	1	parse_gwas_atlas
+	3
+
+[Mon Mar  2 09:46:20 2020]
+rule parse_gwas_atlas:
+    input: data/GWAS_ATLAS/MS_24076602.txt
+    output: output/GWAS_ATLAS/parsed_gwas/MS_24076602_parsed.txt
+    jobid: 2
+    wildcards: trait=MS_24076602
+
+[Mon Mar  2 09:46:22 2020]
+Finished job 2.
+1 of 3 steps (33%) done
+
+[Mon Mar  2 09:46:22 2020]
+rule LD_clumping_GWAS_atlas:
+    input: output/GWAS_ATLAS/parsed_gwas/MS_24076602_parsed.txt
+    output: output/GWAS_ATLAS/clumped/MS_24076602.clumped
+    jobid: 1
+    wildcards: trait=MS_24076602
+
+[Mon Mar  2 09:55:27 2020]
+Finished job 1.
+2 of 3 steps (67%) done
+
+[Mon Mar  2 09:55:27 2020]
+rule Extract_clumped_SNPs_GWAS_ATLAS:
+    input: output/GWAS_ATLAS/clumped/MS_24076602.clumped
+    output: output/GWAS_ATLAS/clumped/MS_24076602_SNPs.txt
+    jobid: 0
+    wildcards: trait=MS_24076602
+
+[Mon Mar  2 09:55:27 2020]
+Finished job 0.
+3 of 3 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-03-02T094620.288095.snakemake.log

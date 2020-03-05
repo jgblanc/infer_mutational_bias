@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 59 of /Users/jenniferblanc/infer_mutational_bias/Snakefile:
+Missing input files for rule LD_clumping_GWAS_atlas:
+data/GWAS_ATLAS/parsed_gwas/CKD_4210_parsed.txt

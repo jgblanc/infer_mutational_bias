@@ -1,0 +1,26 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	LD_clump_GWAS_ATLAS
+	1
+
+[Sat Feb 29 14:27:10 2020]
+rule LD_clump_GWAS_ATLAS:
+    input: output/GWAS_ATLAS/parsed_gwas/CKD_4210_parsed.txt
+    output: output/GWAS_ATLAS/clumped/CKD_4210.clumped, output/GWAS_ATLAD/clumped/CKD_4210.log
+    jobid: 0
+    wildcards: trait=CKD_4210
+
+Waiting at most 5 seconds for missing files.
+MissingOutputException in line 59 of /Users/jenniferblanc/infer_mutational_bias/Snakefile:
+Missing files after 5 seconds:
+output/GWAS_ATLAD/clumped/CKD_4210.log
+This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait.
+Removing output files of failed job LD_clump_GWAS_ATLAS since they might be corrupted:
+output/GWAS_ATLAS/clumped/CKD_4210.clumped
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-02-29T142710.518427.snakemake.log

@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 43 of /Users/jenniferblanc/infer_mutational_bias/Snakefile:
+Missing input files for rule parse_bbj:
+data/BBJ/BMI_47.txt

@@ -1,0 +1,19 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_evo_atlas
+	1	parse_gwas_atlas
+	2
+
+[Fri Jan 31 13:25:09 2020]
+rule parse_gwas_atlas:
+    input: data/GWAS_ATLAS/AD_4094.txt
+    output: output/GWAS_ATLAS/parsed_gwas/AD_4094_parsed.txt
+    jobid: 1
+    wildcards: trait=AD_4094
+
+Terminating processes on user request, this might take some time.
+Cancelling snakemake on user request.

@@ -1,0 +1,4 @@
+Building DAG of jobs...
+MissingInputException in line 51 of /Users/jenniferblanc/infer_mutational_bias/Snakefile:
+Missing input files for rule parse_neal:
+data/UKBB/Plt_30800.txt

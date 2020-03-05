@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	LD_clump_GWAS_ATLAS
+	1
+
+[Sat Feb 29 14:31:15 2020]
+rule LD_clump_GWAS_ATLAS:
+    input: output/GWAS_ATLAS/parsed_gwas/CKD_4210_parsed.txt
+    output: output/GWAS_ATLAS/clumped/CKD_4210.clumped
+    jobid: 0
+    wildcards: trait=CKD_4210
+
+[Sat Feb 29 14:32:55 2020]
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-02-29T143115.038510.snakemake.log

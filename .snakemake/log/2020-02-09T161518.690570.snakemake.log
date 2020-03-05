@@ -1,0 +1,24 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	parse_bbj
+	1
+
+[Sun Feb  9 16:15:18 2020]
+rule parse_bbj:
+    input: data/BBJ/Height_135.txt
+    output: output/BBJ/parsed_gwas/Height_135_parsed.txt
+    jobid: 0
+    wildcards: trait=Height_135
+
+[Sun Feb  9 16:15:18 2020]
+Error in rule parse_bbj:
+    jobid: 0
+    output: output/BBJ/parsed_gwas/Height_135_parsed.txt
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-02-09T161518.690570.snakemake.log

@@ -1,0 +1,18 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	LD_clump_GWAS_ATLAS
+	1
+
+[Sat Feb 29 14:26:24 2020]
+rule LD_clump_GWAS_ATLAS:
+    input: output/GWAS_ATLAS/parsed_gwas/CKD_4210_parsed.txt
+    output: output/GWAS_ATLAS/clumped/CKD_4210.clumped, output/GWAS_ATLAD/clumped/CKD_4210.log
+    jobid: 0
+    wildcards: trait=CKD_4210
+
+RuleException in line 59 of /Users/jenniferblanc/infer_mutational_bias/Snakefile:
+NameError: The name 'trait' is unknown in this context. Please make sure that you defined that variable. Also note that braces not used for variable access have to be escaped by repeating them, i.e. {{print $1}}

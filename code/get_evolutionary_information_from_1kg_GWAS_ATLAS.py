@@ -28,7 +28,6 @@ with open(filepath) as fp:
 print("Made Dictionary") 
 
 # Open GWAS file and pull out derived allele for each SNP based on CHRO:POS matching in directory
-# Open GWAS file and pull out derived allele for each SNP based on rsID matching in directory
 filepath_GWAS = snakemake.input[0]
 new_file_lines = []
 with open(filepath_GWAS) as fp: 
@@ -45,8 +44,6 @@ with open(filepath_GWAS) as fp:
         RAF = line_list[10]
         try: 
             DA = da_dict[SNP]
-#            print(DA)
-            print(MAF)
             DAF = float(daf_dict[SNP])
             if MAF != "NA" and EAF == "NA":
                 print("GOOD")
@@ -57,14 +54,15 @@ with open(filepath_GWAS) as fp:
                         line_list[8] = str(1 - float(MAF)) 
                 if DAF >= 0.5:
                     if DA == EA:
-                        line_list[9]= str(1 - float(MAF)) 
+                        line_list[8]= str(1 - float(MAF)) 
                     else:
                         line_list[8] = MAF
                 if RA == EA:
                     line_list[10] = str(line_list[8])
                 else:
                     line_list[10] = str(1 - float(line_list[8]))
-    
+                EAF = line_list[8]
+                RAF = line_list[10]
             if DA == EA: 
                 new_entry = "T"
                 if EAF == "NA":
@@ -92,15 +90,14 @@ with open(filepath_GWAS) as fp:
             new_entry = "NA" 
             daf = str("NA")
             r_derived = "NA"
- #       print(daf)
         line_list.append(new_entry)
         line_list.append(daf)
-#        print(line_list)
         line_list.append(r_derived)
         new_line = ",".join(line_list)
+        print(new_line)
         new_file_lines.append(new_line)
         line = fp.readline()     
-print("Matched GWAS")    
+print("Matched GWAS")       
     
         
 # Re-write GWAS summary statistics table with column that says if effect allele is derieved

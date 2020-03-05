@@ -1,0 +1,32 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_evo_atlas
+	1	parse_gwas_atlas
+	2
+
+[Thu Jan 30 16:39:14 2020]
+rule parse_gwas_atlas:
+    input: data/GWAS_ATLAS/breastcancer_3659.txt
+    output: output/GWAS_ATLAS/parsed_gwas/breastcancer_3659_parsed.txt
+    jobid: 1
+    wildcards: trait=breastcancer_3659
+
+[Thu Jan 30 16:39:37 2020]
+Finished job 1.
+1 of 2 steps (50%) done
+
+[Thu Jan 30 16:39:37 2020]
+rule add_evo_atlas:
+    input: output/GWAS_ATLAS/parsed_gwas/breastcancer_3659_parsed.txt
+    output: output/GWAS_ATLAS/evo_added/breastcancer_3659_evo.txt
+    jobid: 0
+    wildcards: trait=breastcancer_3659
+
+[Thu Jan 30 16:56:45 2020]
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-01-30T163914.317308.snakemake.log

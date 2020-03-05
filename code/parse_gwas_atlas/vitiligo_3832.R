@@ -13,14 +13,24 @@ print(snakemake@input[[1]])
 
 # Load data
 gwas_data <- read.table(snakemake@input[[1]], header = F, fill=T)
+gwas_data <- read.table("~/infer_mutational_bias/data/GWAS_ATLAS/vitiligo_3832.txt", header = F, fill = T)
 print("loaded data")
-col_names <- c("CHR","SNP","BP","A1","A2","MAF"	,"CHISQ","P","ORX","SE",	"L95",	"U95")
-colnames(gwas_data) <- col_names
+
+chr1 <- subset(gwas_data, gwas_data$V1 == 1)
+col_names_1 <- c("CHR","SNP","BP","A1","A2","MAF"	,"CHISQ","P","ORX","SE",	"L95",	"U95")
+colnames(chr1) <- col_names_1
+
+notchr1 <- subset(gwas_data, gwas_data$V1 != 1)
+col_names_not1 <- c('CHR','SNP','BP','A1','MAF','A2','CHISQ','P','ORX','SE',	'L95',	'U95')
+colnames(notchr1) <- col_names_not1
+notchr1 <- notchr1[, c("CHR","SNP","BP","A1","A2","MAF"	,"CHISQ","P","ORX","SE",	"L95",	"U95")]
+
+gwas_data <- rbind(chr1,notchr1)
 
 # Filter to P-values smaller than 5e-8
 data <- gwas_data %>% filter(P <= 5e-8)
 
-# Delete column with total sample
+# Delete column with chi-sqr and CIs
 data <- data[, -c(7,11,12)]
 
 # Change SNP ID's to be CHR:BP

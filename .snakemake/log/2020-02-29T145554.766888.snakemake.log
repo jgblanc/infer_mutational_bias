@@ -1,0 +1,3 @@
+Building DAG of jobs...
+MissingRuleException:
+No rule to produce /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-02-29T145512.149617.snakemake.log (if you use input functions make sure that they don't raise unexpected exceptions).

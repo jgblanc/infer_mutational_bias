@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	parse_neal
+	1
+
+[Mon Feb 10 15:01:06 2020]
+rule parse_neal:
+    input: data/UKBB/Plt_30080.txt
+    output: output/UKBB/parsed_gwas/Plt_30080_parsed.txt
+    jobid: 0
+    wildcards: trait=Plt_30080
+
+[Mon Feb 10 15:19:57 2020]
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-02-10T150106.868447.snakemake.log

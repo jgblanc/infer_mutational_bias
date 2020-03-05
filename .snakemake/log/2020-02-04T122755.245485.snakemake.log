@@ -1,0 +1,30 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_evo_atlas
+	1	parse_gwas_atlas
+	2
+
+[Tue Feb  4 12:27:55 2020]
+rule parse_gwas_atlas:
+    input: data/GWAS_ATLAS/COasthma_4266.txt
+    output: output/GWAS_ATLAS/parsed_gwas/COasthma_4266_parsed.txt
+    jobid: 1
+    wildcards: trait=COasthma_4266
+
+[Tue Feb  4 12:28:13 2020]
+Finished job 1.
+1 of 2 steps (50%) done
+
+[Tue Feb  4 12:28:13 2020]
+rule add_evo_atlas:
+    input: output/GWAS_ATLAS/parsed_gwas/COasthma_4266_parsed.txt
+    output: output/GWAS_ATLAS/evo_added/COasthma_4266_evo.txt
+    jobid: 0
+    wildcards: trait=COasthma_4266
+
+Terminating processes on user request, this might take some time.
+Cancelling snakemake on user request.

@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	parse_bbj
+	1
+
+[Sun Feb  9 16:52:46 2020]
+rule parse_bbj:
+    input: data/BBJ/TG_109.txt
+    output: output/BBJ/parsed_gwas/TG_109_parsed.txt
+    jobid: 0
+    wildcards: trait=TG_109
+
+[Sun Feb  9 16:52:54 2020]
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-02-09T165246.623702.snakemake.log
