@@ -1,0 +1,16 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_evo_atlas_RSID
+	1
+
+[Fri Mar  6 11:05:03 2020]
+rule add_evo_atlas_RSID:
+    input: output/GWAS_ATLAS/parsed_gwas/depression_4293.RS_parsed.txt
+    output: output/GWAS_ATLAS/evo_added/depression_4293_evo.txt
+    jobid: 0
+    wildcards: trait=depression_4293
+

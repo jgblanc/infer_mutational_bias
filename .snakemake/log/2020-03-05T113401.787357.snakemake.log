@@ -1,0 +1,24 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	parse_gwas_atlas_RSID
+	1
+
+[Thu Mar  5 11:34:01 2020]
+rule parse_gwas_atlas_RSID:
+    input: data/GWAS_ATLAS/depression_4293_RS.txt
+    output: output/GWAS_ATLAS/parsed_gwas/depression_4293.RS_parsed.txt
+    jobid: 0
+    wildcards: trait=depression_4293
+
+[Thu Mar  5 11:34:01 2020]
+Error in rule parse_gwas_atlas_RSID:
+    jobid: 0
+    output: output/GWAS_ATLAS/parsed_gwas/depression_4293.RS_parsed.txt
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-03-05T113401.787357.snakemake.log

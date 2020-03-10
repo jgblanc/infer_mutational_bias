@@ -1,0 +1,12 @@
+Building DAG of jobs...
+AmbiguousRuleException:
+Rules parse_gwas_atlas and parse_gwas_atlas_RSID are ambiguous for the file output/GWAS_ATLAS/parsed_gwas/depression_4293_RS_parsed.txt.
+Consider starting rule output with a unique prefix, constrain your wildcards, or use the ruleorder directive.
+Wildcards:
+	parse_gwas_atlas: trait=depression_4293_RS
+	parse_gwas_atlas_RSID: trait=depression_4293
+Expected input files:
+	parse_gwas_atlas: data/GWAS_ATLAS/depression_4293_RS.txt
+	parse_gwas_atlas_RSID: data/GWAS_ATLAS/depression_4293_RS.txtExpected output files:
+	parse_gwas_atlas: output/GWAS_ATLAS/parsed_gwas/depression_4293_RS_parsed.txt
+	parse_gwas_atlas_RSID: output/GWAS_ATLAS/parsed_gwas/depression_4293_RS_parsed.txt

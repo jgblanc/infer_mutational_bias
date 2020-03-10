@@ -32,6 +32,14 @@ rule parse_gwas_atlas:
     script:
         "code/parse_gwas_atlas/{wildcards.trait}.R"
 
+rule parse_gwas_atlas_RSID:
+    input:
+        "data/GWAS_ATLAS/{trait}_RS.txt"
+    output:
+        "output/GWAS_ATLAS/parsed_gwas/{trait}.RS_parsed.txt"
+    script:
+        "code/parse_gwas_atlas/{wildcards.trait}_RS.R"
+
 rule add_evo_atlas:
     input:
         "output/GWAS_ATLAS/parsed_gwas/{trait}_parsed.txt"
@@ -39,6 +47,14 @@ rule add_evo_atlas:
         "output/GWAS_ATLAS/evo_added/{trait}_evo.txt"
     script:
         "code/get_evolutionary_information_from_1kg_GWAS_ATLAS.py"
+
+rule add_evo_atlas_RSID:
+    input:
+        "output/GWAS_ATLAS/parsed_gwas/{trait}.RS_parsed.txt"
+    output:
+        "output/GWAS_ATLAS/evo_added/{trait}_evo.txt"
+    script:
+        "code/get_evolutionary_information_from_1kg_GWAS_ATLAS_RSID.py"
 
 rule parse_bbj:
     input:

@@ -387,7 +387,21 @@ ggarrange(p1,p2, nrow = 2)
 mean(vit$RAF, na.rm = T)
 ```
 
+Vitiligo
+```{r}
+BIP <- fread("../output/GWAS_ATLAS/evo_added/BIP_4039_evo.txt")
+colnames(BIP) <- c(colnames(BIP)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+BIP$disease <- "BIPiligo"
+clumped <- fread("../output/GWAS_ATLAS/clumped/BIP_4039_SNPs.txt")
+BIP <- left_join(clumped, BIP, by= "SNP") 
 
+dat <- subset(BIP, BIP$Risk_Derived == 'T' | BIP$Risk_Derived == 'F')
+p1 <- ggplot(data=dat, aes(x=RAF,y=OR, color=RISK)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = cols) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("OR") + labs(color = "Increasing")
+p2 <- ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+
+ggarrange(p1,p2, nrow = 2)
+mean(BIP$RAF, na.rm = T)
+```
 
 
 ## Median RAF 

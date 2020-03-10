@@ -1,10 +1,6 @@
-# Parse schizophrenia_PGC.txt
-# It was very difficult to tell which allele was what in this GWAS
-# The downloads page does not exist, I was able to access the scz gwas's at this link (https://www.med.unc.edu/pgc/results-and-downloads__trashed/scz/)
-# I downloaded the EUR samples from EAS GWAS (a280ca286af274da1ff80f9bd6e46a0b)
-# These samples are the same (or very similar) to the ones used in this gwas (https://www.ncbi.nlm.nih.gov/pubmed/25056061)
-# From the supplement table 2 of that paper https://static-content.springer.com/esm/art%3A10.1038%2Fnature13595/MediaObjects/41586_2014_BFnature13595_MOESM75_ESM.pdf,
-# they say that A1 is the effect allele for the frequency and the effect columns - I check a couple snps to make sure that they have the same OR as in my data
+# Parse BIP_4039.txt
+# I based the polarization on the previous PGC gwas I parsed, I double checked using the SNPs in this table http://pgcdata.med.unc.edu/bipolar_disorder/BIP%202018%20readme.pdf
+# and the allele freqs in the GWAS
 
 
 
@@ -18,17 +14,17 @@ print(snakemake@input[[1]])
 
 # Load data
 gwas_data <- fread(snakemake@input[[1]], fill = T)
-gwas_data <- fread("~/infer_mutational_bias/data/GWAS_ATLAS/schizophrenia_PGC.txt", fill= T)
+gwas_data <- fread("~/infer_mutational_bias/data/GWAS_ATLAS/BIP_4039.txt", fill= T)
 col_nasmes <- colnames(gwas_data)
 
 # Filter to P-values smaller than 5e-8
 data <- gwas_data %>% filter(P <= 5e-8)
 
 # Delete uneeded columns
-data <- data[, -c(8,12,13,14,15,16,17,18)]
+data <- data[, -c(8,12,13,14,15,16,17,18,19)]
 
 # Calculate the EAF - use weighted average of case/control freqs
-data$EAF <- ((33640/77096)*data$FRQ_A_33640) + ((43456/77096)*data$FRQ_U_43456)
+data$EAF <- ((20352/51710)*data$FRQ_A_20352) + ((31358/51710)*data$FRQ_U_31358)
 
 # Remove frequency columns
 data <- data[, -c(6,7)]

@@ -1,0 +1,24 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_evo_atlas_RSID
+	1
+
+[Thu Mar  5 14:10:52 2020]
+rule add_evo_atlas_RSID:
+    input: output/GWAS_ATLAS/parsed_gwas/depression_4293.RS_parsed.txt
+    output: output/GWAS_ATLAS/evo_added/depression_4293_evo.txt
+    jobid: 0
+    wildcards: trait=depression_4293
+
+[Thu Mar  5 14:54:27 2020]
+Error in rule add_evo_atlas_RSID:
+    jobid: 0
+    output: output/GWAS_ATLAS/evo_added/depression_4293_evo.txt
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-03-05T141052.527790.snakemake.log
