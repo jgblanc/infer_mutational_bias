@@ -502,10 +502,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreec0d4d1ec960544829c62ac38aa2c66faf52f6fd2targetblankc0d4d1ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/c0d4d1ec960544829c62ac38aa2c66faf52f6fd2" target="_blank">c0d4d1e</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreee35f16114a4fee2d37bf931b090435754f4fdc82targetblanke35f161a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/e35f16114a4fee2d37bf931b090435754f4fdc82" target="_blank">e35f161</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreec0d4d1ec960544829c62ac38aa2c66faf52f6fd2targetblankc0d4d1ea" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreee35f16114a4fee2d37bf931b090435754f4fdc82targetblanke35f161a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -613,6 +613,40 @@ Message
 <tbody>
 <tr>
 <td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/e35f16114a4fee2d37bf931b090435754f4fdc82/analysis/shift_GWAS_ATLAS.Rmd" target="_blank">e35f161</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-17
+</td>
+<td>
+looked for shift
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/05bcd8b4be77010a4b330202dd8b8e2a47f012d8/docs/shift_GWAS_ATLAS.html" target="_blank">05bcd8b</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-17
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 html
 </td>
 <td>
@@ -656,7 +690,15 @@ looked for shift
 <p><span class="math display">\[E[\hat{\beta}] = \beta_l + \beta_E cov(\vec{E}, \vec{g})\]</span></p>
 <p>Model with using residuls after regressing out first PC and <span class="math inline">\(\vec{U_1} = \vec{E}\)</span>:</p>
 <p><span class="math display">\[E[\beta_l] = \beta_l(1 - r^2(g_l,\vec{U_1}))\]</span></p>
-<p>Schizophrenia <img src="figure/shift_GWAS_ATLAS.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Schizophrenia</p>
+<pre class="r"><code>schizophrenia &lt;- fread(&quot;../output/GWAS_ATLAS/evo_added/schizophrenia_3982_0.95_evo.txt&quot;)
+colnames(schizophrenia) &lt;- c(colnames(schizophrenia)[1:13], &quot;EA_Derived&quot;, &quot;DAF&quot;, &quot;Risk_Derived&quot;)
+
+dat &lt;- schizophrenia %&gt;% select(DAF, Risk_Derived, OR) %&gt;% na.omit() %&gt;% filter(abs(log(OR)) &lt;= 0.0005)
+dat$bin &lt;- cut(dat$DAF, 20)
+df &lt;- dat %&gt;% group_by(bin) %&gt;%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == &#39;T&#39;)/n()))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = &quot;navy&quot;) + geom_hline(yintercept = 0.5, col = &quot;red&quot;) + theme_bw() + xlab(&quot;DAF&quot;) + ylab(&quot;Proportion of Risk SNPs&quot;) + theme(axis.text.x = element_text(angle = 90, hjust = 1))</code></pre>
+<p><img src="figure/shift_GWAS_ATLAS.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
 Past versions of unnamed-chunk-1-1.png
@@ -694,8 +736,17 @@ jgblanc
 </table>
 </div>
 </div>
+<pre class="r"><code>sum(dat$Risk_Derived == &quot;T&quot;)/sum(dat$Risk_Derived == &quot;T&quot; | dat$Risk_Derived == &quot;F&quot;)</code></pre>
 <pre><code>[1] 0.4898226</code></pre>
-<p>CAD <img src="figure/shift_GWAS_ATLAS.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>CAD</p>
+<pre class="r"><code>CAD &lt;- fread(&quot;../output/GWAS_ATLAS/evo_added/CAD_3925_0.95_evo.txt&quot;)
+colnames(CAD) &lt;- c(colnames(CAD)[1:13], &quot;EA_Derived&quot;, &quot;DAF&quot;, &quot;Risk_Derived&quot;)
+
+dat &lt;- CAD %&gt;% select(DAF, Risk_Derived, `Log(OR)`) %&gt;% na.omit() %&gt;% filter(abs(`Log(OR)`) &lt;= 0.0005)
+dat$bin &lt;- cut(dat$DAF, 20)
+df &lt;- dat %&gt;% group_by(bin) %&gt;%summarise(prop_risk = (sum(Risk_Derived == &#39;T&#39;)/n()))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = &quot;navy&quot;) + geom_hline(yintercept = 0.5, col = &quot;red&quot;) + theme_bw() + xlab(&quot;DAF&quot;) + ylab(&quot;Proportion of Risk SNPs&quot;) + theme(axis.text.x = element_text(angle = 90, hjust = 1))</code></pre>
+<p><img src="figure/shift_GWAS_ATLAS.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
 Past versions of unnamed-chunk-2-1.png
@@ -733,8 +784,17 @@ jgblanc
 </table>
 </div>
 </div>
+<pre class="r"><code>sum(dat$Risk_Derived == &quot;T&quot;)/sum(dat$Risk_Derived == &quot;T&quot; | dat$Risk_Derived == &quot;F&quot;)</code></pre>
 <pre><code>[1] 0.5007357</code></pre>
-<p>UC <img src="figure/shift_GWAS_ATLAS.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>UC</p>
+<pre class="r"><code>UC &lt;- fread(&quot;../output/GWAS_ATLAS/evo_added/UC_2030_0.95_evo.txt&quot;)
+colnames(UC) &lt;- c(colnames(UC)[1:13], &quot;EA_Derived&quot;, &quot;DAF&quot;, &quot;Risk_Derived&quot;)
+
+dat &lt;- UC %&gt;% select(DAF, Risk_Derived, BETA) %&gt;% na.omit() %&gt;% filter(abs(BETA) &lt;= 0.0005)
+dat$bin &lt;- cut(dat$DAF, 20)
+df &lt;- dat %&gt;% group_by(bin) %&gt;%summarise(prop_risk = (sum(Risk_Derived == &#39;T&#39;)/n()))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = &quot;navy&quot;) + geom_hline(yintercept = 0.5, col = &quot;red&quot;) + theme_bw() + xlab(&quot;DAF&quot;) + ylab(&quot;Proportion of Risk SNPs&quot;) + theme(axis.text.x = element_text(angle = 90, hjust = 1))</code></pre>
+<p><img src="figure/shift_GWAS_ATLAS.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
 Past versions of unnamed-chunk-3-1.png
@@ -772,8 +832,17 @@ jgblanc
 </table>
 </div>
 </div>
+<pre class="r"><code>sum(dat$Risk_Derived == &quot;T&quot;)/sum(dat$Risk_Derived == &quot;T&quot; | dat$Risk_Derived == &quot;F&quot;)</code></pre>
 <pre><code>[1] 0.4913605</code></pre>
-<p>T2D <img src="figure/shift_GWAS_ATLAS.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>T2D</p>
+<pre class="r"><code>T2D &lt;- fread(&quot;../output/GWAS_ATLAS/evo_added/T2D_4085_0.95_evo.txt&quot;)
+colnames(T2D) &lt;- c(colnames(T2D)[1:13], &quot;EA_Derived&quot;, &quot;DAF&quot;, &quot;Risk_Derived&quot;)
+
+dat &lt;- T2D %&gt;% select(DAF, Risk_Derived, BETA) %&gt;% na.omit() %&gt;% filter(abs(BETA) &lt;= 0.0001)
+dat$bin &lt;- cut(dat$DAF, 20)
+df &lt;- dat %&gt;% group_by(bin) %&gt;%summarise(prop_risk = (sum(Risk_Derived == &#39;T&#39;)/n()))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = &quot;navy&quot;) + geom_hline(yintercept = 0.5, col = &quot;red&quot;) + theme_bw() + xlab(&quot;DAF&quot;) + ylab(&quot;Proportion of Risk SNPs&quot;) + theme(axis.text.x = element_text(angle = 90, hjust = 1))</code></pre>
+<p><img src="figure/shift_GWAS_ATLAS.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
 Past versions of unnamed-chunk-4-1.png
@@ -811,6 +880,7 @@ jgblanc
 </table>
 </div>
 </div>
+<pre class="r"><code>sum(dat$Risk_Derived == &quot;T&quot;)/sum(dat$Risk_Derived == &quot;T&quot; | dat$Risk_Derived == &quot;F&quot;)</code></pre>
 <pre><code>[1] 0.5173649</code></pre>
 <pre class="r"><code>#ggplot(data = dat, aes(x=DAF, y=abs(BETA), col = Risk_Derived))+ geom_point()</code></pre>
 <br>
