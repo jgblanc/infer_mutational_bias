@@ -1,0 +1,79 @@
+---
+title: "Stratification_shift"
+author: "Jennifer Blanc"
+date: "3/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(data.table)
+library(ggplot2)
+```
+
+Model with no PC adjustment:  
+
+$$E[\hat{\beta}] = \beta_l + \beta_E cov(\vec{E}, \vec{g})$$
+
+Model with using residuls after regressing out first PC and $\vec{U_1} = \vec{E}$:  
+
+$$E[\beta_l] = \beta_l(1 - r^2(g_l,\vec{U_1}))$$
+
+Schizophrenia 
+```{r, warning=FALSE, echo=FALSE}
+schizophrenia <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_3982_0.95_evo.txt")
+colnames(schizophrenia) <- c(colnames(schizophrenia)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+
+dat <- schizophrenia %>% select(DAF, Risk_Derived, OR) %>% na.omit() %>% filter(abs(log(OR)) <= 0.0005)
+dat$bin <- cut(dat$DAF, 20)
+df <- dat %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
+```
+
+CAD 
+```{r, warning=FALSE, echo=FALSE}
+CAD <- fread("../output/GWAS_ATLAS/evo_added/CAD_3925_0.95_evo.txt")
+colnames(CAD) <- c(colnames(CAD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+
+dat <- CAD %>% select(DAF, Risk_Derived, `Log(OR)`) %>% na.omit() %>% filter(abs(`Log(OR)`) <= 0.0005)
+dat$bin <- cut(dat$DAF, 20)
+df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
+```
+
+UC
+```{r, warning=FALSE, echo=FALSE}
+UC <- fread("../output/GWAS_ATLAS/evo_added/UC_2030_0.95_evo.txt")
+colnames(UC) <- c(colnames(UC)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+
+dat <- UC %>% select(DAF, Risk_Derived, BETA) %>% na.omit() %>% filter(abs(BETA) <= 0.0005)
+dat$bin <- cut(dat$DAF, 20)
+df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
+```
+
+T2D
+```{r, warning=FALSE, echo=FALSE}
+T2D <- fread("../output/GWAS_ATLAS/evo_added/T2D_4085_0.95_evo.txt")
+colnames(T2D) <- c(colnames(T2D)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+
+dat <- T2D %>% select(DAF, Risk_Derived, BETA) %>% na.omit() %>% filter(abs(BETA) <= 0.0001)
+dat$bin <- cut(dat$DAF, 20)
+df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
+```
+
+
+```{r}
+#ggplot(data = dat, aes(x=DAF, y=abs(BETA), col = Risk_Derived))+ geom_point()
+```
+
