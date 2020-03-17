@@ -21,7 +21,7 @@ Model with using residuls after regressing out first PC and $\vec{U_1} = \vec{E}
 $$E[\beta_l] = \beta_l(1 - r^2(g_l,\vec{U_1}))$$
 
 Schizophrenia 
-```{r, warning=FALSE, echo=FALSE}
+```{r, warning=FALSE}
 schizophrenia <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_3982_0.95_evo.txt")
 colnames(schizophrenia) <- c(colnames(schizophrenia)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 
@@ -34,7 +34,7 @@ sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "
 ```
 
 CAD 
-```{r, warning=FALSE, echo=FALSE}
+```{r, warning=FALSE}
 CAD <- fread("../output/GWAS_ATLAS/evo_added/CAD_3925_0.95_evo.txt")
 colnames(CAD) <- c(colnames(CAD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 
@@ -47,7 +47,7 @@ sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "
 ```
 
 UC
-```{r, warning=FALSE, echo=FALSE}
+```{r, warning=FALSE}
 UC <- fread("../output/GWAS_ATLAS/evo_added/UC_2030_0.95_evo.txt")
 colnames(UC) <- c(colnames(UC)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 
@@ -60,7 +60,7 @@ sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "
 ```
 
 T2D
-```{r, warning=FALSE, echo=FALSE}
+```{r, warning=FALSE}
 T2D <- fread("../output/GWAS_ATLAS/evo_added/T2D_4085_0.95_evo.txt")
 colnames(T2D) <- c(colnames(T2D)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 
