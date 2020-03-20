@@ -1,0 +1,24 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	add_evo_atlas
+	1	parse_gwas_atlas_threshold
+	2
+
+[Wed Mar 11 17:19:32 2020]
+rule parse_gwas_atlas_threshold:
+    input: data/GWAS_ATLAS/CAD_3925.txt, data/GWAS_ATLAS/pval_thresholds/0.95.txt
+    output: output/GWAS_ATLAS/parsed_gwas/CAD_3925_0.95_parsed.txt
+    jobid: 1
+    wildcards: trait=CAD_3925, threshold=0.95
+
+Terminating processes on user request, this might take some time.
+[Wed Mar 11 18:14:50 2020]
+Error in rule parse_gwas_atlas_threshold:
+    jobid: 1
+    output: output/GWAS_ATLAS/parsed_gwas/CAD_3925_0.95_parsed.txt
+
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-03-11T171932.515213.snakemake.log

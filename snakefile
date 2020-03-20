@@ -32,13 +32,22 @@ rule parse_gwas_atlas:
     script:
         "code/parse_gwas_atlas/{wildcards.trait}.R"
 
-rule parse_gwas_atlas_RSID:
+rule parse_gwas_atlas_threshold:
     input:
-        "data/GWAS_ATLAS/{trait}_RS.txt"
+        "data/GWAS_ATLAS/{trait}.txt",
+	"data/GWAS_ATLAS/pval_thresholds/{threshold}.txt"
     output:
-        "output/GWAS_ATLAS/parsed_gwas/{trait}.RS_parsed.txt"
+        "output/GWAS_ATLAS/parsed_gwas/{trait}_{threshold}_parsed.txt"
     script:
-        "code/parse_gwas_atlas/{wildcards.trait}_RS.R"
+        "code/parse_gwas_atlas_nonsig/{wildcards.trait}.R"
+
+rule add_evo_atlas_threshold:
+    input:
+        "output/GWAS_ATLAS/parsed_gwas/{trait}_{threshold}_parsed.txt"
+    output:
+        "output/GWAS_ATLAS/evo_added/{trait}-{threshold}_evo.txt"
+    script:
+        "code/get_evolutionary_information_from_1kg_GWAS_ATLAS.py"
 
 rule add_evo_atlas:
     input:
@@ -47,14 +56,6 @@ rule add_evo_atlas:
         "output/GWAS_ATLAS/evo_added/{trait}_evo.txt"
     script:
         "code/get_evolutionary_information_from_1kg_GWAS_ATLAS.py"
-
-rule add_evo_atlas_RSID:
-    input:
-        "output/GWAS_ATLAS/parsed_gwas/{trait}.RS_parsed.txt"
-    output:
-        "output/GWAS_ATLAS/evo_added/{trait}_evo.txt"
-    script:
-        "code/get_evolutionary_information_from_1kg_GWAS_ATLAS_RSID.py"
 
 rule parse_bbj:
     input:

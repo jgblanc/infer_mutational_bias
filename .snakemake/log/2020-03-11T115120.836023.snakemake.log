@@ -1,0 +1,23 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	parse_gwas_atlas_threshold
+	1
+
+[Wed Mar 11 11:51:20 2020]
+rule parse_gwas_atlas_threshold:
+    input: data/GWAS_ATLAS/schizophrenia_3982.txt, data/GWAS_ATLAS/pval_thresholds/0.9.txt
+    output: output/GWAS_ATLAS/parsed_gwas/schizophrenia_3982_0.9_parsed.txt
+    jobid: 0
+    wildcards: trait=schizophrenia_3982, threshold=0.9
+
+Terminating processes on user request, this might take some time.
+[Wed Mar 11 12:19:26 2020]
+Error in rule parse_gwas_atlas_threshold:
+    jobid: 0
+    output: output/GWAS_ATLAS/parsed_gwas/schizophrenia_3982_0.9_parsed.txt
+
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-03-11T115120.836023.snakemake.log

@@ -1,0 +1,12 @@
+Building DAG of jobs...
+AmbiguousRuleException:
+Rules add_evo_atlas_threshold and add_evo_atlas are ambiguous for the file output/GWAS_ATLAS/evo_added/schizophrenia_3982_0.95_evo.txt.
+Consider starting rule output with a unique prefix, constrain your wildcards, or use the ruleorder directive.
+Wildcards:
+	add_evo_atlas_threshold: threshold=0.95,trait=schizophrenia_3982
+	add_evo_atlas: trait=schizophrenia_3982_0.95
+Expected input files:
+	add_evo_atlas_threshold: output/GWAS_ATLAS/parsed_gwas/schizophrenia_3982_0.95_parsed.txt
+	add_evo_atlas: output/GWAS_ATLAS/parsed_gwas/schizophrenia_3982_0.95_parsed.txtExpected output files:
+	add_evo_atlas_threshold: output/GWAS_ATLAS/evo_added/schizophrenia_3982_0.95_evo.txt
+	add_evo_atlas: output/GWAS_ATLAS/evo_added/schizophrenia_3982_0.95_evo.txt
