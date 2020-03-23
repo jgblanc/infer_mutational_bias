@@ -97,3 +97,48 @@ rule Extract_clumped_SNPs_GWAS_ATLAS:
         "output/GWAS_ATLAS/clumped/{trait}_SNPs.txt"
     shell:
         "awk '{{ print $3}}' {input} > {output}"
+
+rule LD_pruning_GWAS_atlas:
+    input:
+        "output/GWAS_ATLAS/parsed_gwas/{trait}_{threshold}_parsed.txt"
+    output:
+        "output/GWAS_ATLAS/pruned/{trait}_{threshold}.prune.in"
+    shell:
+        """
+	cut -f 1 -d' ' {input} > all_ss.snps
+	code/plink \
+    	--noweb \
+    	--bfile data/1000G_20101123_v3_GIANT_chr1_23_minimacnamesifnotRS_CEU_MAF0.01/1000G_20101123_v3_GIANT_chr1_23_minimacnamesifnotRS_CEU_MAF0.01_VARID \
+   	--extract all_ss.snps \
+    	--make-bed \
+    	--out all_ss_plink
+	code/plink \
+    	--bfile all_ss_plink \
+    	--indep-pairwise 50 5 0.5 \
+    	--noweb \
+    	--out output/GWAS_ATLAS/pruned/{wildcards.trait}_{wildcards.threshold}
+	rm all_ss*
+	"""
+
+rule LD_pruning_STRAT:
+    input:
+        "data/STRAT/chr1_EUR_{MAF}.eigenvec.var.DA.txt"
+    output:
+        "output/STRAT/pruned/chr1_EUR_{MAF}.eigenvec.var.DA.prune.in"
+    shell:
+        """
+        cut -f2,25 -d',' {input} > all_ss.temp
+	awk '$2 != "NA"' FS=',' all_ss.temp | cut -f1 -d',' > all_ss.snps #Pick only D/A SNPs and get rsID 
+        code/plink \
+        --noweb \
+        --bfile data/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.EUR/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.EUR \
+        --extract all_ss.snps \
+        --make-bed \
+        --out all_ss_plink
+        code/plink \
+        --bfile all_ss_plink \
+        --indep-pairwise 50 5 0.95 \
+        --noweb \
+        --out output/STRAT/pruned/chr1_EUR_{wildcards.MAF}.eigenvec.var.DA
+	rm all_ss*
+        """

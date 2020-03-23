@@ -63,17 +63,18 @@ T2D
 ```{r, warning=FALSE}
 T2D <- fread("../output/GWAS_ATLAS/evo_added/T2D_4085_0.95_evo.txt")
 colnames(T2D) <- c(colnames(T2D)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+prune_in <- fread("../output/GWAS_ATLAS/pruned/T2D_4085_0.95.prune.in", header = F)
+colnames(prune_in) <- "SNP"
+T2D <- left_join(prune_in, T2D) 
 
 dat <- T2D %>% select(DAF, Risk_Derived, BETA) %>% na.omit() %>% filter(abs(BETA) <= 0.0001)
 dat$bin <- cut(dat$DAF, 20)
-df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()))
+df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()), )
 ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
 ```
 
 
-```{r}
-#ggplot(data = dat, aes(x=DAF, y=abs(BETA), col = Risk_Derived))+ geom_point()
-```
+
 

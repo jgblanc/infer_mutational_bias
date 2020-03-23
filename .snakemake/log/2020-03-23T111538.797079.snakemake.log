@@ -1,0 +1,31 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	LD_pruning_STRAT
+	1
+
+[Mon Mar 23 11:15:38 2020]
+rule LD_pruning_STRAT:
+    input: data/STRAT/chr1_EUR_0.01.eigenvec.var.DA.txt
+    output: output/STRAT/pruned/chr1_EUR_0.01.eigenvec.var.DA.prune.in
+    jobid: 0
+    wildcards: MAF=0.01
+
+[Mon Mar 23 11:16:25 2020]
+Error in rule LD_pruning_STRAT:
+    jobid: 0
+    output: output/STRAT/pruned/chr1_EUR_0.01.eigenvec.var.DA.prune.in
+    shell:
+        
+        cut -f2 -d',' data/STRAT/chr1_EUR_0.01.eigenvec.var.DA.txt > all_ss.temp
+	grep "rs" all_ss.temp > all_ss.snps
+        code/plink         --noweb         --bfile data/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes         --extract all_ss.snps         --make-bed         --out all_ss_plink
+        code/plink         --bfile all_ss_plink         --indep-pairwise 50 5 0.5         --noweb         --out output/STRAT/pruned/chr1_EUR_0.01.eigenvec.var.DA
+        
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-03-23T111538.797079.snakemake.log

@@ -1,0 +1,18 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	LD_pruning_STRAT
+	1
+
+[Mon Mar 23 09:30:23 2020]
+rule LD_pruning_STRAT:
+    input: data/STRAT/chr1_EUR_0.01.eigenvec.var.DA.txt
+    output: output/STRAT/pruned/chr1_EUR_0.01.eigenvec.var.DA.prune.in
+    jobid: 0
+    wildcards: MAF=0.01
+
+RuleException in line 123 of /Users/jenniferblanc/infer_mutational_bias/Snakefile:
+NameError: The name 'MAF' is unknown in this context. Please make sure that you defined that variable. Also note that braces not used for variable access have to be escaped by repeating them, i.e. {{print $1}}

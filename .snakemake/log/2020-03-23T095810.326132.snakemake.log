@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	LD_pruning_STRAT
+	1
+
+[Mon Mar 23 09:58:10 2020]
+rule LD_pruning_STRAT:
+    input: data/STRAT/chr1_EUR_0.01.eigenvec.var.DA.txt
+    output: output/STRAT/pruned/chr1_EUR_0.01.eigenvec.var.DA.prune.in
+    jobid: 0
+    wildcards: MAF=0.01
+
+[Mon Mar 23 10:00:57 2020]
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-03-23T095810.326132.snakemake.log

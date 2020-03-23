@@ -1,0 +1,26 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	LD_pruning_GWAS_atlas
+	1
+
+[Fri Mar 20 16:48:05 2020]
+rule LD_pruning_GWAS_atlas:
+    input: output/GWAS_ATLAS/parsed_gwas/T2D_4085_0.95_parsed.txt
+    output: output/GWAS_ATLAS/pruned/T2D_4085_0.95.prune.in
+    jobid: 0
+    wildcards: trait=T2D_4085, threshold=0.95
+
+[Fri Mar 20 16:48:05 2020]
+Error in rule LD_pruning_GWAS_atlas:
+    jobid: 0
+    output: output/GWAS_ATLAS/pruned/T2D_4085_0.95.prune.in
+    shell:
+        cut -f 1 -d” ” output/GWAS_ATLAS/parsed_gwas/T2D_4085_0.95_parsed.txt > all_ss.snps
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-03-20T164805.348133.snakemake.log

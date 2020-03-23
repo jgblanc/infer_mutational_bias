@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1
+Rules claiming more threads will be scaled down.
+Job counts:
+	count	jobs
+	1	LD_pruning_GWAS_atlas
+	1
+
+[Mon Mar 23 08:59:58 2020]
+rule LD_pruning_GWAS_atlas:
+    input: output/GWAS_ATLAS/parsed_gwas/T2D_4085_0.95_parsed.txt
+    output: output/GWAS_ATLAS/pruned/T2D_4085_0.95.prune.in
+    jobid: 0
+    wildcards: trait=T2D_4085, threshold=0.95
+
+[Mon Mar 23 09:01:28 2020]
+Finished job 0.
+1 of 1 steps (100%) done
+Complete log: /Users/jenniferblanc/infer_mutational_bias/.snakemake/log/2020-03-23T085958.050937.snakemake.log
