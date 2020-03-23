@@ -411,7 +411,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-03-10
+<strong>Last updated:</strong> 2020-03-23
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -502,10 +502,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree3bae1e022df59599ec7ee46860f7f1de160fd8datargetblank3bae1e0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/3bae1e022df59599ec7ee46860f7f1de160fd8da" target="_blank">3bae1e0</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree815d240809e7d7374d63e1f94e916f738837c87ctargetblank815d240a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/815d240809e7d7374d63e1f94e916f738837c87c" target="_blank">815d240</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree3bae1e022df59599ec7ee46860f7f1de160fd8datargetblank3bae1e0a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree815d240809e7d7374d63e1f94e916f738837c87ctargetblank815d240a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,9 +523,11 @@ Ignored files:
     Ignored:    analysis/.DS_Store
     Ignored:    code/.DS_Store
     Ignored:    code/parse_gwas_atlas/.DS_Store
+    Ignored:    code/parse_gwas_atlas_nonsig/.DS_Store
     Ignored:    data/.ipynb_checkpoints/
     Ignored:    data/1000G_20101123_v3_GIANT_chr1_23_minimacnamesifnotRS_CEU_MAF0.01/
     Ignored:    data/47UKBB/
+    Ignored:    data/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.EUR/
     Ignored:    data/BBJ/
     Ignored:    data/GWAS_ATLAS/
     Ignored:    data/STRAT/
@@ -533,8 +535,78 @@ Ignored files:
     Ignored:    output/.DS_Store
     Ignored:    output/47UKBB/
     Ignored:    output/BBJ/.DS_Store
-    Ignored:    output/GWAS_ATLAS/
     Ignored:    output/UKBB/.DS_Store
+
+Untracked files:
+    Untracked:  .snakemake/log/2020-03-20T163416.123214.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T163712.212691.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T163824.046636.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T163953.950543.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T164053.379559.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T164126.250427.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T164153.242505.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T164458.906566.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T164624.338106.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T164805.348133.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T164906.688252.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T164942.180243.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T165052.851217.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T165137.007028.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T165214.304510.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T165253.538599.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T165714.376563.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T165755.120102.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T165850.378114.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T165945.789863.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T170054.739343.snakemake.log
+    Untracked:  .snakemake/log/2020-03-20T170137.325374.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T084203.852612.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T085958.050937.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T092940.511736.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T093023.496249.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T093053.076341.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T095756.789609.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T095810.326132.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T111529.177940.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T111538.797079.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T140245.548702.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T142014.296045.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T144625.937672.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T145357.915273.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T145804.561568.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T150539.755263.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T151252.978931.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T152511.059881.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T152600.514377.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T153454.497070.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T153843.476290.snakemake.log
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcHJ1bmVkL1QyRF80MDg1XzAuOTUucHJ1bmUuaW4=
+    Untracked:  .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjA1LmVpZ2VudmVjLnZhci5EQS5wcnVuZS5pbg==
+    Untracked:  .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjAxLmVpZ2VudmVjLnZhci5EQS5wcnVuZS5pbg==
+    Untracked:  .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjEuZWlnZW52ZWMudmFyLkRBLnBydW5lLmlu
+    Untracked:  .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjIuZWlnZW52ZWMudmFyLkRBLnBydW5lLmlu
+    Untracked:  .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjMuZWlnZW52ZWMudmFyLkRBLnBydW5lLmlu
+    Untracked:  .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjQuZWlnZW52ZWMudmFyLkRBLnBydW5lLmlu
+    Untracked:  code/LD_prune_snp_list.sh
+    Untracked:  code/LD_prune_snp_list.sh~
+    Untracked:  code/all_ss.snps
+    Untracked:  code/all_ss_plink.bed
+    Untracked:  code/all_ss_plink.bim
+    Untracked:  code/all_ss_plink.fam
+    Untracked:  code/all_ss_plink.log
+    Untracked:  code/plink.prune.in
+    Untracked:  code/plink.prune.out
+    Untracked:  code/pruned_snps.log
+    Untracked:  code/pruned_snps.prune.in
+    Untracked:  code/pruned_snps.prune.out
+    Untracked:  output/GWAS_ATLAS/
+    Untracked:  output/STRAT/
+
+Unstaged changes:
+    Modified:   analysis/shift_GWAS_ATLAS.Rmd
+    Modified:   code/plink.log
+    Modified:   snakefile
+    Modified:   snakefile~
 
 </code></pre>
 <p>
@@ -573,6 +645,57 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/815d240809e7d7374d63e1f94e916f738837c87c/analysis/Stratification.Rmd" target="_blank">815d240</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-23
+</td>
+<td>
+added CI
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/2182bdf44f43022f4ec91de6c3644440858be96f/analysis/Stratification.Rmd" target="_blank">2182bdf</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-20
+</td>
+<td>
+changes
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/9997d1ee574c807c1c7bd485066c227220f87622/docs/Stratification.html" target="_blank">9997d1e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -675,7 +798,9 @@ plink -bcf ../../../data/1kg/bcf/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5.
 </li>
 <li>Plink outputs the SNP “loadings” for the first 20 PC’s in an .eigenvec.var file<br />
 </li>
-<li>I used the 1kg_snps.tsv from Joe to add a column to the .eigenvec.var that says 1 if the coded allele (A2) is derived and -1 if the coded allele is ancestral. I was only able to annotate SNPs that had rsID’s and had derived/ancestral info in the table - the rest have NA in that column.</li>
+<li>I used the 1kg_snps.tsv from Joe to add a column to the .eigenvec.var that says 1 if the coded allele (A2) is derived and -1 if the coded allele is ancestral. I was only able to annotate SNPs that had rsID’s and had derived/ancestral info in the table - the rest have NA in that column.<br />
+</li>
+<li>I pulled out the SNPs with D/A info from the 1kG files and did LD pruning on these SNPs using plink –indep-pairwise 50 5 0.95</li>
 </ol>
 </div>
 <div id="get-ids-of-european-individuals" class="section level2">
@@ -737,14 +862,20 @@ jgblanc
 </div>
 <div id="snp-loadings" class="section level2">
 <h2>SNP Loadings</h2>
-<p>MAF filter 0.01 (n=139818)</p>
+<p>MAF filter 0.01 (n=139818, pruned = 47249)</p>
 <pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/chr1_EUR_0.01.eigenvec.var.DA.txt&quot;)
 loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
+pruned &lt;- fread(&quot;../output/STRAT/pruned/chr1_EUR_0.01.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
 only_num &lt;- loading[,5:24]
 sums &lt;- colMeans(only_num, na.rm = T)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
+ 
 
-df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20)))
-pl_0.01 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) 
+df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+pl_0.01 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
 colnames(df_0.01) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
 pl_0.01</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -772,6 +903,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9997d1ee574c807c1c7bd485066c227220f87622/docs/figure/Stratification.Rmd/unnamed-chunk-4-1.png" target="_blank">9997d1e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/04abf02cd3e979fca4e7ab4589ceaab4fb82a8d3/docs/figure/Stratification.Rmd/unnamed-chunk-4-1.png" target="_blank">04abf02</a>
 </td>
 <td>
@@ -785,61 +927,276 @@ jgblanc
 </table>
 </div>
 </div>
-<p>MAF filter 0.05 (n=123616)</p>
+<p>MAF filter 0.05 (n=123616, pruned = 40998)</p>
 <pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/chr1_EUR_0.05.eigenvec.var.DA.txt&quot;)
 loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
+pruned &lt;- fread(&quot;../output/STRAT/pruned/chr1_EUR_0.05.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
 only_num &lt;- loading[,5:24]
 sums &lt;- colMeans(only_num, na.rm = T)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
+ 
 
-df_0.05 &lt;- as.data.frame(cbind(sums,seq(1,20)))
-pl_0.05 &lt;- ggplot(df_0.05, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) 
+df_0.05 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+pl_0.05 &lt;- ggplot(df_0.05, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
 colnames(df_0.05) &lt;- c(&quot;0.05&quot;, &quot;V2&quot;)
 pl_0.05</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>MAF filter 0.1 (n = 110300)</p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9997d1ee574c807c1c7bd485066c227220f87622/docs/figure/Stratification.Rmd/unnamed-chunk-5-1.png" target="_blank">9997d1e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>MAF filter 0.1 (n = 110300, pruned = 36269)</p>
 <pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/chr1_EUR_0.1.eigenvec.var.DA.txt&quot;)
 loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
+pruned &lt;- fread(&quot;../output/STRAT/pruned/chr1_EUR_0.1.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
 only_num &lt;- loading[,5:24]
 sums &lt;- colMeans(only_num, na.rm = T)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
+ 
 
-df_0.1 &lt;- as.data.frame(cbind(sums,seq(1,20)))
-pl_0.1 &lt;- ggplot(df_0.1, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) 
+df_0.1 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+pl_0.1 &lt;- ggplot(df_0.1, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
 colnames(df_0.1) &lt;- c(&quot;0.1&quot;, &quot;V2&quot;)
 pl_0.1</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>MAF filter 0.2 (n=86234)</p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9997d1ee574c807c1c7bd485066c227220f87622/docs/figure/Stratification.Rmd/unnamed-chunk-6-1.png" target="_blank">9997d1e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>MAF filter 0.2 (n=86234, pruned = 28011)</p>
 <pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/chr1_EUR_0.2.eigenvec.var.DA.txt&quot;)
 loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
+pruned &lt;- fread(&quot;../output/STRAT/pruned/chr1_EUR_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
 only_num &lt;- loading[,5:24]
 sums &lt;- colMeans(only_num, na.rm = T)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
+ 
 
-df_0.2 &lt;- as.data.frame(cbind(sums,seq(1,20)))
-pl_0.2 &lt;- ggplot(df_0.2, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw()+ xlim(-0.12,0.12) 
+df_0.2 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+pl_0.2 &lt;- ggplot(df_0.2, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
 colnames(df_0.2) &lt;- c(&quot;0.2&quot;, &quot;V2&quot;)
 pl_0.2</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>MAF filter 0.3 (n=602011)</p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9997d1ee574c807c1c7bd485066c227220f87622/docs/figure/Stratification.Rmd/unnamed-chunk-7-1.png" target="_blank">9997d1e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>MAF filter 0.3 (n=602011, pruned = 19875)</p>
 <pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/chr1_EUR_0.3.eigenvec.var.DA.txt&quot;)
 loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
+pruned &lt;- fread(&quot;../output/STRAT/pruned/chr1_EUR_0.3.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
 only_num &lt;- loading[,5:24]
 sums &lt;- colMeans(only_num, na.rm = T)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
+ 
 
-df_0.3 &lt;- as.data.frame(cbind(sums,seq(1,20)))
-pl_0.3 &lt;- ggplot(df_0.3, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw()+ xlim(-0.12,0.12) 
+df_0.3 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+pl_0.3 &lt;- ggplot(df_0.3, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
 colnames(df_0.3) &lt;- c(&quot;0.3&quot;, &quot;V2&quot;)
 pl_0.3</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>MAF filter 0.4 (n=33130)</p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9997d1ee574c807c1c7bd485066c227220f87622/docs/figure/Stratification.Rmd/unnamed-chunk-8-1.png" target="_blank">9997d1e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>MAF filter 0.4 (n=33130, pruned = 10576)</p>
 <pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/chr1_EUR_0.4.eigenvec.var.DA.txt&quot;)
 loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
+pruned &lt;- fread(&quot;../output/STRAT/pruned/chr1_EUR_0.4.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
 only_num &lt;- loading[,5:24]
 sums &lt;- colMeans(only_num, na.rm = T)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
+ 
 
-df_0.4 &lt;- as.data.frame(cbind(sums,seq(1,20)))
-pl_0.4 &lt;- ggplot(df_0.4, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw()+ xlim(-0.12,0.12) 
+df_0.4 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+pl_0.4 &lt;- ggplot(df_0.4, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
 colnames(df_0.4) &lt;- c(&quot;0.4&quot;, &quot;V2&quot;)
 pl_0.4</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9997d1ee574c807c1c7bd485066c227220f87622/docs/figure/Stratification.Rmd/unnamed-chunk-9-1.png" target="_blank">9997d1e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>df &lt;- cbind(df_0.01[,1], df_0.05[,1], df_0.1[,1], df_0.2[,1], df_0.3[,1], df_0.4[,1])
 
 par(mfrow = c(2,2))
@@ -849,6 +1206,43 @@ for(i in 1:4) {
   abline(a=0,b=0, col = &quot;red&quot;)
 }</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
+Past versions of unnamed-chunk-10-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9997d1ee574c807c1c7bd485066c227220f87622/docs/figure/Stratification.Rmd/unnamed-chunk-10-1.png" target="_blank">9997d1e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>par(mfrow = c(2,2))
 for(i in 5:8) {
   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
@@ -856,6 +1250,43 @@ for(i in 5:8) {
   abline(a=0,b=0, col = &quot;red&quot;)
 }</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
+Past versions of unnamed-chunk-11-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9997d1ee574c807c1c7bd485066c227220f87622/docs/figure/Stratification.Rmd/unnamed-chunk-11-1.png" target="_blank">9997d1e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>par(mfrow = c(2,2))
 for(i in 9:12) {
   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
@@ -863,6 +1294,43 @@ for(i in 9:12) {
   abline(a=0,b=0, col = &quot;red&quot;)
 }</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
+Past versions of unnamed-chunk-12-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9997d1ee574c807c1c7bd485066c227220f87622/docs/figure/Stratification.Rmd/unnamed-chunk-12-1.png" target="_blank">9997d1e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>par(mfrow = c(2,2))
 for(i in 13:16) {
   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
@@ -870,6 +1338,43 @@ for(i in 13:16) {
   abline(a=0,b=0, col = &quot;red&quot;)
 }</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-1">
+Past versions of unnamed-chunk-13-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-13-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9997d1ee574c807c1c7bd485066c227220f87622/docs/figure/Stratification.Rmd/unnamed-chunk-13-1.png" target="_blank">9997d1e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>par(mfrow = c(2,2))
 for(i in 17:20) {
   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
@@ -877,6 +1382,43 @@ for(i in 17:20) {
   abline(a=0,b=0, col = &quot;red&quot;)
 }</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
+Past versions of unnamed-chunk-14-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9997d1ee574c807c1c7bd485066c227220f87622/docs/figure/Stratification.Rmd/unnamed-chunk-14-1.png" target="_blank">9997d1e</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
