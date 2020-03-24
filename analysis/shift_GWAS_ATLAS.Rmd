@@ -10,71 +10,123 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(data.table)
 library(ggplot2)
+library(Hmisc)
 ```
 
-Model with no PC adjustment:  
+Truth: 
+$$\vec{Y} = \mu + \beta_l\vec{g_l} + \beta_E\vec{E} + \vec{e}, \space \space \space \vec{e} \sim N(0, V_E)$$  
 
-$$E[\hat{\beta}] = \beta_l + \beta_E cov(\vec{E}, \vec{g})$$
+Model with no PC adjustment: 
+$$\vec{Y} = \mu + \beta_l\vec{g_l} + \vec{e}$$  
 
-Model with using residuls after regressing out first PC and $\vec{U_1} = \vec{E}$:  
+Expected $\hat{\beta}$: 
+$$E[\hat{\beta}] = \beta_l + \beta_E cov(\vec{E}, \vec{g})$$    
 
-$$E[\beta_l] = \beta_l(1 - r^2(g_l,\vec{U_1}))$$
+Model including PC1: 
+$$\vec{Y} = \mu + \beta_l\vec{g_l} + \beta_{\vec{U_1}}\vec{U_1}+ \vec{e}$$  
 
-Schizophrenia 
+Expected $\hat{\beta}$ assuming that $\vec{U_1} = \vec{E}$: 
+$$E[\beta_l] = \beta_l(1 - r^2(g_l,\vec{U_1}))$$  
+
+### Schizophrenia 
 ```{r, warning=FALSE}
-schizophrenia <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_3982_0.95_evo.txt")
+schizophrenia <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_3982-0.0001_evo.txt")
 colnames(schizophrenia) <- c(colnames(schizophrenia)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+pruned <- fread("../output/GWAS_ATLAS/pruned/schizophrenia_3982_0.0001.prune.in", header = F)
+schizophrenia <- left_join(pruned, schizophrenia, by = c("V1" = "SNP"))
 
-dat <- schizophrenia %>% select(DAF, Risk_Derived, OR) %>% na.omit() %>% filter(abs(log(OR)) <= 0.0005)
+dat <- schizophrenia %>% select(DAF, Risk_Derived, OR) %>% na.omit() 
 dat$bin <- cut(dat$DAF, 20)
 df <- dat %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
-ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))
 
+dat2 <- schizophrenia %>% select(DAF, Risk_Derived, OR) %>% na.omit() 
+dat2$bin <- cut2(dat$DAF, m=nrow(dat2)/20)
+df2 <- dat2 %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
+ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))
+
+# Totol Fraction of Risk Derived SNPs 
 sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
 ```
 
-CAD 
+### CAD 
 ```{r, warning=FALSE}
-CAD <- fread("../output/GWAS_ATLAS/evo_added/CAD_3925_0.95_evo.txt")
+CAD <- fread("../output/GWAS_ATLAS/evo_added/CAD_3925-0.0001_evo.txt")
 colnames(CAD) <- c(colnames(CAD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+pruned <- fread("../output/GWAS_ATLAS/pruned/CAD_3925_0.0001.prune.in", header = F)
+CAD <- left_join(pruned, CAD, by = c("V1" = "SNP"))
 
-dat <- CAD %>% select(DAF, Risk_Derived, `Log(OR)`) %>% na.omit() %>% filter(abs(`Log(OR)`) <= 0.0005)
+dat <- CAD %>% select(DAF, Risk_Derived, `Log(OR)`) %>% na.omit()
 dat$bin <- cut(dat$DAF, 20)
 df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()))
-ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))
+
+dat2 <- CAD %>% select(DAF, Risk_Derived, `Log(OR)`) %>% na.omit() 
+dat2$bin <- cut2(dat$DAF, m=nrow(dat2)/20)
+df2 <- dat2 %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
+ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))
 
 sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
 ```
 
-UC
+### UC
 ```{r, warning=FALSE}
-UC <- fread("../output/GWAS_ATLAS/evo_added/UC_2030_0.95_evo.txt")
+UC <- fread("../output/GWAS_ATLAS/evo_added/UC_2030-0.0001_evo.txt")
 colnames(UC) <- c(colnames(UC)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+pruned <- fread("../output/GWAS_ATLAS/pruned/UC_2030_0.0001.prune.in", header = F)
+UC <- left_join(pruned, UC, by = c("V1" = "SNP"))
 
 dat <- UC %>% select(DAF, Risk_Derived, BETA) %>% na.omit() %>% filter(abs(BETA) <= 0.0005)
 dat$bin <- cut(dat$DAF, 20)
 df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()))
-ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))
+
+dat2 <- UC %>% select(DAF, Risk_Derived, BETA) %>% na.omit() 
+dat2$bin <- cut2(dat$DAF, m=nrow(dat2)/20)
+df2 <- dat2 %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
+ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))
 
 sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
 ```
 
-T2D
+### T2D
 ```{r, warning=FALSE}
-T2D <- fread("../output/GWAS_ATLAS/evo_added/T2D_4085_0.95_evo.txt")
+T2D <- fread("../output/GWAS_ATLAS/evo_added/T2D_4085-0.0001_evo.txt")
 colnames(T2D) <- c(colnames(T2D)[1:13], "EA_Derived", "DAF", "Risk_Derived")
-prune_in <- fread("../output/GWAS_ATLAS/pruned/T2D_4085_0.95.prune.in", header = F)
-colnames(prune_in) <- "SNP"
-T2D <- left_join(prune_in, T2D) 
+pruned <- fread("../output/GWAS_ATLAS/pruned/T2D_4085_0.0001.prune.in", header = F)
+T2D <- left_join(pruned, T2D, by = c("V1" = "SNP"))
 
 dat <- T2D %>% select(DAF, Risk_Derived, BETA) %>% na.omit() %>% filter(abs(BETA) <= 0.0001)
 dat$bin <- cut(dat$DAF, 20)
 df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()), )
-ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))
+
+dat2 <- T2D %>% select(DAF, Risk_Derived, BETA)  %>% na.omit() 
+dat2$bin <- cut2(dat$DAF, m=nrow(dat2)/20)
+df2 <- dat2 %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
+ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))
 
 sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
 ```
 
+### GIANT Height 
+```{r, warning=FALSE}
+height <- fread("../output/GWAS_ATLAS/evo_added/height_142-0.0001_evo.txt")
+colnames(height) <- c(colnames(height)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+pruned <- fread("../output/GWAS_ATLAS/pruned/height_142_0.0001.prune.in", header = F)
+height <- left_join(pruned, height, by = c("V1" = "SNP"))
 
+dat <- height %>% select(DAF, Risk_Derived, BETA) %>% na.omit() %>% filter(abs(BETA) <= 0.0001)
+dat$bin <- cut(dat$DAF, 20)
+df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()), )
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))
+
+dat2 <- height %>% select(DAF, Risk_Derived, BETA)  %>% na.omit() 
+dat2$bin <- cut2(dat$DAF, m=nrow(dat2)/20)
+df2 <- dat2 %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
+ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))
+
+sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
+```
 
 
