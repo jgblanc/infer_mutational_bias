@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Jennifer Blanc" />
@@ -89,7 +89,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -238,6 +237,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -250,48 +250,9 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -305,6 +266,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -444,7 +411,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-02-11
+<strong>Last updated:</strong> 2020-03-30
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -454,7 +421,7 @@ div.section {
 </p>
 <p>
 This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.4.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -535,10 +502,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreed7244a21a57a85c480232cb97da6787f3eff1dcetargetblankd7244a2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/d7244a21a57a85c480232cb97da6787f3eff1dce" target="_blank">d7244a2</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree42c0ed0c0b4d234855a6e7550b3772699492c7f7targetblank42c0ed0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/42c0ed0c0b4d234855a6e7550b3772699492c7f7" target="_blank">42c0ed0</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreed7244a21a57a85c480232cb97da6787f3eff1dcetargetblankd7244a2a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree42c0ed0c0b4d234855a6e7550b3772699492c7f7targetblank42c0ed0a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -556,147 +523,99 @@ Ignored files:
     Ignored:    analysis/.DS_Store
     Ignored:    code/.DS_Store
     Ignored:    code/parse_gwas_atlas/.DS_Store
+    Ignored:    code/parse_gwas_atlas_nonsig/.DS_Store
     Ignored:    data/.ipynb_checkpoints/
+    Ignored:    data/1000G_20101123_v3_GIANT_chr1_23_minimacnamesifnotRS_CEU_MAF0.01/
     Ignored:    data/47UKBB/
+    Ignored:    data/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.EUR/
     Ignored:    data/BBJ/
     Ignored:    data/GWAS_ATLAS/
+    Ignored:    data/STRAT/
     Ignored:    data/UKBB/
-    Ignored:    docs/.DS_Store
-    Ignored:    docs/assets/.DS_Store
     Ignored:    output/.DS_Store
     Ignored:    output/47UKBB/
+    Ignored:    output/BBJ/.DS_Store
     Ignored:    output/GWAS_ATLAS/
+    Ignored:    output/STRAT/
+    Ignored:    output/UKBB/.DS_Store
 
 Untracked files:
-    Untracked:  .snakemake/log/2020-01-30T145351.841085.snakemake.log
-    Untracked:  .snakemake/log/2020-01-30T152809.242567.snakemake.log
-    Untracked:  .snakemake/log/2020-01-30T152814.933120.snakemake.log
-    Untracked:  .snakemake/log/2020-01-30T161043.605380.snakemake.log
-    Untracked:  .snakemake/log/2020-01-30T163643.702329.snakemake.log
-    Untracked:  .snakemake/log/2020-01-30T163914.317308.snakemake.log
-    Untracked:  .snakemake/log/2020-01-30T165942.174064.snakemake.log
-    Untracked:  .snakemake/log/2020-01-31T132509.011706.snakemake.log
-    Untracked:  .snakemake/log/2020-01-31T132531.112131.snakemake.log
-    Untracked:  .snakemake/log/2020-01-31T135909.720564.snakemake.log
-    Untracked:  .snakemake/log/2020-01-31T135932.405589.snakemake.log
-    Untracked:  .snakemake/log/2020-01-31T140258.528215.snakemake.log
-    Untracked:  .snakemake/log/2020-01-31T154259.739904.snakemake.log
-    Untracked:  .snakemake/log/2020-01-31T161214.457782.snakemake.log
-    Untracked:  .snakemake/log/2020-02-04T122755.245485.snakemake.log
-    Untracked:  .snakemake/log/2020-02-04T125925.054486.snakemake.log
-    Untracked:  .snakemake/log/2020-02-04T131309.070607.snakemake.log
-    Untracked:  .snakemake/log/2020-02-04T165741.607714.snakemake.log
-    Untracked:  .snakemake/log/2020-02-04T165832.953657.snakemake.log
-    Untracked:  .snakemake/log/2020-02-04T165845.720203.snakemake.log
-    Untracked:  .snakemake/log/2020-02-04T170106.750876.snakemake.log
-    Untracked:  .snakemake/log/2020-02-04T173554.946756.snakemake.log
-    Untracked:  .snakemake/log/2020-02-04T203921.856975.snakemake.log
-    Untracked:  .snakemake/log/2020-02-04T203936.733129.snakemake.log
-    Untracked:  .snakemake/log/2020-02-05T112056.885301.snakemake.log
-    Untracked:  .snakemake/log/2020-02-05T112242.653088.snakemake.log
-    Untracked:  .snakemake/log/2020-02-05T112254.668205.snakemake.log
-    Untracked:  .snakemake/log/2020-02-05T112317.962078.snakemake.log
-    Untracked:  .snakemake/log/2020-02-05T114409.152072.snakemake.log
-    Untracked:  .snakemake/log/2020-02-05T115017.456859.snakemake.log
-    Untracked:  .snakemake/log/2020-02-05T115225.611708.snakemake.log
-    Untracked:  .snakemake/log/2020-02-05T131627.566541.snakemake.log
-    Untracked:  .snakemake/log/2020-02-05T135142.429095.snakemake.log
-    Untracked:  .snakemake/log/2020-02-05T135147.725230.snakemake.log
-    Untracked:  .snakemake/log/2020-02-06T170947.682904.snakemake.log
-    Untracked:  .snakemake/log/2020-02-06T170955.880903.snakemake.log
-    Untracked:  .snakemake/log/2020-02-06T171020.234309.snakemake.log
-    Untracked:  .snakemake/log/2020-02-06T171059.838074.snakemake.log
-    Untracked:  .snakemake/log/2020-02-06T171138.722326.snakemake.log
-    Untracked:  .snakemake/log/2020-02-06T172326.673867.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T161433.704127.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T161518.690570.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T161701.456606.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T161908.570560.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T163531.063766.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T164707.068682.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T164713.498823.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T164933.856759.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T165246.623702.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T165729.736217.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T165753.884876.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T165811.808410.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T170118.509824.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T185943.187754.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T201412.006222.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T201442.388739.snakemake.log
-    Untracked:  .snakemake/log/2020-02-09T203655.598430.snakemake.log
-    Untracked:  .snakemake/log/2020-02-10T123520.594963.snakemake.log
-    Untracked:  .snakemake/log/2020-02-10T140913.222118.snakemake.log
-    Untracked:  .snakemake/log/2020-02-10T141224.194342.snakemake.log
-    Untracked:  .snakemake/log/2020-02-10T142516.378779.snakemake.log
-    Untracked:  .snakemake/log/2020-02-10T150055.924168.snakemake.log
-    Untracked:  .snakemake/log/2020-02-10T150106.868447.snakemake.log
-    Untracked:  .snakemake/metadata/b3V0cHV0L0JCSi9wYXJzZWRfZ3dhcy9CTUlfMV9wYXJzZWQudHh0
-    Untracked:  .snakemake/metadata/b3V0cHV0L0JCSi9wYXJzZWRfZ3dhcy9IRExfNDdfcGFyc2VkLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0JCSi9wYXJzZWRfZ3dhcy9IYl80OV9wYXJzZWQudHh0
-    Untracked:  .snakemake/metadata/b3V0cHV0L0JCSi9wYXJzZWRfZ3dhcy9IZWlnaHRfMTM1X3BhcnNlZC50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L0JCSi9wYXJzZWRfZ3dhcy9MRExfNjFfcGFyc2VkLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0JCSi9wYXJzZWRfZ3dhcy9QbHRfOTdfcGFyc2VkLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0JCSi9wYXJzZWRfZ3dhcy9UR18xMDlfcGFyc2VkLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL01TXzI0MDc2NjAyX2V2by50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL0FEXzQwOTRfZXZvLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL0FPYXN0aG1hXzQyNjdfZXZvLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL0JNSV80MDc0X2V2by50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL0NPYXN0aG1hXzQyNjZfZXZvLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL0VBbWV0YV80MDY2X2V2by50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL0VBdWtiYl8zNDA5X2V2by50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL0lCRF8yMDMxX2V2by50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL1VDXzIwMzBfZXZvLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL215b3BpYV8zNTM5X2V2by50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL2JyZWFzdGNhbmNlcl8zNjU5X2V2by50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL3BhcmtpbnNvbl80MTY3X2V2by50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL3ZpdGlsaWdvXzM4MzJfZXZvLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvQ09hc3RobWFfNDI2Nl9wYXJzZWQudHh0
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvQU9hc3RobWFfNDI2N19wYXJzZWQudHh0
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvQURfNDA5NF9wYXJzZWQudHh0
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvQk1JXzQwNzRfcGFyc2VkLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvRUF1a2JiXzM0MDlfcGFyc2VkLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvRUFtZXRhXzQwNjZfcGFyc2VkLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvSUJEXzIwMzFfcGFyc2VkLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvTVNfMjQwNzY2MDJfcGFyc2VkLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvVUNfMjAzMF9wYXJzZWQudHh0
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvbXlvcGlhXzM1MzlfcGFyc2VkLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvcGFya2luc29uXzQxNjdfcGFyc2VkLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L1VLQkIvcGFyc2VkX2d3YXMvQk1JXzIzMTA0X3BhcnNlZC50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L1VLQkIvcGFyc2VkX2d3YXMvSERMXzMwNzYwX3BhcnNlZC50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L1VLQkIvcGFyc2VkX2d3YXMvSGJfMzAwNTBfcGFyc2VkLnR4dA==
-    Untracked:  .snakemake/metadata/b3V0cHV0L1VLQkIvcGFyc2VkX2d3YXMvSGVpZ2h0XzUwX3BhcnNlZC50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L1VLQkIvcGFyc2VkX2d3YXMvTERMXzMwNzgwX3BhcnNlZC50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L1VLQkIvcGFyc2VkX2d3YXMvUGx0XzMwMDgwX3BhcnNlZC50eHQ=
-    Untracked:  .snakemake/metadata/b3V0cHV0L1VLQkIvcGFyc2VkX2d3YXMvVEdfMzA4NzBfcGFyc2VkLnR4dA==
-    Untracked:  analysis/BBJvUKKBB.Rmd
-    Untracked:  code/Neal_UKBB.R
-    Untracked:  code/parse_BBJ/
-    Untracked:  code/parse_gwas_atlas/AD_4094.R
-    Untracked:  code/parse_gwas_atlas/AOasthma_4267.R
-    Untracked:  code/parse_gwas_atlas/BMI_4074.R
-    Untracked:  code/parse_gwas_atlas/COasthma_4266.R
-    Untracked:  code/parse_gwas_atlas/EAmeta_4066.R
-    Untracked:  code/parse_gwas_atlas/EAukbb_3409.R
-    Untracked:  code/parse_gwas_atlas/EAukbb_3509.R
-    Untracked:  code/parse_gwas_atlas/IBD_2031.R
-    Untracked:  code/parse_gwas_atlas/MS_24076602.R
-    Untracked:  code/parse_gwas_atlas/UC_2030.R
-    Untracked:  code/parse_gwas_atlas/myopia_3539.R
-    Untracked:  code/parse_gwas_atlas/myopic_3539.R
-    Untracked:  code/parse_gwas_atlas/parkinson_4167.R
-    Untracked:  output/BBJ/
-    Untracked:  output/UKBB/
+    Untracked:  .snakemake/log/2020-03-23T164719.122778.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T164841.172341.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T165052.235224.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T173201.671245.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T190924.512591.snakemake.log
+    Untracked:  .snakemake/log/2020-03-23T194341.864454.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T091905.302205.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T092201.882781.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T092404.171989.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T092428.802361.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T093017.568005.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T093241.050903.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T093254.384314.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T093258.136407.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T093449.542770.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T111104.620227.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T111633.863041.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T111701.823844.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T152044.472618.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T152202.883346.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T152218.356089.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T152224.553347.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T152253.175681.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T152612.976687.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T152904.986735.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T154155.249321.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T154220.752872.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T154225.402696.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T154242.303180.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T154540.706170.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T154744.109794.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T154756.043621.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T155047.465119.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T155100.393951.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T155721.217180.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T155802.251555.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T155823.527017.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T160158.325053.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T160554.632453.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T160813.358275.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T161022.670871.snakemake.log
+    Untracked:  .snakemake/log/2020-03-24T161257.193338.snakemake.log
+    Untracked:  .snakemake/log/2020-03-30T171337.338623.snakemake.log
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL0NBRF8zOTI1LTAuMDAwMV9ldm8udHh0
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL1QyRF80MDg1LTAuMDAwMV9ldm8udHh0
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL1VDXzIwMzAtMC4wMDAxX2V2by50eHQ=
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL2hlaWdodF8xNDItMC4wMDAxX2V2by50eHQ=
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvZXZvX2FkZGVkL3NjaGl6b3BocmVuaWFfMzk4Mi0wLjAwMDFfZXZvLnR4dA==
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvQ0FEXzM5MjVfMC4wMDAxX3BhcnNlZC50eHQ=
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvVDJEXzQwODVfMC4wMDAxX3BhcnNlZC50eHQ=
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvVUNfMjAzMF8wLjAwMDFfcGFyc2VkLnR4dA==
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvaGVpZ2h0XzE0Ml8wLjAwMDFfcGFyc2VkLnR4dA==
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvc2NoaXpvcGhyZW5pYV8zOTgyXzAuMDAwMV9wYXJzZWQudHh0
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcHJ1bmVkL0NBRF8zOTI1XzAuMDAwMS5wcnVuZS5pbg==
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcHJ1bmVkL1QyRF80MDg1XzAuMDAwMS5wcnVuZS5pbg==
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcHJ1bmVkL1VDXzIwMzBfMC4wMDAxLnBydW5lLmlu
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcHJ1bmVkL2hlaWdodF8xNDJfMC4wMDAxLnBydW5lLmlu
+    Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcHJ1bmVkL3NjaGl6b3BocmVuaWFfMzk4Ml8wLjAwMDEucHJ1bmUuaW4=
+    Untracked:  .snakemake/scripts/tmp7997be50.get_evolutionary_information_from_1kg_GWAS_ATLAS.py
+    Untracked:  code/parse_gwas_atlas_nonsig/height_142.R
+    Untracked:  code/rsID_Pos_conversion.py
+    Untracked:  code/rsID_Pos_conversion.py~
 
 Unstaged changes:
-    Modified:   .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvYnJlYXN0Y2FuY2VyXzM2NTlfcGFyc2VkLnR4dA==
-    Modified:   .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcGFyc2VkX2d3YXMvdml0aWxpZ29fMzgzMl9wYXJzZWQudHh0
-    Deleted:    code/#get_evolutionary_information_from_1kg_GWAS_ATLAS.py#
-    Modified:   code/.ipynb_checkpoints/Untitled-checkpoint.ipynb
-    Modified:   code/Untitled.ipynb
-    Modified:   code/get_evolutionary_information_from_1kg_GWAS_ATLAS.py
-    Modified:   code/get_evolutionary_information_from_1kg_GWAS_ATLAS.py~
-    Modified:   code/parse_gwas_atlas/vitiligo_3832.R
+    Modified:   .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjA1LmVpZ2VudmVjLnZhci5EQS5wcnVuZS5pbg==
+    Modified:   .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjAxLmVpZ2VudmVjLnZhci5EQS5wcnVuZS5pbg==
+    Modified:   .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjEuZWlnZW52ZWMudmFyLkRBLnBydW5lLmlu
+    Modified:   .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjIuZWlnZW52ZWMudmFyLkRBLnBydW5lLmlu
+    Modified:   .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjMuZWlnZW52ZWMudmFyLkRBLnBydW5lLmlu
+    Modified:   .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjQuZWlnZW52ZWMudmFyLkRBLnBydW5lLmlu
+    Modified:   analysis/Stratification.Rmd
+    Modified:   analysis/shift_GWAS_ATLAS.Rmd
+    Modified:   code/parse_gwas_atlas_nonsig/CAD_3925.R
+    Modified:   code/parse_gwas_atlas_nonsig/T2D_4085.R
+    Modified:   code/parse_gwas_atlas_nonsig/UC_2030.R
+    Modified:   code/parse_gwas_atlas_nonsig/schizophrenia_3982.R
     Modified:   snakefile
     Modified:   snakefile~
 
@@ -737,6 +656,74 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/42c0ed0c0b4d234855a6e7550b3772699492c7f7/analysis/GWAS_ATLAS_results.Rmd" target="_blank">42c0ed0</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-30
+</td>
+<td>
+work please
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/3bae1e022df59599ec7ee46860f7f1de160fd8da/analysis/GWAS_ATLAS_results.Rmd" target="_blank">3bae1e0</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-10
+</td>
+<td>
+added freq Strat
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/6d9fe78db44c4f078976e0a39f26aa51fe86da2b/analysis/GWAS_ATLAS_results.Rmd" target="_blank">6d9fe78</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-03-05
+</td>
+<td>
+more stuff
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/GWAS_ATLAS_results.html" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -899,30 +886,19 @@ Start of GWAS atlas analysis
 </div>
 <pre class="r"><code>library(data.table)
 library(ggplot2)
-library(ggpubr)</code></pre>
-<pre><code>Loading required package: magrittr</code></pre>
-<pre class="r"><code>library(latex2exp)
+library(ggpubr)
+library(latex2exp)
 library(dplyr)</code></pre>
-<pre><code>
-Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:data.table&#39;:
-
-    between, first, last</code></pre>
-<pre><code>The following objects are masked from &#39;package:stats&#39;:
-
-    filter, lag</code></pre>
-<pre><code>The following objects are masked from &#39;package:base&#39;:
-
-    intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>getwd()</code></pre>
-<pre><code>[1] &quot;/Users/jenniferblanc/infer_mutational_bias/analysis&quot;</code></pre>
 <div id="intro" class="section level1">
 <h1>Intro</h1>
 <p>Write overview</p>
 </div>
 <div id="results" class="section level1">
 <h1>Results</h1>
-<p>Schizophrenia <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Schizophrenia - Meta analysis</p>
+<pre><code>Joining, by = &quot;SNP&quot;</code></pre>
+<pre><code>[1] 0.5423082</code></pre>
+<p><img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
 Past versions of unnamed-chunk-2-1.png
@@ -971,7 +947,7 @@ jgblanc
 </table>
 </div>
 </div>
-<pre><code>[1] 0.5755149</code></pre>
+<p><img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Schizophrenia - Psychiatric Genomic Consortium <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
@@ -1021,58 +997,7 @@ jgblanc
 </table>
 </div>
 </div>
-<pre><code>[1] 0.6456232</code></pre>
-<p>Schizophrenia EAS<br />
-<img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
-Past versions of unnamed-chunk-4-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-4-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/0ec351c7d7a854bcc62ed2798d629d6b6edbd3e3/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-4-1.png" target="_blank">0ec351c</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-02-03
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/7694f8a39f9a13a323bb8113570cf6e8a212d8b7/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-4-1.png" target="_blank">7694f8a</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre><code>[1] 0.5034015</code></pre>
+<pre><code>[1] 0.6278304</code></pre>
 <p>Chronic Kidney Disease <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
@@ -1096,6 +1021,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-5-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/0ec351c7d7a854bcc62ed2798d629d6b6edbd3e3/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-5-1.png" target="_blank">0ec351c</a>
@@ -1122,8 +1058,8 @@ jgblanc
 </table>
 </div>
 </div>
-<pre><code>[1] 0.4647463</code></pre>
-<p>Atrial Fibrilation <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>[1] 0.4609823</code></pre>
+<p>Atrial Fibrilation (removed top hit) <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
 Past versions of unnamed-chunk-6-1.png
@@ -1146,6 +1082,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-6-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/0ec351c7d7a854bcc62ed2798d629d6b6edbd3e3/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-6-1.png" target="_blank">0ec351c</a>
@@ -1172,8 +1119,19 @@ jgblanc
 </table>
 </div>
 </div>
-<pre><code>[1] 0.4304269</code></pre>
-<p>Type 2 Diabetes <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>[1] 0.3796268</code></pre>
+<p>CAD</p>
+<pre class="r"><code>CAD &lt;- fread(&quot;../output/GWAS_ATLAS/evo_added/CAD_3925_evo.txt&quot;)
+colnames(CAD) &lt;- c(colnames(CAD)[1:13], &quot;EA_Derived&quot;, &quot;DAF&quot;, &quot;Risk_Derived&quot;)
+CAD$disease &lt;- &quot;Coronary artery disease&quot;
+clumped &lt;- fread(&quot;../output/GWAS_ATLAS/clumped/CAD_3925_SNPs.txt&quot;)
+CAD &lt;- left_join(clumped, CAD, by= &quot;SNP&quot;) 
+CAD$disease &lt;- &quot;Coronary Artery Disease&quot;
+
+CAD &lt;- subset(CAD, CAD$Risk_Derived == &#39;T&#39; | CAD$Risk_Derived == &#39;F&#39;)
+ggplot(data=CAD, aes(x=RAF,y=abs(`Log(OR)`),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle(&quot;Coronary Artery Disease&quot;) + labs(y = TeX(&#39;$\\hat{\\beta}$&#39;), color = &quot;Risk Derived&quot;) + ylim(0,max(abs(CAD$`Log(OR)`))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
 Past versions of unnamed-chunk-7-1.png
@@ -1198,6 +1156,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-7-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/0ec351c7d7a854bcc62ed2798d629d6b6edbd3e3/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-7-1.png" target="_blank">0ec351c</a>
 </td>
 <td>
@@ -1211,8 +1180,9 @@ jgblanc
 </table>
 </div>
 </div>
-<pre><code>[1] 0.5154908</code></pre>
-<p>Crohns <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>mean(CAD$RAF)</code></pre>
+<pre><code>[1] 0.3686692</code></pre>
+<p>Type 2 Diabetes <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
 Past versions of unnamed-chunk-8-1.png
@@ -1237,6 +1207,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-8-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/0ec351c7d7a854bcc62ed2798d629d6b6edbd3e3/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-8-1.png" target="_blank">0ec351c</a>
 </td>
 <td>
@@ -1250,8 +1231,8 @@ jgblanc
 </table>
 </div>
 </div>
-<pre><code>[1] 0.4607642</code></pre>
-<p>Breast Cancer <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>[1] 0.5162338</code></pre>
+<p>Crohns <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
 Past versions of unnamed-chunk-9-1.png
@@ -1289,8 +1270,7 @@ jgblanc
 </table>
 </div>
 </div>
-<pre><code>[1] 0.3836395</code></pre>
-<p>Alzheimer’s <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Breast Cancer <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
 Past versions of unnamed-chunk-10-1.png
@@ -1328,8 +1308,8 @@ jgblanc
 </table>
 </div>
 </div>
-<pre><code>[1] 0.4657562</code></pre>
-<p>Parkinson <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>[1] 0.3836395</code></pre>
+<p>Alzheimer’s Disease <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
 Past versions of unnamed-chunk-11-1.png
@@ -1354,6 +1334,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-11-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/0ec351c7d7a854bcc62ed2798d629d6b6edbd3e3/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-11-1.png" target="_blank">0ec351c</a>
 </td>
 <td>
@@ -1367,8 +1358,8 @@ jgblanc
 </table>
 </div>
 </div>
-<pre><code>[1] 0.6517214</code></pre>
-<p>IBD <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>[1] 0.3997422</code></pre>
+<p>Parkinson <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
 Past versions of unnamed-chunk-12-1.png
@@ -1406,8 +1397,8 @@ jgblanc
 </table>
 </div>
 </div>
-<pre><code>[1] 0.445817</code></pre>
-<p>Ulcerativ Colitis <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>[1] 0.4737009</code></pre>
+<p>IBD <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-1">
 Past versions of unnamed-chunk-13-1.png
@@ -1432,6 +1423,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-13-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/0ec351c7d7a854bcc62ed2798d629d6b6edbd3e3/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-13-1.png" target="_blank">0ec351c</a>
 </td>
 <td>
@@ -1445,24 +1447,349 @@ jgblanc
 </table>
 </div>
 </div>
-<pre><code>[1] 0.4450994</code></pre>
-<p>Childhood Onset Asthma <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] 0.5028729</code></pre>
-<p>Adult Onset Asthma <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] 0.5648415</code></pre>
-<p>Multiple Sclerosis <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] 0.5984474</code></pre>
-<p>Myopia <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] 0.4810731</code></pre>
-<p>Educational Attainment - UKBB only <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] 0.5214631</code></pre>
-<p>Educational Attainment - meta-analysis <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] 0.5057544</code></pre>
+<pre><code>[1] 0.3132487</code></pre>
+<p>Ulcerative Colitis <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
+Past versions of unnamed-chunk-14-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-14-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-14-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>[1] 0.2535299</code></pre>
+<p>Childhood Onset Asthma <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-15-1">
+Past versions of unnamed-chunk-15-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-15-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-15-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] 0.5071093</code></pre>
+<p>Adult Onset Asthma <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-1">
+Past versions of unnamed-chunk-16-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-16-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] 0.5277265</code></pre>
+<p>Multiple Sclerosis <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-17-1">
+Past versions of unnamed-chunk-17-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-17-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-17-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] 0.5867623</code></pre>
+<p>Myopia <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-1">
+Past versions of unnamed-chunk-18-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-18-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] 0.5233334</code></pre>
+<p>Educational Attainment - UKBB only <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-19-1">
+Past versions of unnamed-chunk-19-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-19-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-19-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] 0.1689608</code></pre>
 <p>Educational Attainment - meta-analysis <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>[1] 0.4906255</code></pre>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-1">
+Past versions of unnamed-chunk-20-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-20-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] 0.4982147</code></pre>
+<p>BMI <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-21-1">
+Past versions of unnamed-chunk-21-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-21-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b868ae93061c663ccd1b61a2d4585311b642ad6d/docs/figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-21-1.png" target="_blank">b868ae9</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-02-11
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre><code>[1] 0.4937467</code></pre>
+<p>PBC <img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-22-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>[1] 0.4586081</code></pre>
+<p>Vitiligo</p>
+<pre class="r"><code>vit &lt;- fread(&quot;../output/GWAS_ATLAS/evo_added/vitiligo_3832_evo.txt&quot;)
+colnames(vit) &lt;- c(colnames(vit)[1:13], &quot;EA_Derived&quot;, &quot;DAF&quot;, &quot;Risk_Derived&quot;)
+vit$disease &lt;- &quot;Vitiligo&quot;
+clumped &lt;- fread(&quot;../output/GWAS_ATLAS/clumped/vitiligo_3832_SNPs.txt&quot;)
+vit &lt;- left_join(clumped, vit, by= &quot;SNP&quot;) 
+
+dat &lt;- subset(vit, vit$Risk_Derived == &#39;T&#39; | vit$Risk_Derived == &#39;F&#39;)
+ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle(&quot;Vitiligo&quot;) + labs(y = TeX(&#39;$\\hat{\\beta}$&#39;), color = &quot;Risk Derived&quot;) + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>mean(vit$RAF, na.rm = T)</code></pre>
+<pre><code>[1] 0.4924878</code></pre>
+<p>Bipolar Disorder</p>
+<pre class="r"><code>BIP &lt;- fread(&quot;../output/GWAS_ATLAS/evo_added/BIP_4039_evo.txt&quot;)
+colnames(BIP) &lt;- c(colnames(BIP)[1:13], &quot;EA_Derived&quot;, &quot;DAF&quot;, &quot;Risk_Derived&quot;)
+BIP$disease &lt;- &quot;Bipolar Disorder&quot;
+clumped &lt;- fread(&quot;../output/GWAS_ATLAS/clumped/BIP_4039_SNPs.txt&quot;)
+BIP &lt;- left_join(clumped, BIP, by= &quot;SNP&quot;) 
+
+dat &lt;- subset(BIP, BIP$Risk_Derived == &#39;T&#39; | BIP$Risk_Derived == &#39;F&#39;)
+ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle(&quot;Bipolar Disorder&quot;) + labs(y = TeX(&#39;$\\hat{\\beta}$&#39;), color = &quot;Risk Derived&quot;) + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-24-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>mean(BIP$RAF, na.rm = T)</code></pre>
+<pre><code>[1] 0.4335857</code></pre>
 <div id="median-raf" class="section level2">
 <h2>Median RAF</h2>
-<p><img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/GWAS_ATLAS_results.Rmd/unnamed-chunk-25-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1471,13 +1798,13 @@ jgblanc
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 3.5.1 (2018-07-02)
+<pre><code>R version 3.6.2 (2019-12-12)
 Platform: x86_64-apple-darwin15.6.0 (64-bit)
 Running under: macOS High Sierra 10.13.6
 
 Matrix products: default
-BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
-LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
+BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -1486,20 +1813,21 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] dplyr_0.8.1       latex2exp_0.4.0   ggpubr_0.2        magrittr_1.5     
-[5] ggplot2_3.2.1     data.table_1.12.2
+[1] dplyr_0.8.4       latex2exp_0.4.0   ggpubr_0.2.5      magrittr_1.5     
+[5] ggplot2_3.2.1     data.table_1.12.8 workflowr_1.6.0  
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.3       compiler_3.5.1   pillar_1.4.2     git2r_0.25.2    
- [5] workflowr_1.4.0  tools_3.5.1      digest_0.6.22    evaluate_0.14   
+ [1] Rcpp_1.0.3       compiler_3.6.2   pillar_1.4.3     later_1.0.0     
+ [5] git2r_0.26.1     tools_3.6.2      digest_0.6.25    evaluate_0.14   
  [9] lifecycle_0.1.0  tibble_2.1.3     gtable_0.3.0     pkgconfig_2.0.3 
-[13] rlang_0.4.1      yaml_2.2.0       xfun_0.7         withr_2.1.2     
-[17] stringr_1.4.0    knitr_1.23       fs_1.3.1         cowplot_0.9.4   
-[21] rprojroot_1.3-2  grid_3.5.1       tidyselect_0.2.5 glue_1.3.1      
-[25] R6_2.4.1         rmarkdown_1.13   farver_2.0.1     purrr_0.3.2     
-[29] whisker_0.3-2    backports_1.1.5  scales_1.1.0     htmltools_0.3.6 
-[33] assertthat_0.2.1 colorspace_1.4-1 labeling_0.3     stringi_1.4.3   
-[37] lazyeval_0.2.2   munsell_0.5.0    crayon_1.3.4    </code></pre>
+[13] rlang_0.4.4      yaml_2.2.1       xfun_0.12        withr_2.1.2     
+[17] stringr_1.4.0    knitr_1.28       vctrs_0.2.3      fs_1.3.1        
+[21] rprojroot_1.3-2  grid_3.6.2       tidyselect_1.0.0 glue_1.3.1      
+[25] R6_2.4.1         rmarkdown_2.1    farver_2.0.3     purrr_0.3.3     
+[29] whisker_0.4      backports_1.1.5  scales_1.1.0     promises_1.1.0  
+[33] htmltools_0.4.0  assertthat_0.2.1 colorspace_1.4-1 ggsignif_0.6.0  
+[37] httpuv_1.5.2     labeling_0.3     stringi_1.4.6    lazyeval_0.2.2  
+[41] munsell_0.5.0    crayon_1.3.4    </code></pre>
 </div>
 </div>
 </div>
@@ -1534,6 +1862,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
