@@ -89,7 +89,7 @@ ggplot(data=CKD, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0
 mean(CKD$RAF)
 ```
 
-Atrial Fibrilation (removed top hit)
+Atrial Fibrilation
 ```{r, warning=FALSE, echo=FALSE}
 AF <- fread("../output/GWAS_ATLAS/evo_added/AF_4361_evo.txt")
 colnames(AF) <- c(colnames(AF)[1:13], "EA_Derived", "DAF", "Risk_Derived")
@@ -99,18 +99,22 @@ AF <- left_join(clumped, AF, by= "SNP")
 
 AF <- subset(AF, AF$Risk_Derived == 'T' | AF$Risk_Derived == 'F')
 ggplot(data=AF, aes(x=RAF,y=abs(EFFECT),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Atrial fibrillation") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(AF$EFFECT))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+mean(AF$RAF)
+```
 
+Atrial Fibrilation - remove top hit
+```{r, warning=FALSE, echo=FALSE}
 # Remove top hit 
 AF <- subset(AF, AF$Risk_Derived == 'T' | AF$Risk_Derived == 'F')
 AF_ind <- which.max(abs(AF$EFFECT)) 
 AF <- AF[-487, ]
 ggplot(data=AF, aes(x=RAF,y=abs(EFFECT),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Atrial fibrillation") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(AF$EFFECT))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
 mean(AF$RAF)
 ```
 
+
 CAD
-```{r}
+```{r, warning=FALSE, echo=FALSE}
 CAD <- fread("../output/GWAS_ATLAS/evo_added/CAD_3925_evo.txt")
 colnames(CAD) <- c(colnames(CAD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 CAD$disease <- "Coronary artery disease"
@@ -347,7 +351,7 @@ mean(PBC$RAF, na.rm = T)
 ```
 
 Vitiligo
-```{r}
+```{r, warning=FALSE, echo=FALSE}
 vit <- fread("../output/GWAS_ATLAS/evo_added/vitiligo_3832_evo.txt")
 colnames(vit) <- c(colnames(vit)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 vit$disease <- "Vitiligo"
@@ -361,7 +365,7 @@ mean(vit$RAF, na.rm = T)
 ```
 
 Bipolar Disorder
-```{r}
+```{r, warning=FALSE, echo=FALSE}
 BIP <- fread("../output/GWAS_ATLAS/evo_added/BIP_4039_evo.txt")
 colnames(BIP) <- c(colnames(BIP)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 BIP$disease <- "Bipolar Disorder"
