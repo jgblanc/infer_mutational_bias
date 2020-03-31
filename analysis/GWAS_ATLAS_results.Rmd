@@ -21,6 +21,11 @@ Write overview
 # Results 
 
 Schizophrenia - Meta analysis 
+
+```{r, out.height="50%", out.width="50%", echo=FALSE}
+knitr::include_graphics("../docs/assets/schizophrenia_3982.png")
+```
+
 ```{r, warning=FALSE, echo=FALSE}
 cols <- c("deeppink4", "navy")
 derive <- c("springgreen4", "purple1")
@@ -38,6 +43,7 @@ schizophrenia <- left_join(clumped, schizophrenia)
 #ggarrange(p1,p2, nrow = 2)
 
 schizophrenia <- subset(schizophrenia, schizophrenia$Risk_Derived == 'T' | schizophrenia$Risk_Derived == 'F')
+
 pl <- ggplot(data=schizophrenia, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom") + ggtitle("Schizophrenia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(schizophrenia$OR)))+0.01)
 mean(schizophrenia$RAF)
 pl
@@ -46,6 +52,16 @@ pl
 pl_nocolor <- ggplot(data=schizophrenia, aes(x=RAF,y=abs(log(OR)))) + geom_point(alpha=0.5) + theme_bw()  + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom") + ggtitle("Schizophrenia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(schizophrenia$OR)))+0.01)
 pl_nocolor
 ```
+
+```{r}
+six <- subset(schizophrenia, schizophrenia$CHR == 6)
+ggplot(data=six, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom") + ggtitle("Schizophrenia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(six$OR)))+0.01)
+
+no_six <- subset(schizophrenia, schizophrenia$CHR != 6)
+ggplot(data=no_six, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom") + ggtitle("Schizophrenia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(no_six$OR)))+0.01)
+```
+
+
 
 Schizophrenia - Psychiatric Genomic Consortium 
 ```{r, warning=FALSE,echo=FALSE}
@@ -64,13 +80,13 @@ mean(scz_pgc$RAF)
 ```
 
 ```{r, warning=FALSE, echo=FALSE}
-#scz_eas <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_EAS_evo.txt")
-#colnames(scz_eas) <- c(colnames(scz_eas)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+scz_eas <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_EAS_evo.txt")
+colnames(scz_eas) <- c(colnames(scz_eas)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 #clumped <- fread("../output/GWAS_ATLAS/clumped/schizophrenia_EAS.clumped")
 #scz_eas <- left_join(clumped, scz_pgc, by= "SNP") 
-#scz_eas$disease <- "Schizophrenia EAS"
+scz_eas$disease <- "Schizophrenia EAS"
 
-#ggplot(data=scz_eas, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
+ggplot(data=scz_eas, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
 
 #ggarrange(p1,p2, nrow = 2)
 #mean(scz_eas$RAF)
