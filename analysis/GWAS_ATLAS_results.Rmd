@@ -20,13 +20,28 @@ Write overview
 
 # Results 
 
-Schizophrenia - Meta analysis 
+```{r}
+'%!in%' <- function(x,y)!('%in%'(x,y))
+HLA <- seq(28477797,33448354)
+remove_HLA <- function(df) {
+  bad <- subset(df, df$CHR == 6 & df$BP %in% HLA)
+  bad_snps <- bad$SNP
+  good <- df %>% filter(SNP  %!in% bad_snps)
+  return(good)
+}
+```
 
-```{r, out.height="50%", out.width="50%", echo=FALSE}
+
+### Schizophrenia - Meta analysis  
+
+
+Manhattan Plot  
+```{r, out.height="75%", out.width="75%", echo=FALSE}
 knitr::include_graphics("../docs/assets/schizophrenia_3982.png")
 ```
 
-```{r, warning=FALSE, echo=FALSE}
+RAF vs Effect Size 
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
 cols <- c("deeppink4", "navy")
 derive <- c("springgreen4", "purple1")
 schizophrenia <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_3982_evo.txt")
@@ -43,9 +58,7 @@ schizophrenia <- left_join(clumped, schizophrenia)
 #ggarrange(p1,p2, nrow = 2)
 
 schizophrenia <- subset(schizophrenia, schizophrenia$Risk_Derived == 'T' | schizophrenia$Risk_Derived == 'F')
-
 pl <- ggplot(data=schizophrenia, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom") + ggtitle("Schizophrenia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(schizophrenia$OR)))+0.01)
-mean(schizophrenia$RAF)
 pl
 #ggsave("~/Desktop/schizophrenia.png",pl, height = 5, width = 9)
 
@@ -53,32 +66,66 @@ pl_nocolor <- ggplot(data=schizophrenia, aes(x=RAF,y=abs(log(OR)))) + geom_point
 pl_nocolor
 ```
 
-```{r}
-six <- subset(schizophrenia, schizophrenia$CHR == 6)
-ggplot(data=six, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom") + ggtitle("Schizophrenia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(six$OR)))+0.01)
-
-no_six <- subset(schizophrenia, schizophrenia$CHR != 6)
-ggplot(data=no_six, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom") + ggtitle("Schizophrenia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(no_six$OR)))+0.01)
+Remove HLA Region 
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+dat <- remove_HLA(schizophrenia)
+ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom") + ggtitle("Schizophrenia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01)
 ```
 
+Mean/Median RAF   
+```{r}
+mean(schizophrenia$RAF)
+median(schizophrenia$RAF)
+```
+
+Notes on SNP research  
 
 
-Schizophrenia - Psychiatric Genomic Consortium 
+
+### Schizophrenia - Psychiatric Genomic Consortium  
+
+Manhattan Plot  
+```{r, out.height="75%", out.width="75%", echo=FALSE}
+knitr::include_graphics("../docs/assets/manhattan_atlas_4038.png")
+```
+
+RAF vs Effect Size
 ```{r, warning=FALSE,echo=FALSE}
 cols <- c("deeppink4", "navy")
 derive <- c("springgreen4", "purple1")
 scz_pgc <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_PGC_evo.txt")
 colnames(scz_pgc) <- c(colnames(scz_pgc)[1:13], "EA_Derived", "DAF", "Risk_Derived")
-clumped <- fread("../output/GWAS_ATLAS/clumped/schizophrenia_PGC.clumped")
+clumped <- fread("../output/GWAS_ATLAS/clumped/schizophrenia_PGC_SNPs.txt")
 scz_pgc <- left_join(clumped, scz_pgc, by= "SNP") 
 scz_pgc$disease <- "Schizophenria PGC"
 
 scz_pgc <- subset(scz_pgc, scz_pgc$Risk_Derived == 'T' | scz_pgc$Risk_Derived == 'F')
-pl <- ggplot(data=scz_pgc, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Schizophrenia PGC") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(scz_pgc$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-pl
-mean(scz_pgc$RAF)
+ggplot(data=scz_pgc, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Schizophrenia PGC") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(scz_pgc$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
+Remove HLA Region
+```{r}
+dat <- remove_HLA(scz_pgc)
+ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Schizophrenia PGC") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+
+Mean/Median RAF  
+```{r}
+mean(scz_pgc$RAF)
+median(scz_pgc$RAF)
+```
+
+
+
+### Schizophrenia EAS - not LD clumped!  
+
+Manhattan Plot  
+```{r, out.height="75%", out.width="75%", echo=FALSE}
+knitr::include_graphics("../docs/assets/scz_EAS.png")
+```
+
+RAF vs Effect Size - not LD clumped
 ```{r, warning=FALSE, echo=FALSE}
 scz_eas <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_EAS_evo.txt")
 colnames(scz_eas) <- c(colnames(scz_eas)[1:13], "EA_Derived", "DAF", "Risk_Derived")
@@ -86,13 +133,27 @@ colnames(scz_eas) <- c(colnames(scz_eas)[1:13], "EA_Derived", "DAF", "Risk_Deriv
 #scz_eas <- left_join(clumped, scz_pgc, by= "SNP") 
 scz_eas$disease <- "Schizophrenia EAS"
 
-ggplot(data=scz_eas, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A")
-
-#ggarrange(p1,p2, nrow = 2)
+scz_eas <- subset(scz_eas, scz_eas$Risk_Derived == 'T' | scz_eas$Risk_Derived == 'F')
+ggplot(data=scz_eas, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Schizophrenia EAS") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(scz_eas$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 #mean(scz_eas$RAF)
 ```
 
-Chronic Kidney Disease
+Remove HLA Region
+```{r}
+dat <- remove_HLA(scz_eas)
+ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Schizophrenia EAS") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Median RAF  
+```{r}
+mean(scz_eas$RAF)
+median(scz_eas$RAF)
+```
+
+
+### Chronic Kidney Disease
+
+
 ```{r, warning=FALSE,echo=FALSE}
 CKD <- fread("../output/GWAS_ATLAS/evo_added/CKD_4210_evo.txt")
 colnames(CKD) <- c(colnames(CKD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
