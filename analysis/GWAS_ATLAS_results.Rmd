@@ -85,7 +85,7 @@ Notes on SNP research
 ### Schizophrenia - Psychiatric Genomic Consortium  
 
 Manhattan Plot  
-```{r, out.height="75%", out.width="75%", echo=FALSE}
+```{r, out.height="100%", out.width="100%", echo=FALSE}
 knitr::include_graphics("../docs/assets/manhattan_atlas_4038.png")
 ```
 
@@ -121,7 +121,7 @@ median(scz_pgc$RAF)
 ### Schizophrenia EAS - not LD clumped!  
 
 Manhattan Plot  
-```{r, out.height="75%", out.width="75%", echo=FALSE}
+```{r, out.height="100%", out.width="100%", echo=FALSE}
 knitr::include_graphics("../docs/assets/scz_EAS.png")
 ```
 
@@ -153,7 +153,12 @@ median(scz_eas$RAF)
 
 ### Chronic Kidney Disease
 
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("../docs/assets/manhattan_atlas_4210.png")
+```
 
+RAF vs Effect Size 
 ```{r, warning=FALSE,echo=FALSE}
 CKD <- fread("../output/GWAS_ATLAS/evo_added/CKD_4210_evo.txt")
 colnames(CKD) <- c(colnames(CKD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
