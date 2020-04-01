@@ -11,6 +11,7 @@ library(ggplot2)
 library(ggpubr)
 library(latex2exp)
 library(dplyr)
+options(knitr.graphics.error = FALSE)
 ```
 
 
@@ -37,7 +38,7 @@ remove_HLA <- function(df) {
 
 Manhattan Plot  
 ```{r, out.height="75%", out.width="75%", echo=FALSE}
-knitr::include_graphics("../docs/assets/schizophrenia_3982.png")
+knitr::include_graphics("assets/schizophrenia_3982.png", error = FALSE)
 ```
 
 RAF vs Effect Size 
@@ -86,7 +87,7 @@ Notes on SNP research
 
 Manhattan Plot  
 ```{r, out.height="100%", out.width="100%", echo=FALSE}
-knitr::include_graphics("../docs/assets/manhattan_atlas_4038.png")
+knitr::include_graphics("assets/manhattan_atlas_4038.png", error = FALSE)
 ```
 
 RAF vs Effect Size
@@ -122,7 +123,7 @@ median(scz_pgc$RAF)
 
 Manhattan Plot  
 ```{r, out.height="100%", out.width="100%", echo=FALSE}
-knitr::include_graphics("../docs/assets/scz_EAS.png")
+knitr::include_graphics("assets/scz_EAS.png", error = FALSE)
 ```
 
 RAF vs Effect Size - not LD clumped
@@ -155,7 +156,7 @@ median(scz_eas$RAF)
 
 Manhattan Plot  
 ```{r, out.height="100%", out.width="100%", echo=FALSE}
-knitr::include_graphics("../docs/assets/manhattan_atlas_4210.png")
+knitr::include_graphics("assets/manhattan_atlas_4210.png", error = FALSE)
 ```
 
 RAF vs Effect Size 
