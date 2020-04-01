@@ -67,21 +67,27 @@ pl_nocolor <- ggplot(data=schizophrenia, aes(x=RAF,y=abs(log(OR)))) + geom_point
 pl_nocolor
 ```
 
-Remove HLA Region 
-```{r, warning=FALSE, echo=FALSE, message=FALSE}
-dat <- remove_HLA(schizophrenia)
-ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom") + ggtitle("Schizophrenia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01)
-```
-
 Mean/Median RAF   
-```{r}
+```{r, warning=F,echo=FALSE}
 mean(schizophrenia$RAF)
 median(schizophrenia$RAF)
 ```
 
+Remove HLA Region 
+```{r, warning=FALSE, echo=FALSE, message=FALSE}
+dat <- remove_HLA(schizophrenia)
+ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom") + ggtitle("Schizophrenia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01)
+
+ggplot(data=dat, aes(x=RAF,y=abs(log(OR)))) + geom_point(alpha=0.5) + theme_bw()  + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom") + ggtitle("Schizophrenia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01)
+```
+
+Mean/Median RAF   
+```{r, warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
 Notes on SNP research  
-
-
 
 ### Schizophrenia - Psychiatric Genomic Consortium  
 
@@ -104,17 +110,21 @@ scz_pgc <- subset(scz_pgc, scz_pgc$Risk_Derived == 'T' | scz_pgc$Risk_Derived ==
 ggplot(data=scz_pgc, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Schizophrenia PGC") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(scz_pgc$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
+Mean/Median RAF  
+```{r, warning=F,echo=FALSE}
+mean(scz_pgc$RAF)
+median(scz_pgc$RAF)
+```
+
 Remove HLA Region
-```{r}
+```{r, warning=F,echo=FALSE}
 dat <- remove_HLA(scz_pgc)
 ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Schizophrenia PGC") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
-
-
 Mean/Median RAF  
-```{r}
-mean(scz_pgc$RAF)
-median(scz_pgc$RAF)
+```{r, warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
 ```
 
 
@@ -140,13 +150,13 @@ ggplot(data=scz_eas, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(
 ```
 
 Remove HLA Region
-```{r}
+```{r, warning=F,echo=FALSE}
 dat <- remove_HLA(scz_eas)
 ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Schizophrenia EAS") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
 Mean/Median RAF  
-```{r}
+```{r, warning=F,echo=FALSE}
 mean(scz_eas$RAF)
 median(scz_eas$RAF)
 ```
@@ -168,11 +178,24 @@ clumped <- fread("../output/GWAS_ATLAS/clumped/CKD_4210.clumped")
 CKD <- left_join(clumped, CKD, by= "SNP") 
 
 ggplot(data=CKD, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Risk Beta, colored by D/A") + ggtitle("Chronic Kidney Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(CKD$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(CKD$RAF)
 ```
 
-Atrial Fibrilation
+No HLA SNPs 
+
+Mean/Median RAF  
+```{r, warning=F,echo=FALSE}
+mean(CKD$RAF)
+median(CKD$RAF)
+```
+
+### Atrial Fibrilation  
+
+Manhattan Plot 
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/manhattan_atlas_4361.png", error = FALSE)
+```
+
+RAF vs Effect Size  
 ```{r, warning=FALSE, echo=FALSE}
 AF <- fread("../output/GWAS_ATLAS/evo_added/AF_4361_evo.txt")
 colnames(AF) <- c(colnames(AF)[1:13], "EA_Derived", "DAF", "Risk_Derived")
@@ -182,7 +205,6 @@ AF <- left_join(clumped, AF, by= "SNP")
 
 AF <- subset(AF, AF$Risk_Derived == 'T' | AF$Risk_Derived == 'F')
 ggplot(data=AF, aes(x=RAF,y=abs(EFFECT),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Atrial fibrillation") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(AF$EFFECT))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-mean(AF$RAF)
 ```
 
 Atrial Fibrilation - remove top hit
@@ -192,11 +214,21 @@ AF <- subset(AF, AF$Risk_Derived == 'T' | AF$Risk_Derived == 'F')
 AF_ind <- which.max(abs(AF$EFFECT)) 
 AF <- AF[-487, ]
 ggplot(data=AF, aes(x=RAF,y=abs(EFFECT),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Atrial fibrillation") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(AF$EFFECT))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-mean(AF$RAF)
 ```
 
+No HLA Hits  
 
-CAD
+Mean/Median RAF
+```{r, warning=F,echo=FALSE}
+mean(AF$RAF)
+median(AF$RAF)
+```
+
+### Coronary Artery Disease  
+
+Manhattan Plot - need to find the right one 
+
+RAF vs Effect Size 
 ```{r, warning=FALSE, echo=FALSE}
 CAD <- fread("../output/GWAS_ATLAS/evo_added/CAD_3925_evo.txt")
 colnames(CAD) <- c(colnames(CAD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
@@ -207,13 +239,34 @@ CAD$disease <- "Coronary Artery Disease"
 
 CAD <- subset(CAD, CAD$Risk_Derived == 'T' | CAD$Risk_Derived == 'F')
 ggplot(data=CAD, aes(x=RAF,y=abs(`Log(OR)`),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Coronary Artery Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(CAD$`Log(OR)`))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(CAD$RAF)
 ```
 
+Mean/Median RAF 
+```{r, warning=F,echo=FALSE}
+mean(CAD$RAF)
+median(CAD$RAF)
+```
 
+Remove HLA region
+```{r, warning=F,echo=FALSE}
+dat <- remove_HLA(CAD)
+ggplot(data=dat, aes(x=RAF,y=abs(`Log(OR)`),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Coronary Artery Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$`Log(OR)`))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
 
-Type 2 Diabetes
+Mean/Median RAF 
+```{r, warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### Type 2 Diabetes  
+
+Manhattan Plot 
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/T2D_4085.png", error = FALSE)
+```
+
+RAF vs Effect Size
 ```{r, warning=FALSE,echo=FALSE}
 T2D <- fread("../output/GWAS_ATLAS/evo_added/T2D_4085_evo.txt")
 colnames(T2D) <- c(colnames(T2D)[1:13], "EA_Derived", "DAF", "Risk_Derived")
@@ -223,11 +276,35 @@ T2D <- left_join(clumped, T2D, by= "SNP")
 
 T2D <- subset(T2D, T2D$Risk_Derived == 'T' | T2D$Risk_Derived == 'F')
 ggplot(data=T2D, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Type 2 Diabetes") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(T2D$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(T2D$RAF)
 ```
 
-Crohns
+Mean/Meadian RAF
+```{r, warning=F,echo=FALSE}
+mean(T2D$RAF)
+median(T2D$RAF)
+```
+
+Remove HLA region
+```{r, warning=F,echo=FALSE}
+dat <- remove_HLA(T2D)
+ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Type 2 Diabetes") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Meadian RAF
+```{r, warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+
+### Crohn's Disease  
+
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/manhattan_atlas_2029.png", error = FALSE)
+```
+
+RAF vs Effect Size
 ```{r, warning=F, echo=FALSE}
 crohns <- fread("../output/GWAS_ATLAS/evo_added/crohns_2029_evo.txt")
 colnames(crohns) <- c(colnames(crohns)[1:13], "EA_Derived", "DAF", "Risk_Derived")
@@ -236,116 +313,289 @@ clumped <- fread("../output/GWAS_ATLAS/clumped/crohns_2029_SNPs.txt")
 crohns <- left_join(clumped, crohns, by= "SNP") 
 
 crohns <- subset(crohns, crohns$Risk_Derived == 'T' | crohns$Risk_Derived == 'F')
-pl <- ggplot(data=crohns, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5), legend.position = "bottom") + ggtitle("Crohn's Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") 
-pl
+ggplot(data=crohns, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5), legend.position = "bottom") + ggtitle("Crohn's Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") 
 ```
 
-Breast Cancer
-```{r,warning=FALSE,echo=FALSE}
+Mean/Median RAF  
+```{r, warning=F,echo=FALSE}
+mean(crohns$RAF)
+median(crohns$RAF)
+```
+
+Remove HLA region
+```{r, warning=F,echo=FALSE}
+dat <- remove_HLA(crohns)
+ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5), legend.position = "bottom") + ggtitle("Crohn's Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") 
+```
+
+Mean/Median RAF  
+```{r, warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### Breast Cancer  
+
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/manhattan_atlas_2029.png", error = FALSE)
+```
+
+RAF vs Effect Size  
+```{r, warning=FALSE,echo=FALSE}
 bc <- fread("../output/GWAS_ATLAS/evo_added/breastcancer_3659_evo.txt")
 colnames(bc) <- c(colnames(bc)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 bc$disease <- "Breast Cancer"
 
-dat <- subset(bc, bc$Risk_Derived == 'T' | bc$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Breast Cancer") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(dat$RAF)
-
+bc <- subset(bc, bc$Risk_Derived == 'T' | bc$Risk_Derived == 'F')
+ggplot(data=bc, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Breast Cancer") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(bc$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
+Mean/Median RAF  
+```{r, warning=F,echo=FALSE}
+mean(bc$RAF)
+median(bc$RAF)
+```
 
-Alzheimer's Disease 
-```{r,warning=FALSE,echo=FALSE}
+Remove HLA  
+```{r, warning=F,echo=FALSE}
+dat <- remove_HLA(bc)
+ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Breast Cancer") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Median RAF  
+```{r, warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### Alzheimer's Disease 
+
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/AD_4094.png", error = FALSE)
+```
+
+RAF vs Effect Size 
+```{r, warning=FALSE,echo=FALSE}
 AD<- fread("../output/GWAS_ATLAS/evo_added/AD_4094_evo.txt")
 colnames(AD) <- c(colnames(AD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 AD$disease <- "Alzheimers"
 clumped <- fread("../output/GWAS_ATLAS/clumped/AD_4094_SNPs.txt")
 AD <- left_join(clumped, AD, by= "SNP") 
 
-dat <- subset(AD, AD$Risk_Derived == 'T' | AD$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Alzheimer's Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-
-mean(AD$RAF, na.rm = T)
+AD <- subset(AD, AD$Risk_Derived == 'T' | AD$Risk_Derived == 'F')
+ggplot(data=AD, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Alzheimer's Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(AD$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
+Mean/Median RAF 
+```{r, warning=F,echo=FALSE}
+mean(AD$RAF)
+median(AD$RAF)
+```
 
-Parkinson
-```{r,warning=FALSE,echo=FALSE}
+Remove HLA 
+```{r, warning=F,echo=FALSE}
+dat <- remove_HLA(AD)
+ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Alzheimer's Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Median RAF 
+```{r, warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### Parkinson's Disease 
+
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/manhattan_atlas_4167.png", error = FALSE)
+```
+
+RAF vs Effect Size
+```{r, warning=FALSE,echo=FALSE}
 PD<- fread("../output/GWAS_ATLAS/evo_added/parkinson_4167_evo.txt")
 colnames(PD) <- c(colnames(PD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 PD$disease <- "Parkinson's disease"
 clumped <- fread("../output/GWAS_ATLAS/clumped/parkinson_4167_SNPs.txt")
 PD <- left_join(clumped, PD, by= "SNP") 
 
-dat <- subset(PD, PD$Risk_Derived == 'T' | PD$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Parkinson's Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(PD$RAF, na.rm = T)
+PD <- subset(PD, PD$Risk_Derived == 'T' | PD$Risk_Derived == 'F')
+ggplot(data=PD, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Parkinson's Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(PD$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
+Mean/Median RAF 
+```{r, warning=F,echo=FALSE}
+mean(PD$RAF)
+median(PD$RAF)
+```
 
-IBD 
-```{r, warning=FALSE, echo=FALSE}
+Remove HLA 
+```{r, warning=F,echo=FALSE}
+dat <- remove_HLA(PD)
+ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Parkinson's Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Median RAF 
+```{r, warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### IBD  
+
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/manhattan_atlas_2031.png", error = FALSE)
+```
+
+RAF vs Effect Size
+```{r, warning=F, echo=FALSE}
 IBD<- fread("../output/GWAS_ATLAS/evo_added/IBD_2031_evo.txt")
 colnames(IBD) <- c(colnames(IBD)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 IBD$disease <- "Inflamatory Bowel Disease"
 clumped <- fread("../output/GWAS_ATLAS/clumped/IBD_2031_SNPs.txt")
 IBD <- left_join(clumped, IBD, by= "SNP") 
 
-dat <- subset(IBD, IBD$Risk_Derived == 'T' | IBD$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Inflamatory Bowel Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(IBD$RAF, na.rm = T)
+IBD <- subset(IBD, IBD$Risk_Derived == 'T' | IBD$Risk_Derived == 'F')
+ggplot(data=IBD, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Inflamatory Bowel Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(IBD$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
+Mean/Median RAF 
+```{r, warning=F,echo=FALSE}
+mean(IBD$RAF)
+median(IBD$RAF)
+```
 
-Ulcerative Colitis
-```{r,warning=F,echo=FALSE}
+Remove HLA 
+```{r, warning=F,echo=FALSE}
+dat <- remove_HLA(IBD)
+ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Inflamatory Bowel Disease") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Median RAF 
+```{r, warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### Ulcerative Colitis
+
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/manhattan_atlas_2030.png", error = FALSE)
+```
+
+RAF vs Effect Size
+```{r, warning=F,echo=FALSE}
 UC<- fread("../output/GWAS_ATLAS/evo_added/UC_2030_evo.txt")
 colnames(UC) <- c(colnames(UC)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 UC$disease <- "Ulcerative Colitis"
 clumped <- fread("../output/GWAS_ATLAS/clumped/UC_2030_SNPs.txt")
 UC <- left_join(clumped, UC, by= "SNP") 
 
-dat <- subset(UC, UC$Risk_Derived == 'T' | UC$Risk_Derived == 'F')
+UC <- subset(UC, UC$Risk_Derived == 'T' | UC$Risk_Derived == 'F')
+ggplot(data=UC, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Ulcerative Colitis") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(UC$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+
+ggplot(data=UC, aes(x=RAF,y=abs(BETA))) + geom_point(alpha=0.5) + theme_bw() + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Ulcerative Colitis") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(UC$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Median RAF
+```{r, warning=F,echo=FALSE}
+mean(UC$RAF)
+median(UC$RAF)
+```
+
+Remove HLA
+```{r, warning=F,echo=FALSE}
+dat <- remove_HLA(UC)
 ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Ulcerative Colitis") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 
 ggplot(data=dat, aes(x=RAF,y=abs(BETA))) + geom_point(alpha=0.5) + theme_bw() + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Ulcerative Colitis") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(UC$RAF, na.rm = T)
 ```
 
-Childhood Onset Asthma
-```{r,warning=F,echo=FALSE}
+Mean/Median RAF
+```{r, warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### Childhood Onset Asthma
+
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/manhattan_atlas_4266.png", error = FALSE)
+```
+
+RAF vs Effect Size
+```{r, warning=F,echo=FALSE}
 CO<- fread("../output/GWAS_ATLAS/evo_added/COasthma_4266_evo.txt")
 colnames(CO) <- c(colnames(CO)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 CO$disease <- "Childhood Onset Asthma"
 clumped <- fread("../output/GWAS_ATLAS/clumped/COasthma_4266_SNPs.txt")
 CO <- left_join(clumped, CO, by= "SNP") 
 
-dat <- subset(CO, CO$Risk_Derived == 'T' | CO$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Childhood Onset Asthma") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(CO$RAF, na.rm = T)
+CO <- subset(CO, CO$Risk_Derived == 'T' | CO$Risk_Derived == 'F')
+ggplot(data=CO, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Childhood Onset Asthma") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(CO$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
+Mean/Median RAF 
+```{r, echo=FALSE}
+mean(CO$RAF)
+median(CO$RAF)
+```
 
-Adult Onset Asthma
-```{r,warning=F,echo=FALSE}
+Remove HLA
+```{r, warning=F,echo=FALSE}
+dat <- remove_HLA(CO)
+ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Childhood Onset Asthma") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Median RAF 
+```{r, echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### Adult Onset Asthma
+
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/manhattan_atlas_4266.png", error = FALSE)
+```
+
+RAF vs Effect Size
+```{r, warning=F,echo=FALSE}
 AO<- fread("../output/GWAS_ATLAS/evo_added/AOasthma_4267_evo.txt")
 colnames(AO) <- c(colnames(AO)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 AO$disease <- "Adult Onset Asthma"
 clumped <- fread("../output/GWAS_ATLAS/clumped/AOasthma_4267_SNPs.txt")
 AO <- left_join(clumped, AO, by= "SNP") 
 
-dat <- subset(AO, AO$Risk_Derived == 'T' | AO$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Adult Onset Asthma") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(AO$RAF, na.rm = T)
+AO <- subset(AO, AO$Risk_Derived == 'T' | AO$Risk_Derived == 'F')
+ggplot(data=AO, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Adult Onset Asthma") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(AO$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
-Multiple Sclerosis
+Mean/Median RAF
+```{r, warning=F,echo=FALSE}
+mean(AO$RAF)
+median(AO$RAF)
+```
+
+Remove HLA
+```{r, warning=F,echo=FALSE}
+dat <- remove_HLA(AO)
+ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Adult Onset Asthma") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### Multiple Sclerosis
 ```{r,warning=F,echo=FALSE}
 MS <- fread("../output/GWAS_ATLAS/evo_added/MS_24076602_evo.txt")
 colnames(MS) <- c(colnames(MS)[1:13], "EA_Derived", "DAF", "Risk_Derived")
@@ -353,16 +603,36 @@ MS$disease <- "Multiple Sclerosis"
 clumped <- fread("../output/GWAS_ATLAS/clumped/MS_24076602_SNPs.txt")
 MS <- left_join(clumped, MS, by= "SNP") 
 
-dat <- subset(MS, MS$Risk_Derived == 'T' | MS$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Multiple Sclerosis") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(MS$RAF, na.rm = T)
-
+MS <- subset(MS, MS$Risk_Derived == 'T' | MS$Risk_Derived == 'F')
+ggplot(data=MS, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Multiple Sclerosis") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(MS$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(MS$RAF)
+median(MS$RAF)
+```
 
+Remove HLA
+```{r,warning=F,echo=FALSE}
+dat <- remove_HLA(MS)
+ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Multiple Sclerosis") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
 
-Myopia 
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### Myopia  
+
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/manhattan_atlas_3539.png", error = FALSE)
+```
+
+RAF vs Effect Size
 ```{r,warning=F,echo=FALSE}
 myopia<- fread("../output/GWAS_ATLAS/evo_added/myopia_3539_evo.txt")
 colnames(myopia) <- c(colnames(myopia)[1:13], "EA_Derived", "DAF", "Risk_Derived")
@@ -370,13 +640,26 @@ myopia$disease <- "Myopia"
 clumped <- fread("../output/GWAS_ATLAS/clumped/myopia_3539_SNPs.txt")
 myopia <- left_join(clumped, myopia, by= "SNP") 
 
-dat <- subset(myopia, myopia$Risk_Derived == 'T' | myopia$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Myopia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(myopia$RAF, na.rm = T)
+myopia <- subset(myopia, myopia$Risk_Derived == 'T' | myopia$Risk_Derived == 'F')
+ggplot(data=myopia, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Myopia") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(myopia$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
-Educational Attainment - UKBB only 
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(myopia$RAF)
+median(myopia$RAF)
+```
+
+No HLA SNPs
+
+### Educational Attainment - UKBB only 
+
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/manhattan_atlas_3409.png", error = FALSE)
+```
+
+RAF vs Effect Size
 ```{r,warning=F,echo=FALSE}
 EAukbb <- fread("../output/GWAS_ATLAS/evo_added/EAukbb_3409_evo.txt")
 colnames(EAukbb) <- c(colnames(EAukbb)[1:13], "EA_Derived", "DAF", "Risk_Derived")
@@ -384,14 +667,29 @@ EAukbb$disease <- "Educational Attainment UKBB"
 clumped <- fread("../output/GWAS_ATLAS/clumped/EAukbb_3409_SNPs.txt")
 EAukbb <- left_join(clumped, EAukbb, by= "SNP") 
 
-dat <- subset(EAukbb, EAukbb$Risk_Derived == 'T' | EAukbb$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Educational Attainment - UKBB") + labs(y = TeX('$\\hat{\\beta}$'), x = "Trait increasing allele frequency", color = "Trait increasing allele derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(EAukbb$RAF, na.rm = T)
+EAukbb <- subset(EAukbb, EAukbb$Risk_Derived == 'T' | EAukbb$Risk_Derived == 'F')
+ggplot(data=EAukbb, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Educational Attainment - UKBB") + labs(y = TeX('$\\hat{\\beta}$'), x = "Trait increasing allele frequency", color = "Trait increasing allele derived") + ylim(0,max(abs(EAukbb$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(EAukbb$RAF)
+median(EAukbb$RAF)
+```
 
-Educational Attainment - meta-analysis
+Remove HLA  
+```{r,warning=F,echo=FALSE}
+dat <- remove_HLA(EAukbb)
+ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Educational Attainment - UKBB") + labs(y = TeX('$\\hat{\\beta}$'), x = "Trait increasing allele frequency", color = "Trait increasing allele derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### Educational Attainment - meta-analysis
 ```{r,warning=F,echo=FALSE}
 EAmeta<- fread("../output/GWAS_ATLAS/evo_added/EAmeta_4066_evo.txt")
 colnames(EAmeta) <- c(colnames(EAmeta)[1:13], "EA_Derived", "DAF", "Risk_Derived")
@@ -399,13 +697,29 @@ EAmeta$disease <- "Educational Attainment Meta"
 clumped <- fread("../output/GWAS_ATLAS/clumped/EAmeta_4066_SNPs.txt")
 EAmeta <- left_join(clumped, EAmeta, by= "SNP") 
 
-dat <- subset(EAmeta, EAmeta$Risk_Derived == 'T' | EAmeta$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Educational Attainment - Meta-analysis") + labs(y = TeX('$\\hat{\\beta}$'), x = "Trait increasing allele frequency", color = "Trait increasing allele derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(EAmeta$RAF, na.rm = T)
+EAmeta <- subset(EAmeta, EAmeta$Risk_Derived == 'T' | EAmeta$Risk_Derived == 'F')
+ggplot(data=EAmeta, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Educational Attainment - Meta-analysis") + labs(y = TeX('$\\hat{\\beta}$'), x = "Trait increasing allele frequency", color = "Trait increasing allele derived") + ylim(0,max(abs(EAmeta$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
-BMI
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(EAmeta$RAF)
+median(EAmeta$RAF)
+```
+
+Remove HLA
+```{r,warning=F,echo=FALSE}
+dat <- remove_HLA(EAmeta)
+ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Educational Attainment - Meta-analysis") + labs(y = TeX('$\\hat{\\beta}$'), x = "Trait increasing allele frequency", color = "Trait increasing allele derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### BMI
 ```{r,warning=F,echo=FALSE}
 BMI <- fread("../output/GWAS_ATLAS/evo_added/BMI_4074_evo.txt")
 colnames(BMI) <- c(colnames(BMI)[1:13], "EA_Derived", "DAF", "Risk_Derived")
@@ -413,13 +727,25 @@ BMI$disease <- "BMI"
 clumped <- fread("../output/GWAS_ATLAS/clumped/BMI_4074.clumped")
 BMI <- left_join(clumped, BMI, by= "SNP") 
 
-dat <- subset(BMI, BMI$Risk_Derived == 'T' | BMI$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("BMI") + labs(y = TeX('$\\hat{\\beta}$'), x = "Trait increasing allele frequency", color = "Trait increasing allele derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(BMI$RAF, na.rm = T)
+BMI <- subset(BMI, BMI$Risk_Derived == 'T' | BMI$Risk_Derived == 'F')
+ggplot(data=BMI, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("BMI") + labs(y = TeX('$\\hat{\\beta}$'), x = "Trait increasing allele frequency", color = "Trait increasing allele derived") + ylim(0,max(abs(BMI$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
-PBC
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(BMI$RAF)
+median(BMI$RAF)
+```
+No HLA SNPs
+
+### PBC
+
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/manhattan_atlas_3822.png", error = FALSE)
+```
+
+RAF vs Effect Size
 ```{r,warning=F,echo=FALSE}
 PBC <- fread("../output/GWAS_ATLAS/evo_added/PBC_3822_evo.txt")
 colnames(PBC) <- c(colnames(PBC)[1:13], "EA_Derived", "DAF", "Risk_Derived")
@@ -427,44 +753,90 @@ PBC$disease <- "Primary Biliary Cholangitis"
 clumped <- fread("../output/GWAS_ATLAS/clumped/PBC_3822_SNPs.txt")
 PBC <- left_join(clumped, PBC, by= "SNP") 
 
-dat <- subset(PBC, PBC$Risk_Derived == 'T' | PBC$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Primary Biliary Cholangitis") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(PBC$RAF, na.rm = T)
+PBC <- subset(PBC, PBC$Risk_Derived == 'T' | PBC$Risk_Derived == 'F')
+ggplot(data=PBC, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Primary Biliary Cholangitis") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(PBC$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
-Vitiligo
-```{r, warning=FALSE, echo=FALSE}
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(PBC$RAF)
+median(PBC$RAF)
+```
+
+Remove HLA
+```{r,warning=F,echo=FALSE}
+dat <- remove_HLA(PBC)
+ggplot(data=dat, aes(x=RAF,y=abs(BETA),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Primary Biliary Cholangitis") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(dat$BETA))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### Vitiligo 
+
+Manhattan Plot  
+```{r, out.height="100%", out.width="100%", echo=FALSE}
+knitr::include_graphics("assets/manhattan_atlas_3822.png", error = FALSE)
+```
+
+RAF vs Effect Size
+```{r, warning=F, echo=FALSE}
 vit <- fread("../output/GWAS_ATLAS/evo_added/vitiligo_3832_evo.txt")
 colnames(vit) <- c(colnames(vit)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 vit$disease <- "Vitiligo"
 clumped <- fread("../output/GWAS_ATLAS/clumped/vitiligo_3832_SNPs.txt")
 vit <- left_join(clumped, vit, by= "SNP") 
 
-dat <- subset(vit, vit$Risk_Derived == 'T' | vit$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Vitiligo") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-mean(vit$RAF, na.rm = T)
+vit <- subset(vit, vit$Risk_Derived == 'T' | vit$Risk_Derived == 'F')
+ggplot(data=vit, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Vitiligo") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(vit$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
 
-Bipolar Disorder
-```{r, warning=FALSE, echo=FALSE}
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(vit$RAF)
+median(vit$RAF)
+```
+
+Remove HLA
+```{r,warning=F,echo=FALSE}
+dat <- remove_HLA(vit)
+ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Vitiligo") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
+```
+
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(dat$RAF)
+median(dat$RAF)
+```
+
+### Bipolar Disorder 
+
+RAF vs Effect Size 
+```{r, warning=F, echo=FALSE}
 BIP <- fread("../output/GWAS_ATLAS/evo_added/BIP_4039_evo.txt")
 colnames(BIP) <- c(colnames(BIP)[1:13], "EA_Derived", "DAF", "Risk_Derived")
 BIP$disease <- "Bipolar Disorder"
 clumped <- fread("../output/GWAS_ATLAS/clumped/BIP_4039_SNPs.txt")
 BIP <- left_join(clumped, BIP, by= "SNP") 
 
-dat <- subset(BIP, BIP$Risk_Derived == 'T' | BIP$Risk_Derived == 'F')
-ggplot(data=dat, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Bipolar Disorder") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(dat$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
-
-
-mean(BIP$RAF, na.rm = T)
+BIP <- subset(BIP, BIP$Risk_Derived == 'T' | BIP$Risk_Derived == 'F')
+ggplot(data=BIP, aes(x=RAF,y=abs(log(OR)),color=Risk_Derived)) + geom_point(alpha=0.5) + theme_bw() + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Bipolar Disorder") + labs(y = TeX('$\\hat{\\beta}$'), color = "Risk Derived") + ylim(0,max(abs(log(BIP$OR)))+0.01) + theme(plot.title = element_text(hjust = 0.5),  legend.position = "bottom")
 ```
+
+Mean/Median RAF
+```{r,warning=F,echo=FALSE}
+mean(BIP$RAF)
+median(BIP$RAF)
+```
+
+No HLA SNPs 
 
 
 ## Median RAF 
-```{r,warning=FALSE,echo=FALSE}
+```{r,warning=F,echo=FALSE}
 combined <- bind_rows(AD,AF,AO,bc,BIP,BMI,CAD,CKD,CO,crohns,EAmeta, EAukbb,IBD,MS,myopia,PBC,PD,schizophrenia,scz_pgc,T2D,UC,vit)
 
 fig4 <- combined %>% select(RAF, disease) %>% na.omit()
