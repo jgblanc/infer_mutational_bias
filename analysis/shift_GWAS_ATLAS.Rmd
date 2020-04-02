@@ -37,13 +37,13 @@ schizophrenia <- left_join(pruned, schizophrenia, by = c("V1" = "SNP"))
 
 dat <- schizophrenia %>% select(DAF, Risk_Derived, OR) %>% na.omit() 
 dat$bin <- cut(dat$DAF, 20)
-df <- dat %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
-ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))
+df <- dat %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()), lower_bound = prop_risk - (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)), upper_bound = prop_risk + (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5)) + geom_errorbar(aes(ymin = lower_bound, ymax = upper_bound))
 
 dat2 <- schizophrenia %>% select(DAF, Risk_Derived, OR) %>% na.omit() 
 dat2$bin <- cut2(dat$DAF, m=nrow(dat2)/20)
-df2 <- dat2 %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
-ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))
+df2 <- dat2 %>%  group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()), lower_bound = prop_risk - (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)), upper_bound = prop_risk + (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)))
+ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5)) + geom_errorbar(aes(ymin = lower_bound, ymax = upper_bound))
 
 # Totol Fraction of Risk Derived SNPs 
 sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
@@ -58,16 +58,17 @@ CAD <- left_join(pruned, CAD, by = c("V1" = "SNP"))
 
 dat <- CAD %>% select(DAF, Risk_Derived, `Log(OR)`) %>% na.omit()
 dat$bin <- cut(dat$DAF, 20)
-df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()))
-ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))
+df <- dat  %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()), lower_bound = prop_risk - (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)), upper_bound = prop_risk + (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))+ geom_errorbar(aes(ymin = lower_bound, ymax = upper_bound))
 
 dat2 <- CAD %>% select(DAF, Risk_Derived, `Log(OR)`) %>% na.omit() 
 dat2$bin <- cut2(dat$DAF, m=nrow(dat2)/20)
-df2 <- dat2 %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
-ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))
+df2 <- dat2  %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()), lower_bound = prop_risk - (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)), upper_bound = prop_risk + (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)))
+ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))+ geom_errorbar(aes(ymin = lower_bound, ymax = upper_bound))
 
 sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
 ```
+
 
 ### UC
 ```{r, warning=FALSE}
@@ -78,13 +79,13 @@ UC <- left_join(pruned, UC, by = c("V1" = "SNP"))
 
 dat <- UC %>% select(DAF, Risk_Derived, BETA) %>% na.omit() %>% filter(abs(BETA) <= 0.0005)
 dat$bin <- cut(dat$DAF, 20)
-df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()))
-ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))
+df <- dat  %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()), lower_bound = prop_risk - (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)), upper_bound = prop_risk + (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))+ geom_errorbar(aes(ymin = lower_bound, ymax = upper_bound))
 
 dat2 <- UC %>% select(DAF, Risk_Derived, BETA) %>% na.omit() 
 dat2$bin <- cut2(dat$DAF, m=nrow(dat2)/20)
-df2 <- dat2 %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
-ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))
+df2 <- dat2 %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()), lower_bound = prop_risk - (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)), upper_bound = prop_risk + (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)))
+ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))+ geom_errorbar(aes(ymin = lower_bound, ymax = upper_bound))
 
 sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
 ```
@@ -98,13 +99,13 @@ T2D <- left_join(pruned, T2D, by = c("V1" = "SNP"))
 
 dat <- T2D %>% select(DAF, Risk_Derived, BETA) %>% na.omit() %>% filter(abs(BETA) <= 0.0001)
 dat$bin <- cut(dat$DAF, 20)
-df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()), )
-ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))
+df <- dat  %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()), lower_bound = prop_risk - (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)), upper_bound = prop_risk + (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))+ geom_errorbar(aes(ymin = lower_bound, ymax = upper_bound))
 
 dat2 <- T2D %>% select(DAF, Risk_Derived, BETA)  %>% na.omit() 
 dat2$bin <- cut2(dat$DAF, m=nrow(dat2)/20)
-df2 <- dat2 %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
-ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))
+df2 <- dat2 %>% group_by(bin)  %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()), lower_bound = prop_risk - (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)), upper_bound = prop_risk + (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)))
+ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))+ geom_errorbar(aes(ymin = lower_bound, ymax = upper_bound))
 
 sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
 ```
@@ -118,15 +119,15 @@ height <- left_join(pruned, height, by = c("V1" = "SNP"))
 
 dat <- height %>% select(DAF, Risk_Derived, BETA) %>% na.omit() %>% filter(abs(BETA) <= 0.0001)
 dat$bin <- cut(dat$DAF, 20)
-df <- dat %>% group_by(bin) %>%summarise(prop_risk = (sum(Risk_Derived == 'T')/n()), )
-ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))
+df <- dat %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()), lower_bound = prop_risk - (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)), upper_bound = prop_risk + (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)))
+ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))+ geom_errorbar(aes(ymin = lower_bound, ymax = upper_bound))
 
 dat2 <- height %>% select(DAF, Risk_Derived, BETA)  %>% na.omit() 
 dat2$bin <- cut2(dat$DAF, m=nrow(dat2)/20)
-df2 <- dat2 %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()))
-ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))
+df2 <- dat2 %>% group_by(bin) %>%summarise(num_snps = n(),prop_risk = (sum(Risk_Derived == 'T')/n()), lower_bound = prop_risk - (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)), upper_bound = prop_risk + (1.96 *sqrt((prop_risk * (1-prop_risk))/num_snps)))
+ggplot(df2, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Risk SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Number of SNPs per Bins") + theme(plot.title = element_text(hjust = 0.5))+ geom_errorbar(aes(ymin = lower_bound, ymax = upper_bound))
 
 sum(dat$Risk_Derived == "T")/sum(dat$Risk_Derived == "T" | dat$Risk_Derived == "F")
 ```
 
-
+n = 34090
