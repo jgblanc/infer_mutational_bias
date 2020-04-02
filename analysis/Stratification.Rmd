@@ -51,7 +51,7 @@ These $V_{k,l}$ entries represent the correlation of each SNP with the individua
 plink -bcf ../../../data/1kg/bcf/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5.20130502.genotypes.bcf --keep ../../../data/1kg/bcf/EUR_IDS.txt --double-id --pca var-wts --out ../output/PCA/chr1_EUR --allow-extra-chr  
 3. Plink outputs the SNP "loadings" for the first 20 PC's in an .eigenvec.var file  
 4. I used the 1kg_snps.tsv from Joe to add a column to the .eigenvec.var that says 1 if the coded allele (A2) is derived and -1 if the coded allele is ancestral. I was only able to annotate SNPs that had rsID's and had derived/ancestral info in the table - the rest have NA in that column.  
-5. I pulled out the SNPs with D/A info from the 1kG files and did LD pruning on these SNPs using plink --indep-pairwise 50 5 0.95  
+5. I pulled out the SNPs with D/A info from the 1kG files and did LD pruning on these SNPs using plink --indep-pairwise 50 5 0.05  
 
 
 ## Get ID's of European individuals 
@@ -66,7 +66,7 @@ id_only <- cbind(EUR$Sample,EUR$Sample)
 
 ## PCA 
 ```{r}
-vecs <- fread("../data/STRAT/chr1_EUR_0.01.eigenvec")
+vecs <- fread("../data/STRAT/test1_all_0.01.eigenvec")
 pop_info <- fread("../data/STRAT/20130606_sample_info.csv")
 dat <- inner_join(vecs, pop_info, by = c("V2"= "Sample"))
 p1 <- ggplot(data = dat, aes(x=V3, y=V4, color = Population)) + geom_point() + xlab("PC1") + ylab("PC2")
@@ -79,11 +79,11 @@ ggarrange(p1,p2,p3,p4, common.legend = T)
 ## SNP Loadings 
 
 
-MAF filter 0.01 (n=139818, pruned = 47249)
+MAF filter 0.01 (n = 9755877, pruned = 65370)
 ```{r}
-loading <- fread("../data/STRAT/chr1_EUR_0.01.eigenvec.var.DA.txt")
+loading <- fread("../data/STRAT/EUR_0.01_evo.txt")
 loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-pruned <- fread("../output/STRAT/pruned/chr1_EUR_0.01.eigenvec.var.DA.prune.in", header = F)
+pruned <- fread("../data/STRAT/EUR_0.01.eigenvec.var.DA.prune.in", header = F)
 loading <- left_join(pruned,loading, by = c("V1"="V2"))
 only_num <- loading[,5:24]
 sums <- colMeans(only_num, na.rm = T)
@@ -98,11 +98,11 @@ colnames(df_0.01) <- c("0.01", "V2")
 pl_0.01
 ```
 
-MAF filter 0.05 (n=123616, pruned = 40998)
+MAF filter 0.05 (n=6983938, pruned = 45803)
 ```{r}
-loading <- fread("../data/STRAT/chr1_EUR_0.05.eigenvec.var.DA.txt")
+loading <- fread("../data/STRAT/EUR_0.05_evo.txt")
 loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-pruned <- fread("../output/STRAT/pruned/chr1_EUR_0.05.eigenvec.var.DA.prune.in", header = F)
+pruned <- fread("../data/STRAT/EUR_0.05.eigenvec.var.DA.prune.in", header = F)
 loading <- left_join(pruned,loading, by = c("V1"="V2"))
 only_num <- loading[,5:24]
 sums <- colMeans(only_num, na.rm = T)
@@ -117,11 +117,11 @@ colnames(df_0.05) <- c("0.05", "V2")
 pl_0.05
 ```
 
-MAF filter 0.1 (n = 110300, pruned = 36269)
+MAF filter 0.1 (n = 5608165, pruned = 41521)
 ```{r}
-loading <- fread("../data/STRAT/chr1_EUR_0.1.eigenvec.var.DA.txt")
+loading <- fread("../data/STRAT/EUR_0.1_evo.txt")
 loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-pruned <- fread("../output/STRAT/pruned/chr1_EUR_0.1.eigenvec.var.DA.prune.in", header = F)
+pruned <- fread("../data/STRAT/EUR_0.1.eigenvec.var.DA.prune.in", header = F)
 loading <- left_join(pruned,loading, by = c("V1"="V2"))
 only_num <- loading[,5:24]
 sums <- colMeans(only_num, na.rm = T)
@@ -136,11 +136,11 @@ colnames(df_0.1) <- c("0.1", "V2")
 pl_0.1
 ```
 
-MAF filter 0.2 (n=86234, pruned = 28011)
+MAF filter 0.2 (n=3787677, pruned = 36086)
 ```{r}
-loading <- fread("../data/STRAT/chr1_EUR_0.2.eigenvec.var.DA.txt")
+loading <- fread("../data/STRAT/EUR_0.2_evo.txt")
 loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-pruned <- fread("../output/STRAT/pruned/chr1_EUR_0.2.eigenvec.var.DA.prune.in", header = F)
+pruned <- fread("../data/STRAT/EUR_0.2.eigenvec.var.DA.prune.in", header = F)
 loading <- left_join(pruned,loading, by = c("V1"="V2"))
 only_num <- loading[,5:24]
 sums <- colMeans(only_num, na.rm = T)
@@ -155,11 +155,11 @@ colnames(df_0.2) <- c("0.2", "V2")
 pl_0.2
 ```
 
-MAF filter 0.3 (n=602011, pruned = 19875)
+MAF filter 0.3 (n=2401987, pruned = 31059)
 ```{r}
-loading <- fread("../data/STRAT/chr1_EUR_0.3.eigenvec.var.DA.txt")
+loading <- fread("../data/STRAT/EUR_0.3_evo.txt")
 loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-pruned <- fread("../output/STRAT/pruned/chr1_EUR_0.3.eigenvec.var.DA.prune.in", header = F)
+pruned <- fread("../data/STRAT/EUR_0.3.eigenvec.var.DA.prune.in", header = F)
 loading <- left_join(pruned,loading, by = c("V1"="V2"))
 only_num <- loading[,5:24]
 sums <- colMeans(only_num, na.rm = T)
@@ -174,11 +174,11 @@ colnames(df_0.3) <- c("0.3", "V2")
 pl_0.3
 ```
 
-MAF filter 0.4 (n=33130, pruned = 10576)
+MAF filter 0.4 (n=1172620, pruned = 24810)
 ```{r}
-loading <- fread("../data/STRAT/chr1_EUR_0.4.eigenvec.var.DA.txt")
+loading <- fread("../data/STRAT/EUR_0.4_evo.txt")
 loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-pruned <- fread("../output/STRAT/pruned/chr1_EUR_0.4.eigenvec.var.DA.prune.in", header = F)
+pruned <- fread("../data/STRAT/EUR_0.4.eigenvec.var.DA.prune.in", header = F)
 loading <- left_join(pruned,loading, by = c("V1"="V2"))
 only_num <- loading[,5:24]
 sums <- colMeans(only_num, na.rm = T)
