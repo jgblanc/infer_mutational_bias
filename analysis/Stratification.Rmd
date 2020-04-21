@@ -56,7 +56,7 @@ plink -bcf ../../../data/1kg/bcf/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5.
 
 ## Get ID's of European individuals 
 ```{r}
-pop_info <- fread("../data/STRAT/20130606_sample_info.csv")
+pop_info <- fread("../data/STRAT/20130606_sample_info.txt")
 EUR <- pop_info %>% filter(Population %in% c("CEU", "TSI", "FIN", "GBR","IBS"))
 id_list <- cbind(0,EUR$Sample)
 id_only <- cbind(EUR$Sample,EUR$Sample)
@@ -66,8 +66,8 @@ id_only <- cbind(EUR$Sample,EUR$Sample)
 
 ## PCA 
 ```{r}
-vecs <- fread("../data/STRAT/test1_all_0.01.eigenvec")
-pop_info <- fread("../data/STRAT/20130606_sample_info.csv")
+vecs <- fread("../data/STRAT/EUR_0.01.eigenvec")
+pop_info <- fread("../data/STRAT/20130606_sample_info.txt")
 dat <- inner_join(vecs, pop_info, by = c("V2"= "Sample"))
 p1 <- ggplot(data = dat, aes(x=V3, y=V4, color = Population)) + geom_point() + xlab("PC1") + ylab("PC2")
 p2 <- ggplot(data = dat, aes(x=V5, y=V6, color = Population)) + geom_point() + xlab("PC3") + ylab("PC4")
@@ -76,22 +76,20 @@ p4 <- ggplot(data = dat, aes(x=V9, y=V10, color = Population)) + geom_point() + 
 ggarrange(p1,p2,p3,p4, common.legend = T)
 ```
 
-## SNP Loadings 
+## SNP Loadings - Pruning each set of MAF cutoffs separately 
 
 MAF filter 0.01 (n w/ DA info = 7937190 , pruned = 578137)
 ```{r}
-loading <- fread("../data/STRAT/EUR_0.01_evo.txt")
-loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-pruned <- fread("../data/STRAT/EUR_0.01.eigenvec.var.DA.prune.in", header = F)
-loading <- left_join(pruned,loading, by = c("V1"="V2"))
+all_snps <- fread("../data/STRAT/EUR_all_evo.txt")
+all_da <- all_snps %>% na.omit() # Get rid of no info (DA) SNPs 
+pruned <- fread("../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
 only_num <- loading[,5:24] * loading$V25
 sums <- colMeans(only_num)
 stan_devs <- apply(only_num, 2, sd)
 lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
 upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
- 
-
-df_0.01 <- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+df_0.01 <- as.data.frame(cbind(sums,seq(1,20)))
 pl_0.01 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
 colnames(df_0.01) <- c("0.01", "V2")
 pl_0.01
@@ -99,15 +97,13 @@ pl_0.01
 
 MAF filter 0.05 (n w/ DA info = 5627285, pruned = 117441)
 ```{r}
-loading <- fread("../data/STRAT/EUR_0.05_evo.txt")
-loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-pruned <- fread("../data/STRAT/EUR_0.05.eigenvec.var.DA.prune.in", header = F)
-loading <- left_join(pruned,loading, by = c("V1"="V2"))
-only_num <- loading[,5:24] *  loading$V25
+pruned <- fread("../data/STRAT/EUR_0.05_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
+only_num <- loading[,5:24]* loading$V25
 sums <- colMeans(only_num, na.rm = T)
 stan_devs <- apply(only_num, 2, sd)
-lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
-upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
  
 
 df_0.05 <- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
@@ -118,15 +114,13 @@ pl_0.05
 
 MAF filter 0.1 (n = 4496063, pruned = 86767)
 ```{r}
-loading <- fread("../data/STRAT/EUR_0.1_evo.txt")
-loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-pruned <- fread("../data/STRAT/EUR_0.1.eigenvec.var.DA.prune.in", header = F)
-loading <- left_join(pruned,loading, by = c("V1"="V2"))
-only_num <- loading[,5:24] * loading$V25
+pruned <- fread("../data/STRAT/EUR_0.1_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
+only_num <- loading[,5:24]* loading$V25
 sums <- colMeans(only_num, na.rm = T)
 stan_devs <- apply(only_num, 2, sd)
-lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
-upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
  
 
 df_0.1 <- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
@@ -137,15 +131,13 @@ pl_0.1
 
 MAF filter 0.2 (n=3019106, pruned = 64230)
 ```{r}
-loading <- fread("../data/STRAT/EUR_0.2_evo.txt")
-loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-pruned <- fread("../data/STRAT/EUR_0.2.eigenvec.var.DA.prune.in", header = F)
-loading <- left_join(pruned,loading, by = c("V1"="V2"))
+pruned <- fread("../data/STRAT/EUR_0.2_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
 only_num <- loading[,5:24]* loading$V25
 sums <- colMeans(only_num, na.rm = T)
 stan_devs <- apply(only_num, 2, sd)
-lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
-upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
  
 
 df_0.2 <- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
@@ -156,17 +148,14 @@ pl_0.2
 
 MAF filter 0.3 (n=1906644, pruned = 48015)
 ```{r}
-loading <- fread("../data/STRAT/EUR_0.3_evo.txt")
-loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-pruned <- fread("../data/STRAT/EUR_0.3.eigenvec.var.DA.prune.in", header = F)
-loading <- left_join(pruned,loading, by = c("V1"="V2"))
+pruned <- fread("../data/STRAT/EUR_0.3_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
 only_num <- loading[,5:24]* loading$V25
 sums <- colMeans(only_num, na.rm = T)
 stan_devs <- apply(only_num, 2, sd)
 lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
 upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
  
-
 df_0.3 <- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
 pl_0.3 <- ggplot(df_0.3, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
 colnames(df_0.3) <- c("0.3", "V2")
@@ -175,82 +164,240 @@ pl_0.3
 
 MAF filter 0.4 (n=926834, pruned = 33551)
 ```{r}
-loading <- fread("../data/STRAT/EUR_0.4_evo.txt")
-loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-pruned <- fread("../data/STRAT/EUR_0.4.eigenvec.var.DA.prune.in", header = F)
-loading <- left_join(pruned,loading, by = c("V1"="V2"))
+pruned <- fread("../data/STRAT/EUR_0.4_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
 only_num <- loading[,5:24]* loading$V25
 sums <- colMeans(only_num, na.rm = T)
 stan_devs <- apply(only_num, 2, sd)
 lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
 upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
  
-
 df_0.4 <- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
 pl_0.4 <- ggplot(df_0.4, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
 colnames(df_0.4) <- c("0.4", "V2")
 pl_0.4
 ```
 
-```{r}
-df <- cbind(df_0.01[,1], df_0.05[,1], df_0.1[,1], df_0.2[,1], df_0.3[,1], df_0.4[,1])
+## SNP Loadins - one set of pruned SNPs eliminating SNPs based on MAF freq  
 
-par(mfrow = c(2,2))
-for(i in 1:4) {
-  plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = "blue", pch = 19, xlab = "Frequency", ylab = "Mean Loading")
-  title(main = paste0("PC ", i))
-  abline(a=0,b=0, col = "red")
-}
+MAF 0.01
+```{r}
+pruned <- fread("../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
+loading <- loading %>% filter(V26 >= 0.01) 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) <- c("0.01", "V2")
+pl_0.01
 ```
 
+MAF 0.05
 ```{r}
-par(mfrow = c(2,2))
-for(i in 5:8) {
-  plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = "blue", pch = 19, xlab = "Frequency", ylab = "Mean Loading")
-  title(main = paste0("PC ", i))
-  abline(a=0,b=0, col = "red")
-}
+loading <- loading %>% filter(V26 >= 0.05) 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.05 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.05 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) <- c("0.01", "V2")
+pl_0.05
 ```
 
+MAF 0.1
 ```{r}
-par(mfrow = c(2,2))
-for(i in 9:12) {
-  plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = "blue", pch = 19, xlab = "Frequency", ylab = "Mean Loading")
-  title(main = paste0("PC ", i))
-  abline(a=0,b=0, col = "red")
-}
+loading <- loading %>% filter(V26 >= 0.1) 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.1 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.1 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.1) <- c("0.01", "V2")
+pl_0.1
 ```
 
+MAF 0.2
 ```{r}
-par(mfrow = c(2,2))
-for(i in 13:16) {
-  plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = "blue", pch = 19, xlab = "Frequency", ylab = "Mean Loading")
-  title(main = paste0("PC ", i))
-  abline(a=0,b=0, col = "red")
-}
+loading <- loading %>% filter(V26 >= 0.2) 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.2 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.2 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.2) <- c("0.01", "V2")
+pl_0.2
 ```
 
+MAF 0.3
 ```{r}
-par(mfrow = c(2,2))
-for(i in 17:20) {
-  plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = "blue", pch = 19, xlab = "Frequency", ylab = "Mean Loading")
-  title(main = paste0("PC ", i))
-  abline(a=0,b=0, col = "red")
-}
+loading <- loading %>% filter(V26 >= 0.3) 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.3 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.3 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.2) <- c("0.01", "V2")
+pl_0.3
 ```
 
-### Stratifacation of GWAS SNPs  
+MAF 0.4
+```{r}
+loading <- loading %>% filter(V26 >= 0.4) 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.4 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.4 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.2) <- c("0.01", "V2")
+pl_0.4
+```
+
+### SNP Loadings - Same set of pruned SNPs seperate intervals  
+
+0.01 - 0.05
+```{r}
+pruned <- fread("../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
+loading <- loading %>% filter(V26 >= 0.01 & V26 <= 0.05) 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) <- c("0.01", "V2")
+pl_0.01
+```
+
+0.05 - 0.1
+```{r}
+pruned <- fread("../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
+loading <- loading %>% filter(V26 >= 0.05 & V26 <= 0.1) 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) <- c("0.01", "V2")
+pl_0.01
+```
+
+0.1 - 0.2
+```{r}
+pruned <- fread("../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
+loading <- loading %>% filter(V26 >= 0.1 & V26 <= 0.5) 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) <- c("0.01", "V2")
+pl_0.01
+```
+
+0.2 - 0.3
+```{r}
+pruned <- fread("../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
+loading <- loading %>% filter(V26 >= 0.2 & V26 <= 0.3) 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) <- c("0.01", "V2")
+pl_0.01
+```
+
+0.3 - 0.4
+```{r}
+pruned <- fread("../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
+loading <- loading %>% filter(V26 >= 0.3 & V26 <= 0.4) 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) <- c("0.01", "V2")
+pl_0.01
+```
+
+0.4 - 0.5
+```{r}
+pruned <- fread("../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in", header = F)
+loading <- left_join(pruned,all_da, by = c("V1"="V2"))
+loading <- loading %>% filter(V26 >= 0.4 & V26 <= 0.5) 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) <- c("0.01", "V2")
+pl_0.01
+```
+
+
+## SNP loadings - no pruning
+
+0.01
+```{r}
+loading <- all_da 
+only_num <- loading[,5:24] * loading$V25
+sums <- colMeans(only_num)
+stan_devs <- apply(only_num, 2, sd)
+lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 <- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) <- c("0.01", "V2")
+pl_0.01
+```
+
+s
+
+
+
+
+
 
 **Schizophrenia significant SNPs** 
 ```{r}
-loading <- fread("../data/STRAT/EUR_0.01_evo.txt")
-loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
-schizophrenia <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_3982_evo.txt")
-colnames(schizophrenia) <- c(colnames(schizophrenia)[1:13], "EA_Derived", "DAF", "Risk_Derived")
-schizophrenia$disease <- "Schizophenria"
-clumped <- fread("../output/GWAS_ATLAS/clumped/schizophrenia_3982_SNPs.txt")
-schizophrenia <- left_join(clumped, schizophrenia) 
-df <- schizophrenia %>% select(SNP)
+# loading <- fread("../data/STRAT/EUR_0.01_evo.txt")
+# loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
+# schizophrenia <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_3982_evo.txt")
+# colnames(schizophrenia) <- c(colnames(schizophrenia)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+# schizophrenia$disease <- "Schizophenria"
+# clumped <- fread("../output/GWAS_ATLAS/clumped/schizophrenia_3982_SNPs.txt")
+# schizophrenia <- left_join(clumped, schizophrenia) 
+# df <- schizophrenia %>% select(SNP)
 ```
 
 ```{r}
@@ -259,29 +406,29 @@ df <- schizophrenia %>% select(SNP)
 ```
 
 ```{r}
-conversion <- fread("../data/STRAT/schizophrenia_conversion.csv", header = F)
-comb <- left_join(conversion, loading, by = c("V2" = "V2"))
-
-only_num <- comb[,6:25] * comb$V25
-only_num <- only_num %>%na.omit()
-sums <- colMeans(only_num, na.rm = T)
-stan_devs <- apply(only_num, 2, sd)
-lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
-upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
- 
-df <- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
-pl <- ggplot(df, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
-
-pl
+# conversion <- fread("../data/STRAT/schizophrenia_conversion.csv", header = F)
+# comb <- left_join(conversion, loading, by = c("V2" = "V2"))
+# 
+# only_num <- comb[,6:25] * comb$V25
+# only_num <- only_num %>%na.omit()
+# sums <- colMeans(only_num, na.rm = T)
+# stan_devs <- apply(only_num, 2, sd)
+# lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+# upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+#  
+# df <- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+# pl <- ggplot(df, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+# 
+# pl
 ```
 
 **Schizophrenia non-significant SNPs**  
 ```{r}
-schizophrenia <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_3982-0.0001_evo.txt")
-colnames(schizophrenia) <- c(colnames(schizophrenia)[1:13], "EA_Derived", "DAF", "Risk_Derived")
-pruned <- fread("../output/GWAS_ATLAS/pruned/schizophrenia_3982_0.0001.prune.in", header = F)
-schizophrenia <- left_join(pruned, schizophrenia, by = c("V1" = "SNP"))
-df <- schizophrenia %>% select(V1)
+# schizophrenia <- fread("../output/GWAS_ATLAS/evo_added/schizophrenia_3982-0.0001_evo.txt")
+# colnames(schizophrenia) <- c(colnames(schizophrenia)[1:13], "EA_Derived", "DAF", "Risk_Derived")
+# pruned <- fread("../output/GWAS_ATLAS/pruned/schizophrenia_3982_0.0001.prune.in", header = F)
+# schizophrenia <- left_join(pruned, schizophrenia, by = c("V1" = "SNP"))
+# df <- schizophrenia %>% select(V1)
 ```
 
 ```{r}
@@ -290,21 +437,83 @@ df <- schizophrenia %>% select(V1)
 ```
 
 ```{r}
-conversion <- fread("../data/STRAT/schizophrenia_conversion_nonsig.csv", header = F)
-comb <- left_join(conversion, loading, by = c("V2" = "V2"))
-
-only_num <- comb[,6:25] * comb$V25
-only_num <- only_num %>%na.omit()
-sums <- colMeans(only_num, na.rm = T)
-stan_devs <- apply(only_num, 2, sd)
-lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
-upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
- 
-df_nonsig <- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
-pl_nonsig <- ggplot(df_nonsig, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
-
-pl_nonsig
+# conversion <- fread("../data/STRAT/schizophrenia_conversion_nonsig.csv", header = F)
+# comb <- left_join(conversion, loading, by = c("V2" = "V2"))
+# 
+# only_num <- comb[,6:25] * comb$V25
+# only_num <- only_num %>%na.omit()
+# sums <- colMeans(only_num, na.rm = T)
+# stan_devs <- apply(only_num, 2, sd)
+# lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+# upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+#  
+# df_nonsig <- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+# pl_nonsig <- ggplot(df_nonsig, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+# 
+# pl_nonsig
 ```
 
+```{r}
+# loading <- fread("../data/STRAT/EUR_0.01_evo.txt")
+# loading <- loading %>% na.omit() # Get rid of no info (DA) SNPs 
+# pruned <- fread("../data/STRAT/EUR_0.01.eigenvec.var.DA.prune.in", header = F)
+# loading <- left_join(pruned,loading, by = c("V1"="V2"))
+# only_num <- loading[,5:24] * loading$V25
+# sums <- colMeans(only_num)
+# stan_devs <- apply(only_num, 2, sd)
+# lower_bound <- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+# upper_bound <- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+#  
+# 
+# df_0.01 <- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+# pl_0.01 <- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("Mean") + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+# colnames(df_0.01) <- c("0.01", "V2")
+# pl_0.01
+```
 
+```{r}
+# df <- cbind(df_0.01[,1], df_0.05[,1], df_0.1[,1], df_0.2[,1], df_0.3[,1], df_0.4[,1])
+# 
+# par(mfrow = c(2,2))
+# for(i in 1:4) {
+#   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = "blue", pch = 19, xlab = "Frequency", ylab = "Mean Loading")
+#   title(main = paste0("PC ", i))
+#   abline(a=0,b=0, col = "red")
+# }
+```
 
+```{r}
+# par(mfrow = c(2,2))
+# for(i in 5:8) {
+#   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = "blue", pch = 19, xlab = "Frequency", ylab = "Mean Loading")
+#   title(main = paste0("PC ", i))
+#   abline(a=0,b=0, col = "red")
+# }
+```
+
+```{r}
+# par(mfrow = c(2,2))
+# for(i in 9:12) {
+#   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = "blue", pch = 19, xlab = "Frequency", ylab = "Mean Loading")
+#   title(main = paste0("PC ", i))
+#   abline(a=0,b=0, col = "red")
+# }
+```
+
+```{r}
+# par(mfrow = c(2,2))
+# for(i in 13:16) {
+#   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = "blue", pch = 19, xlab = "Frequency", ylab = "Mean Loading")
+#   title(main = paste0("PC ", i))
+#   abline(a=0,b=0, col = "red")
+# }
+```
+
+```{r}
+# par(mfrow = c(2,2))
+# for(i in 17:20) {
+#   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = "blue", pch = 19, xlab = "Frequency", ylab = "Mean Loading")
+#   title(main = paste0("PC ", i))
+#   abline(a=0,b=0, col = "red")
+# }
+```

@@ -1,0 +1,179 @@
+---
+title: "STAN_model"
+author: "Jennifer Blanc"
+date: "4/13/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list = ls())
+library(rstan)
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+set.seed(407)
+```
+
+## Intro  
+
+Model:  
+
+$$\vec{\hat{\beta}} = \vec{\beta_T} + \sum_i \lambda_i^{1/2} \vec{V} \beta_i + \vec{e}$$  
+
+$$D_l = 1 \text{   if  } \beta_l > 0$$
+$$D_l = 0 \text{   if  } \beta_l < 0$$  
+
+$$R = \sum_lD_l$$  
+
+$$R \sim Bin(1/2, L)$$
+
+
+## Functions to Simulate Data  
+
+Function to simulate SNP loadings:  
+* n = number of PCs
+* L = number of SNPs
+* loading_mean = used to skew the loadings 
+* loading_sd = standard deviation used to draw loadings  
+```{r}
+simulate_loadings <- function(L, n, loading_mean, loading_sd) {
+  loadings <- matrix(0, ncol = L, nrow = n)
+  for (i in 1:n) {
+   loadings[i,] <- rnorm(L, mean = loading_mean, sd = loading_sd) # skew mean
+  }
+  return(loadings)
+}
+``` 
+
+Function to simulate Beta hats:  
+* n = number of PCs
+* L = number of SNPs
+* Bpc = the true value of $\beta_{PC}$  
+* epsilon_sd = standard deviation of the error
+* loadings = SNP loadings simulated above
+```{r}
+calc_beta_hat <- function(L, n, Btrue, Bpc, epsilon_sd, loadings) {
+  Bhat <- rep(0, L)
+  mat <- matrix(NA, ncol = L, nrow = n)
+  for (i in 1:n) {
+    mat[i,] <- Bpc[i] * loadings[i,]
+  }
+  loading_time_pc <- colSums(mat)
+  Bhat <- Btrue + loading_time_pc + rnorm(L, mean = 0, sd = epsilon_sd)
+  return(Bhat)
+}
+```
+
+Function to Calculate R - the fraction of sites with $\hat{\beta} > 0$  
+```{r}
+calc_R <- function(Bhat) {
+  return(sum(Bhat > 0))
+}
+```
+
+
+## STAN model 
+
+```{stan, output.var="simple"}
+data {
+  int<lower=0> L;   // number of Beta hats
+  int<lower=0> n;   // number of predictors (PCs)
+  matrix[L, n] x;   // predictor matrix (loadings n x L)
+  vector[L] y;      // outcome vector
+  int<lower=0> R;   // number B > 0 
+}
+parameters {
+  real alpha;           // intercept
+  vector[n] beta;       // coefficients for predictors
+  real<lower=0> sigma;  // error scale
+}
+model {
+  y ~ normal(x * beta + alpha, sigma);  // likelihood
+  R ~ binomial(L, 0.5); 
+}
+```
+
+## Fit model 
+
+Function to fit model 
+```{r, warning=FALSE, result='hide'}
+fit_model <- function(L, n, loading_mean, loading_sd, Bpc, epsilon_sd, Btrue) {
+  loadings <- simulate_loadings(L = L, n = n, loading_mean = loading_mean, loading_sd = loading_sd)
+  Bhat <- calc_beta_hat(L = L, n = n, Btrue = Btrue, Bpc = Bpc, epsilon_sd = epsilon_sd, loadings = loadings)
+  R <- calc_R(Bhat)
+  data <- list(y = Bhat, L = L, n = n, x = t(loadings), R=R)
+  fit <- sampling(simple, data = data, refresh = 0)
+  return(fit)
+}
+```
+
+## Examples  
+
+1 PC with no effect 
+```{r, results="hide"}
+mod <- fit_model(L = 1000, n = 1, loading_mean = 1, loading_sd = 1, Bpc = 0, epsilon_sd = 1, Btrue = rep(0, 1000))
+```
+
+```{r}
+fit_ss <- extract(mod)
+hist(fit_ss$beta, main = "Posterior")
+abline(v=0,col="red")
+```
+
+1 PC with Bpc = 2 
+```{r, results="hide"}
+mod <- fit_model(L = 1000, n = 1, loading_mean = 1, loading_sd = 1, Bpc = 2, epsilon_sd = 1, Btrue = rep(0, 1000))
+```
+
+```{r}
+fit_ss <- extract(mod)
+hist(fit_ss$beta, main = "Posterior")
+abline(v=2,col="red")
+```
+
+4 PCs no effects 
+```{r}
+mod <- fit_model(L = 1000, n = 4, loading_mean = 1, loading_sd = 1, Bpc = rep(0,4), epsilon_sd = 1, Btrue = rep(0, 1000))
+
+fit_ss <- extract(mod)
+beta <- fit_ss$beta
+par(mfrow = c(2,2))
+hist(beta[,1])
+abline(v=0,col="red")
+hist(beta[,2])
+abline(v=0,col="red")
+hist(beta[,3])
+abline(v=0,col="red")
+hist(beta[,4])
+abline(v=0,col="red")
+```
+
+4 PCs - PC has effect = -2 
+```{r}
+mod <- fit_model(L = 1000, n = 4, loading_mean = 1, loading_sd = 1, Bpc = c(0,-2,0,0), epsilon_sd = 1, Btrue = rep(0, 1000))
+
+fit_ss <- extract(mod)
+beta <- fit_ss$beta
+par(mfrow = c(2,2))
+hist(beta[,1])
+abline(v=0,col="red")
+hist(beta[,2])
+abline(v=-2,col="red")
+hist(beta[,3])
+abline(v=0,col="red")
+hist(beta[,4])
+abline(v=0,col="red")
+```
+
+```{r}
+# print(mod)
+# plot(mod)
+# traceplot(mod,pars="beta[1]" )
+```
+
+
+
+
+
+
+
