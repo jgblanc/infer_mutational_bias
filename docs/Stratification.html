@@ -411,7 +411,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-04-14
+<strong>Last updated:</strong> 2020-04-21
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -502,10 +502,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree61ad1257bce9aa6871e9d38f3ef45d5909ffad24targetblank61ad125a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/61ad1257bce9aa6871e9d38f3ef45d5909ffad24" target="_blank">61ad125</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreee9aa5c6d19309fd434735c556eeb5b439a156b17targetblanke9aa5c6a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/e9aa5c6d19309fd434735c556eeb5b439a156b17" target="_blank">e9aa5c6</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree61ad1257bce9aa6871e9d38f3ef45d5909ffad24targetblank61ad125a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreee9aa5c6d19309fd434735c556eeb5b439a156b17targetblanke9aa5c6a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -599,7 +599,6 @@ Untracked files:
     Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcHJ1bmVkL2hlaWdodF8xNDJfMC4wMDAxLnBydW5lLmlu
     Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcHJ1bmVkL3NjaGl6b3BocmVuaWFfMzk4Ml8wLjAwMDEucHJ1bmUuaW4=
     Untracked:  .snakemake/scripts/tmp7997be50.get_evolutionary_information_from_1kg_GWAS_ATLAS.py
-    Untracked:  analysis/STAN_model_strat.Rmd
     Untracked:  analysis/test.Rmd
     Untracked:  code/parse_gwas_atlas_nonsig/height_142.R
     Untracked:  code/rsID_Pos_conversion.py
@@ -658,6 +657,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/e9aa5c6d19309fd434735c556eeb5b439a156b17/analysis/Stratification.Rmd" target="_blank">e9aa5c6</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-21
+</td>
+<td>
+added new stan model
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/Stratification.html" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -903,7 +936,7 @@ plink -bcf ../../../data/1kg/bcf/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5.
 </div>
 <div id="get-ids-of-european-individuals" class="section level2">
 <h2>Get ID’s of European individuals</h2>
-<pre class="r"><code>pop_info &lt;- fread(&quot;../data/STRAT/20130606_sample_info.csv&quot;)
+<pre class="r"><code>pop_info &lt;- fread(&quot;../data/STRAT/20130606_sample_info.txt&quot;)
 EUR &lt;- pop_info %&gt;% filter(Population %in% c(&quot;CEU&quot;, &quot;TSI&quot;, &quot;FIN&quot;, &quot;GBR&quot;,&quot;IBS&quot;))
 id_list &lt;- cbind(0,EUR$Sample)
 id_only &lt;- cbind(EUR$Sample,EUR$Sample)
@@ -911,8 +944,8 @@ id_only &lt;- cbind(EUR$Sample,EUR$Sample)
 </div>
 <div id="pca" class="section level2">
 <h2>PCA</h2>
-<pre class="r"><code>vecs &lt;- fread(&quot;../data/STRAT/test1_all_0.01.eigenvec&quot;)
-pop_info &lt;- fread(&quot;../data/STRAT/20130606_sample_info.csv&quot;)
+<pre class="r"><code>vecs &lt;- fread(&quot;../data/STRAT/EUR_0.01.eigenvec&quot;)
+pop_info &lt;- fread(&quot;../data/STRAT/20130606_sample_info.txt&quot;)
 dat &lt;- inner_join(vecs, pop_info, by = c(&quot;V2&quot;= &quot;Sample&quot;))
 p1 &lt;- ggplot(data = dat, aes(x=V3, y=V4, color = Population)) + geom_point() + xlab(&quot;PC1&quot;) + ylab(&quot;PC2&quot;)
 p2 &lt;- ggplot(data = dat, aes(x=V5, y=V6, color = Population)) + geom_point() + xlab(&quot;PC3&quot;) + ylab(&quot;PC4&quot;)
@@ -969,21 +1002,19 @@ jgblanc
 </div>
 </div>
 </div>
-<div id="snp-loadings" class="section level2">
-<h2>SNP Loadings</h2>
+<div id="snp-loadings---pruning-each-set-of-maf-cutoffs-separately" class="section level2">
+<h2>SNP Loadings - Pruning each set of MAF cutoffs separately</h2>
 <p>MAF filter 0.01 (n w/ DA info = 7937190 , pruned = 578137)</p>
-<pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/EUR_0.01_evo.txt&quot;)
-loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
-pruned &lt;- fread(&quot;../data/STRAT/EUR_0.01.eigenvec.var.DA.prune.in&quot;, header = F)
-loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
+<pre class="r"><code>all_snps &lt;- fread(&quot;../data/STRAT/EUR_all_evo.txt&quot;)
+all_da &lt;- all_snps %&gt;% na.omit() # Get rid of no info (DA) SNPs 
+pruned &lt;- fread(&quot;../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
 only_num &lt;- loading[,5:24] * loading$V25
 sums &lt;- colMeans(only_num)
 stan_devs &lt;- apply(only_num, 2, sd)
 lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
 upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
- 
-
-df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20)))
 pl_0.01 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
 colnames(df_0.01) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
 pl_0.01</code></pre>
@@ -1010,6 +1041,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-4-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/5f3eb80a88bc372136b87854f5843e3eb9184aac/docs/figure/Stratification.Rmd/unnamed-chunk-4-1.png" target="_blank">5f3eb80</a>
@@ -1059,15 +1101,13 @@ jgblanc
 </div>
 </div>
 <p>MAF filter 0.05 (n w/ DA info = 5627285, pruned = 117441)</p>
-<pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/EUR_0.05_evo.txt&quot;)
-loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
-pruned &lt;- fread(&quot;../data/STRAT/EUR_0.05.eigenvec.var.DA.prune.in&quot;, header = F)
-loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
-only_num &lt;- loading[,5:24] *  loading$V25
+<pre class="r"><code>pruned &lt;- fread(&quot;../data/STRAT/EUR_0.05_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
+only_num &lt;- loading[,5:24]* loading$V25
 sums &lt;- colMeans(only_num, na.rm = T)
 stan_devs &lt;- apply(only_num, 2, sd)
-lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
-upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
  
 
 df_0.05 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
@@ -1097,6 +1137,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-5-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/5f3eb80a88bc372136b87854f5843e3eb9184aac/docs/figure/Stratification.Rmd/unnamed-chunk-5-1.png" target="_blank">5f3eb80</a>
@@ -1135,15 +1186,13 @@ jgblanc
 </div>
 </div>
 <p>MAF filter 0.1 (n = 4496063, pruned = 86767)</p>
-<pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/EUR_0.1_evo.txt&quot;)
-loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
-pruned &lt;- fread(&quot;../data/STRAT/EUR_0.1.eigenvec.var.DA.prune.in&quot;, header = F)
-loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
-only_num &lt;- loading[,5:24] * loading$V25
+<pre class="r"><code>pruned &lt;- fread(&quot;../data/STRAT/EUR_0.1_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
+only_num &lt;- loading[,5:24]* loading$V25
 sums &lt;- colMeans(only_num, na.rm = T)
 stan_devs &lt;- apply(only_num, 2, sd)
-lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
-upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
  
 
 df_0.1 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
@@ -1173,6 +1222,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-6-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/5f3eb80a88bc372136b87854f5843e3eb9184aac/docs/figure/Stratification.Rmd/unnamed-chunk-6-1.png" target="_blank">5f3eb80</a>
@@ -1211,15 +1271,13 @@ jgblanc
 </div>
 </div>
 <p>MAF filter 0.2 (n=3019106, pruned = 64230)</p>
-<pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/EUR_0.2_evo.txt&quot;)
-loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
-pruned &lt;- fread(&quot;../data/STRAT/EUR_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
-loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
+<pre class="r"><code>pruned &lt;- fread(&quot;../data/STRAT/EUR_0.2_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
 only_num &lt;- loading[,5:24]* loading$V25
 sums &lt;- colMeans(only_num, na.rm = T)
 stan_devs &lt;- apply(only_num, 2, sd)
-lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
-upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
  
 
 df_0.2 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
@@ -1249,6 +1307,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-7-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/5f3eb80a88bc372136b87854f5843e3eb9184aac/docs/figure/Stratification.Rmd/unnamed-chunk-7-1.png" target="_blank">5f3eb80</a>
@@ -1287,17 +1356,14 @@ jgblanc
 </div>
 </div>
 <p>MAF filter 0.3 (n=1906644, pruned = 48015)</p>
-<pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/EUR_0.3_evo.txt&quot;)
-loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
-pruned &lt;- fread(&quot;../data/STRAT/EUR_0.3.eigenvec.var.DA.prune.in&quot;, header = F)
-loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
+<pre class="r"><code>pruned &lt;- fread(&quot;../data/STRAT/EUR_0.3_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
 only_num &lt;- loading[,5:24]* loading$V25
 sums &lt;- colMeans(only_num, na.rm = T)
 stan_devs &lt;- apply(only_num, 2, sd)
 lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
 upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
  
-
 df_0.3 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
 pl_0.3 &lt;- ggplot(df_0.3, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
 colnames(df_0.3) &lt;- c(&quot;0.3&quot;, &quot;V2&quot;)
@@ -1325,6 +1391,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-8-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/5f3eb80a88bc372136b87854f5843e3eb9184aac/docs/figure/Stratification.Rmd/unnamed-chunk-8-1.png" target="_blank">5f3eb80</a>
@@ -1363,17 +1440,14 @@ jgblanc
 </div>
 </div>
 <p>MAF filter 0.4 (n=926834, pruned = 33551)</p>
-<pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/EUR_0.4_evo.txt&quot;)
-loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
-pruned &lt;- fread(&quot;../data/STRAT/EUR_0.4.eigenvec.var.DA.prune.in&quot;, header = F)
-loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
+<pre class="r"><code>pruned &lt;- fread(&quot;../data/STRAT/EUR_0.4_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
 only_num &lt;- loading[,5:24]* loading$V25
 sums &lt;- colMeans(only_num, na.rm = T)
 stan_devs &lt;- apply(only_num, 2, sd)
 lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(pruned))))
 upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(pruned))))
  
-
 df_0.4 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
 pl_0.4 &lt;- ggplot(df_0.4, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
 colnames(df_0.4) &lt;- c(&quot;0.4&quot;, &quot;V2&quot;)
@@ -1401,6 +1475,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-9-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/5f3eb80a88bc372136b87854f5843e3eb9184aac/docs/figure/Stratification.Rmd/unnamed-chunk-9-1.png" target="_blank">5f3eb80</a>
@@ -1438,14 +1523,22 @@ jgblanc
 </table>
 </div>
 </div>
-<pre class="r"><code>df &lt;- cbind(df_0.01[,1], df_0.05[,1], df_0.1[,1], df_0.2[,1], df_0.3[,1], df_0.4[,1])
-
-par(mfrow = c(2,2))
-for(i in 1:4) {
-  plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
-  title(main = paste0(&quot;PC &quot;, i))
-  abline(a=0,b=0, col = &quot;red&quot;)
-}</code></pre>
+</div>
+<div id="snp-loadins---one-set-of-pruned-snps-eliminating-snps-based-on-maf-freq" class="section level2">
+<h2>SNP Loadins - one set of pruned SNPs eliminating SNPs based on MAF freq</h2>
+<p>MAF 0.01</p>
+<pre class="r"><code>pruned &lt;- fread(&quot;../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
+loading &lt;- loading %&gt;% filter(V26 &gt;= 0.01) 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.01</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
@@ -1469,6 +1562,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-10-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/5f3eb80a88bc372136b87854f5843e3eb9184aac/docs/figure/Stratification.Rmd/unnamed-chunk-10-1.png" target="_blank">5f3eb80</a>
@@ -1506,12 +1610,17 @@ jgblanc
 </table>
 </div>
 </div>
-<pre class="r"><code>par(mfrow = c(2,2))
-for(i in 5:8) {
-  plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
-  title(main = paste0(&quot;PC &quot;, i))
-  abline(a=0,b=0, col = &quot;red&quot;)
-}</code></pre>
+<p>MAF 0.05</p>
+<pre class="r"><code>loading &lt;- loading %&gt;% filter(V26 &gt;= 0.05) 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.05 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.05 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.05</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
@@ -1535,6 +1644,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-11-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/5f3eb80a88bc372136b87854f5843e3eb9184aac/docs/figure/Stratification.Rmd/unnamed-chunk-11-1.png" target="_blank">5f3eb80</a>
@@ -1572,12 +1692,17 @@ jgblanc
 </table>
 </div>
 </div>
-<pre class="r"><code>par(mfrow = c(2,2))
-for(i in 9:12) {
-  plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
-  title(main = paste0(&quot;PC &quot;, i))
-  abline(a=0,b=0, col = &quot;red&quot;)
-}</code></pre>
+<p>MAF 0.1</p>
+<pre class="r"><code>loading &lt;- loading %&gt;% filter(V26 &gt;= 0.1) 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.1 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.1 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.1) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.1</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
@@ -1601,6 +1726,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-12-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/5f3eb80a88bc372136b87854f5843e3eb9184aac/docs/figure/Stratification.Rmd/unnamed-chunk-12-1.png" target="_blank">5f3eb80</a>
@@ -1638,12 +1774,17 @@ jgblanc
 </table>
 </div>
 </div>
-<pre class="r"><code>par(mfrow = c(2,2))
-for(i in 13:16) {
-  plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
-  title(main = paste0(&quot;PC &quot;, i))
-  abline(a=0,b=0, col = &quot;red&quot;)
-}</code></pre>
+<p>MAF 0.2</p>
+<pre class="r"><code>loading &lt;- loading %&gt;% filter(V26 &gt;= 0.2) 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.2 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.2 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.2) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.2</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-1">
@@ -1667,6 +1808,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-13-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/5f3eb80a88bc372136b87854f5843e3eb9184aac/docs/figure/Stratification.Rmd/unnamed-chunk-13-1.png" target="_blank">5f3eb80</a>
@@ -1704,12 +1856,17 @@ jgblanc
 </table>
 </div>
 </div>
-<pre class="r"><code>par(mfrow = c(2,2))
-for(i in 17:20) {
-  plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
-  title(main = paste0(&quot;PC &quot;, i))
-  abline(a=0,b=0, col = &quot;red&quot;)
-}</code></pre>
+<p>MAF 0.3</p>
+<pre class="r"><code>loading &lt;- loading %&gt;% filter(V26 &gt;= 0.3) 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.3 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.3 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.2) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.3</code></pre>
 <p><img src="figure/Stratification.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
@@ -1733,6 +1890,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-14-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/5f3eb80a88bc372136b87854f5843e3eb9184aac/docs/figure/Stratification.Rmd/unnamed-chunk-14-1.png" target="_blank">5f3eb80</a>
@@ -1770,58 +1938,289 @@ jgblanc
 </table>
 </div>
 </div>
-<div id="stratifacation-of-gwas-snps" class="section level3">
-<h3>Stratifacation of GWAS SNPs</h3>
+<p>MAF 0.4</p>
+<pre class="r"><code>loading &lt;- loading %&gt;% filter(V26 &gt;= 0.4) 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.4 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.4 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.2) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.4</code></pre>
+<p><img src="figure/Stratification.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="snp-loadings---same-set-of-pruned-snps-seperate-intervals" class="section level3">
+<h3>SNP Loadings - Same set of pruned SNPs seperate intervals</h3>
+<p>0.01 - 0.05</p>
+<pre class="r"><code>pruned &lt;- fread(&quot;../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
+loading &lt;- loading %&gt;% filter(V26 &gt;= 0.01 &amp; V26 &lt;= 0.05) 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.01</code></pre>
+<p><img src="figure/Stratification.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>0.05 - 0.1</p>
+<pre class="r"><code>pruned &lt;- fread(&quot;../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
+loading &lt;- loading %&gt;% filter(V26 &gt;= 0.05 &amp; V26 &lt;= 0.1) 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.01</code></pre>
+<p><img src="figure/Stratification.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-17-1">
+Past versions of unnamed-chunk-17-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-17-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-17-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>0.1 - 0.2</p>
+<pre class="r"><code>pruned &lt;- fread(&quot;../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
+loading &lt;- loading %&gt;% filter(V26 &gt;= 0.1 &amp; V26 &lt;= 0.5) 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.01</code></pre>
+<p><img src="figure/Stratification.Rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>0.2 - 0.3</p>
+<pre class="r"><code>pruned &lt;- fread(&quot;../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
+loading &lt;- loading %&gt;% filter(V26 &gt;= 0.2 &amp; V26 &lt;= 0.3) 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.01</code></pre>
+<p><img src="figure/Stratification.Rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>0.3 - 0.4</p>
+<pre class="r"><code>pruned &lt;- fread(&quot;../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
+loading &lt;- loading %&gt;% filter(V26 &gt;= 0.3 &amp; V26 &lt;= 0.4) 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.01</code></pre>
+<p><img src="figure/Stratification.Rmd/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-20-1">
+Past versions of unnamed-chunk-20-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-20-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/8d1ef802afbce95f67d7c297c4963527de700bd7/docs/figure/Stratification.Rmd/unnamed-chunk-20-1.png" target="_blank">8d1ef80</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-14
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>0.4 - 0.5</p>
+<pre class="r"><code>pruned &lt;- fread(&quot;../data/STRAT/EUR_0.01_100_25_0.2.eigenvec.var.DA.prune.in&quot;, header = F)
+loading &lt;- left_join(pruned,all_da, by = c(&quot;V1&quot;=&quot;V2&quot;))
+loading &lt;- loading %&gt;% filter(V26 &gt;= 0.4 &amp; V26 &lt;= 0.5) 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.01</code></pre>
+<p><img src="figure/Stratification.Rmd/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="snp-loadings---no-pruning" class="section level2">
+<h2>SNP loadings - no pruning</h2>
+<p>0.01</p>
+<pre class="r"><code>loading &lt;- all_da 
+only_num &lt;- loading[,5:24] * loading$V25
+sums &lt;- colMeans(only_num)
+stan_devs &lt;- apply(only_num, 2, sd)
+lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20)))
+pl_0.01 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+colnames(df_0.01) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+pl_0.01</code></pre>
+<p><img src="figure/Stratification.Rmd/unnamed-chunk-22-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>s</p>
 <p><strong>Schizophrenia significant SNPs</strong></p>
-<pre class="r"><code>loading &lt;- fread(&quot;../data/STRAT/EUR_0.01_evo.txt&quot;)
-loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
-schizophrenia &lt;- fread(&quot;../output/GWAS_ATLAS/evo_added/schizophrenia_3982_evo.txt&quot;)
-colnames(schizophrenia) &lt;- c(colnames(schizophrenia)[1:13], &quot;EA_Derived&quot;, &quot;DAF&quot;, &quot;Risk_Derived&quot;)
-schizophrenia$disease &lt;- &quot;Schizophenria&quot;
-clumped &lt;- fread(&quot;../output/GWAS_ATLAS/clumped/schizophrenia_3982_SNPs.txt&quot;)
-schizophrenia &lt;- left_join(clumped, schizophrenia) </code></pre>
-<pre><code>Joining, by = &quot;SNP&quot;</code></pre>
-<pre class="r"><code>df &lt;- schizophrenia %&gt;% select(SNP)</code></pre>
+<pre class="r"><code># loading &lt;- fread(&quot;../data/STRAT/EUR_0.01_evo.txt&quot;)
+# loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
+# schizophrenia &lt;- fread(&quot;../output/GWAS_ATLAS/evo_added/schizophrenia_3982_evo.txt&quot;)
+# colnames(schizophrenia) &lt;- c(colnames(schizophrenia)[1:13], &quot;EA_Derived&quot;, &quot;DAF&quot;, &quot;Risk_Derived&quot;)
+# schizophrenia$disease &lt;- &quot;Schizophenria&quot;
+# clumped &lt;- fread(&quot;../output/GWAS_ATLAS/clumped/schizophrenia_3982_SNPs.txt&quot;)
+# schizophrenia &lt;- left_join(clumped, schizophrenia) 
+# df &lt;- schizophrenia %&gt;% select(SNP)</code></pre>
 <pre class="r"><code>#write.table(df, file = &quot;../data/STRAT/schizophrenia_chrbp_snps.txt&quot;, quote = F, row.names = F)
 #system(&quot;awk -F &#39;,&#39; &#39;NR==FNR {id[$1]; next} $1 in id&#39; ../data/STRAT/schizophrenia_chrbp_snps.txt ../data/rsID_pos_conversion.txt &gt; ../data/STRAT/schizophrenia_conversion.csv&quot;)</code></pre>
-<pre class="r"><code>conversion &lt;- fread(&quot;../data/STRAT/schizophrenia_conversion.csv&quot;, header = F)
-comb &lt;- left_join(conversion, loading, by = c(&quot;V2&quot; = &quot;V2&quot;))
-
-only_num &lt;- comb[,6:25] * comb$V25
-only_num &lt;- only_num %&gt;%na.omit()
-sums &lt;- colMeans(only_num, na.rm = T)
-stan_devs &lt;- apply(only_num, 2, sd)
-lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
-upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
- 
-df &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
-pl &lt;- ggplot(df, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
-
-pl</code></pre>
-<p><img src="figure/Stratification.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># conversion &lt;- fread(&quot;../data/STRAT/schizophrenia_conversion.csv&quot;, header = F)
+# comb &lt;- left_join(conversion, loading, by = c(&quot;V2&quot; = &quot;V2&quot;))
+# 
+# only_num &lt;- comb[,6:25] * comb$V25
+# only_num &lt;- only_num %&gt;%na.omit()
+# sums &lt;- colMeans(only_num, na.rm = T)
+# stan_devs &lt;- apply(only_num, 2, sd)
+# lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+# upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+#  
+# df &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+# pl &lt;- ggplot(df, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+# 
+# pl</code></pre>
 <p><strong>Schizophrenia non-significant SNPs</strong></p>
-<pre class="r"><code>schizophrenia &lt;- fread(&quot;../output/GWAS_ATLAS/evo_added/schizophrenia_3982-0.0001_evo.txt&quot;)
-colnames(schizophrenia) &lt;- c(colnames(schizophrenia)[1:13], &quot;EA_Derived&quot;, &quot;DAF&quot;, &quot;Risk_Derived&quot;)
-pruned &lt;- fread(&quot;../output/GWAS_ATLAS/pruned/schizophrenia_3982_0.0001.prune.in&quot;, header = F)
-schizophrenia &lt;- left_join(pruned, schizophrenia, by = c(&quot;V1&quot; = &quot;SNP&quot;))
-df &lt;- schizophrenia %&gt;% select(V1)</code></pre>
+<pre class="r"><code># schizophrenia &lt;- fread(&quot;../output/GWAS_ATLAS/evo_added/schizophrenia_3982-0.0001_evo.txt&quot;)
+# colnames(schizophrenia) &lt;- c(colnames(schizophrenia)[1:13], &quot;EA_Derived&quot;, &quot;DAF&quot;, &quot;Risk_Derived&quot;)
+# pruned &lt;- fread(&quot;../output/GWAS_ATLAS/pruned/schizophrenia_3982_0.0001.prune.in&quot;, header = F)
+# schizophrenia &lt;- left_join(pruned, schizophrenia, by = c(&quot;V1&quot; = &quot;SNP&quot;))
+# df &lt;- schizophrenia %&gt;% select(V1)</code></pre>
 <pre class="r"><code>#write.table(df, file = &quot;../data/STRAT/schizophrenia_chrbp_snps_nonsig.txt&quot;, quote = F, row.names = F)
 #system(&quot;awk -F &#39;,&#39; &#39;NR==FNR {id[$1]; next} $1 in id&#39; ../data/STRAT/schizophrenia_chrbp_snps_nonsig.txt ../data/rsID_pos_conversion.txt &gt; ../data/STRAT/schizophrenia_conversion_nonsig.csv&quot;)</code></pre>
-<pre class="r"><code>conversion &lt;- fread(&quot;../data/STRAT/schizophrenia_conversion_nonsig.csv&quot;, header = F)
-comb &lt;- left_join(conversion, loading, by = c(&quot;V2&quot; = &quot;V2&quot;))
-
-only_num &lt;- comb[,6:25] * comb$V25
-only_num &lt;- only_num %&gt;%na.omit()
-sums &lt;- colMeans(only_num, na.rm = T)
-stan_devs &lt;- apply(only_num, 2, sd)
-lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
-upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
- 
-df_nonsig &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
-pl_nonsig &lt;- ggplot(df_nonsig, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
-
-pl_nonsig</code></pre>
-<p><img src="figure/Stratification.Rmd/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># conversion &lt;- fread(&quot;../data/STRAT/schizophrenia_conversion_nonsig.csv&quot;, header = F)
+# comb &lt;- left_join(conversion, loading, by = c(&quot;V2&quot; = &quot;V2&quot;))
+# 
+# only_num &lt;- comb[,6:25] * comb$V25
+# only_num &lt;- only_num %&gt;%na.omit()
+# sums &lt;- colMeans(only_num, na.rm = T)
+# stan_devs &lt;- apply(only_num, 2, sd)
+# lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+# upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+#  
+# df_nonsig &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+# pl_nonsig &lt;- ggplot(df_nonsig, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+# 
+# pl_nonsig</code></pre>
+<pre class="r"><code># loading &lt;- fread(&quot;../data/STRAT/EUR_0.01_evo.txt&quot;)
+# loading &lt;- loading %&gt;% na.omit() # Get rid of no info (DA) SNPs 
+# pruned &lt;- fread(&quot;../data/STRAT/EUR_0.01.eigenvec.var.DA.prune.in&quot;, header = F)
+# loading &lt;- left_join(pruned,loading, by = c(&quot;V1&quot;=&quot;V2&quot;))
+# only_num &lt;- loading[,5:24] * loading$V25
+# sums &lt;- colMeans(only_num)
+# stan_devs &lt;- apply(only_num, 2, sd)
+# lower_bound &lt;- sums - (1.960 * (stan_devs / sqrt(nrow(only_num))))
+# upper_bound &lt;- sums + (1.960 * (stan_devs / sqrt(nrow(only_num))))
+#  
+# 
+# df_0.01 &lt;- as.data.frame(cbind(sums,seq(1,20), lower_bound, upper_bound))
+# pl_0.01 &lt;- ggplot(df_0.01, aes(x=sums,y=V2)) + geom_point(size = 2, color = &quot;navy&quot;) + geom_vline(xintercept = 0, color = &quot;red&quot;) + ylab(&quot;PC&quot;) + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab(&quot;Mean&quot;) + theme_bw() + xlim(-0.12,0.12) + geom_errorbarh(aes(xmin = lower_bound, xmax = upper_bound))
+# colnames(df_0.01) &lt;- c(&quot;0.01&quot;, &quot;V2&quot;)
+# pl_0.01</code></pre>
+<pre class="r"><code># df &lt;- cbind(df_0.01[,1], df_0.05[,1], df_0.1[,1], df_0.2[,1], df_0.3[,1], df_0.4[,1])
+# 
+# par(mfrow = c(2,2))
+# for(i in 1:4) {
+#   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
+#   title(main = paste0(&quot;PC &quot;, i))
+#   abline(a=0,b=0, col = &quot;red&quot;)
+# }</code></pre>
+<pre class="r"><code># par(mfrow = c(2,2))
+# for(i in 5:8) {
+#   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
+#   title(main = paste0(&quot;PC &quot;, i))
+#   abline(a=0,b=0, col = &quot;red&quot;)
+# }</code></pre>
+<pre class="r"><code># par(mfrow = c(2,2))
+# for(i in 9:12) {
+#   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
+#   title(main = paste0(&quot;PC &quot;, i))
+#   abline(a=0,b=0, col = &quot;red&quot;)
+# }</code></pre>
+<pre class="r"><code># par(mfrow = c(2,2))
+# for(i in 13:16) {
+#   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
+#   title(main = paste0(&quot;PC &quot;, i))
+#   abline(a=0,b=0, col = &quot;red&quot;)
+# }</code></pre>
+<pre class="r"><code># par(mfrow = c(2,2))
+# for(i in 17:20) {
+#   plot(c(0.01,0.05,0.1,0.2,0.3,0.4), df[i,], col = &quot;blue&quot;, pch = 19, xlab = &quot;Frequency&quot;, ylab = &quot;Mean Loading&quot;)
+#   title(main = paste0(&quot;PC &quot;, i))
+#   abline(a=0,b=0, col = &quot;red&quot;)
+# }</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1853,14 +2252,13 @@ loaded via a namespace (and not attached):
  [5] git2r_0.26.1     tools_3.6.2      digest_0.6.25    evaluate_0.14   
  [9] lifecycle_0.1.0  tibble_2.1.3     gtable_0.3.0     pkgconfig_2.0.3 
 [13] rlang_0.4.4      yaml_2.2.1       xfun_0.12        gridExtra_2.3   
-[17] withr_2.1.2      stringr_1.4.0    knitr_1.28       vctrs_0.2.3     
-[21] fs_1.3.1         cowplot_1.0.0    rprojroot_1.3-2  grid_3.6.2      
-[25] tidyselect_1.0.0 glue_1.3.1       R6_2.4.1         rmarkdown_2.1   
-[29] farver_2.0.3     purrr_0.3.3      whisker_0.4      backports_1.1.5 
-[33] scales_1.1.0     promises_1.1.0   htmltools_0.4.0  assertthat_0.2.1
-[37] colorspace_1.4-1 ggsignif_0.6.0   httpuv_1.5.2     labeling_0.3    
-[41] stringi_1.4.6    lazyeval_0.2.2   munsell_0.5.0    crayon_1.3.4    </code></pre>
-</div>
+[17] withr_2.1.2      stringr_1.4.0    knitr_1.28       fs_1.3.1        
+[21] cowplot_1.0.0    rprojroot_1.3-2  grid_3.6.2       tidyselect_1.0.0
+[25] glue_1.3.1       R6_2.4.1         rmarkdown_2.1    farver_2.0.3    
+[29] purrr_0.3.3      whisker_0.4      backports_1.1.5  scales_1.1.0    
+[33] promises_1.1.0   htmltools_0.4.0  assertthat_0.2.1 colorspace_1.4-1
+[37] ggsignif_0.6.0   httpuv_1.5.2     labeling_0.3     stringi_1.4.6   
+[41] lazyeval_0.2.2   munsell_0.5.0    crayon_1.3.4    </code></pre>
 </div>
 </div>
 
