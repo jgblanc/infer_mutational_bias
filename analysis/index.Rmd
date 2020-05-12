@@ -16,7 +16,7 @@ To see the results of data processing, click here [link](CS_results.html)
 To see the results of my data processing from the GWAS Atlas, click here [link](GWAS_ATLAS_results.html)  
 To see the results of my UKBB vs BBJ data processing, click here [link](BBJvUKKBB.html)  
 To see the results of PCA on 1kg data, click here [link](Stratification.html)   
-To see the results of looking for stratification in GWAS summary statistics, click here [link](shift_GWAS_ATLAS.html)
-To see STAN inference, click here [link](STAN_model_strat.html)
+To see the results of looking for stratification in GWAS summary statistics, click here [link](shift_GWAS_ATLAS.html)  
+To see STAN inference, click here [link](STAN_model_strat.html)  
 
 
