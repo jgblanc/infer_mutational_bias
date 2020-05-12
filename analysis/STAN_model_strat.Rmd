@@ -90,13 +90,13 @@ parameters {
 }
 model {
   int R;
-  vector[L] true_beta;
+  vector[L] est_beta;
   real true_causal;
   R = 0;
-  true_beta = x*beta;
+  est_beta = x*beta;
   //print(R, true_beta);
   for (i in 1:L) {
-    true_causal = y[i] - true_beta[i];
+    true_causal = y[i] - est_beta[i];
     if (true_causal > 0) {
       R = R + 1;
     }
