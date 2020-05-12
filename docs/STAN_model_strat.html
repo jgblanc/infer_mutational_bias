@@ -502,10 +502,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreeeb97fb40255eadd05cbf1f7ef0ca9b69f68ae182targetblankeb97fb4a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/eb97fb40255eadd05cbf1f7ef0ca9b69f68ae182" target="_blank">eb97fb4</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree2a19adc1366f5d9d9cecd613b36caec96a5ce837targetblank2a19adca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/2a19adc1366f5d9d9cecd613b36caec96a5ce837" target="_blank">2a19adc</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreeeb97fb40255eadd05cbf1f7ef0ca9b69f68ae182targetblankeb97fb4a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree2a19adc1366f5d9d9cecd613b36caec96a5ce837targetblank2a19adca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -663,6 +663,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/2a19adc1366f5d9d9cecd613b36caec96a5ce837/analysis/STAN_model_strat.Rmd" target="_blank">2a19adc</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-05-12
+</td>
+<td>
+maybe fixed stan model?
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/06c8accfcb5c55cd44a130e63bbfdf9e48739ba6/docs/STAN_model_strat.html" target="_blank">06c8acc</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-05-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/eb97fb40255eadd05cbf1f7ef0ca9b69f68ae182/analysis/STAN_model_strat.Rmd" target="_blank">eb97fb4</a>
 </td>
 <td>
@@ -772,13 +806,13 @@ parameters {
 }
 model {
   int R;
-  vector[L] true_beta;
+  vector[L] est_beta;
   real true_causal;
   R = 0;
-  true_beta = x*beta;
+  est_beta = x*beta;
   //print(R, true_beta);
   for (i in 1:L) {
-    true_causal = y[i] - true_beta[i];
+    true_causal = y[i] - est_beta[i];
     if (true_causal &gt; 0) {
       R = R + 1;
     }
@@ -808,12 +842,86 @@ model {
 hist(fit_ss$beta, main = &quot;Posterior&quot;)
 abline(v=0,col=&quot;red&quot;)</code></pre>
 <p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/06c8accfcb5c55cd44a130e63bbfdf9e48739ba6/docs/figure/STAN_model_strat.Rmd/unnamed-chunk-6-1.png" target="_blank">06c8acc</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-05-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>1 PC with Bpc = 2</p>
 <pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 1, loading_mean = 1, loading_sd = 1, Bpc = 2, epsilon_sd = 1, Btrue = rep(0, 1000), b=0.5)</code></pre>
 <pre class="r"><code>fit_ss &lt;- extract(mod)
 hist(fit_ss$beta, main = &quot;Posterior&quot;)
 abline(v=2,col=&quot;red&quot;)</code></pre>
 <p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/06c8accfcb5c55cd44a130e63bbfdf9e48739ba6/docs/figure/STAN_model_strat.Rmd/unnamed-chunk-8-1.png" target="_blank">06c8acc</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-05-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>4 PCs no effects</p>
 <pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 4, loading_mean = 1, loading_sd = 1, Bpc = rep(0,4), epsilon_sd = 1, Btrue = rep(0, 1000), b=0.5)</code></pre>
 <pre><code>Warning: There were 3950 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
@@ -859,6 +967,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/06c8accfcb5c55cd44a130e63bbfdf9e48739ba6/docs/figure/STAN_model_strat.Rmd/unnamed-chunk-9-1.png" target="_blank">06c8acc</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-05-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/b0d721fd5c0aae82c05a463c2e0648043b56d555/docs/figure/STAN_model_strat.Rmd/unnamed-chunk-9-1.png" target="_blank">b0d721f</a>
@@ -911,6 +1030,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/06c8accfcb5c55cd44a130e63bbfdf9e48739ba6/docs/figure/STAN_model_strat.Rmd/unnamed-chunk-10-1.png" target="_blank">06c8acc</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-05-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/b0d721fd5c0aae82c05a463c2e0648043b56d555/docs/figure/STAN_model_strat.Rmd/unnamed-chunk-10-1.png" target="_blank">b0d721f</a>
