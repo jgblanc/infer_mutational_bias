@@ -411,7 +411,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-04-21
+<strong>Last updated:</strong> 2020-05-12
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -502,10 +502,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreee9aa5c6d19309fd434735c556eeb5b439a156b17targetblanke9aa5c6a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/e9aa5c6d19309fd434735c556eeb5b439a156b17" target="_blank">e9aa5c6</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreeeb97fb40255eadd05cbf1f7ef0ca9b69f68ae182targetblankeb97fb4a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/eb97fb40255eadd05cbf1f7ef0ca9b69f68ae182" target="_blank">eb97fb4</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreee9aa5c6d19309fd434735c556eeb5b439a156b17targetblanke9aa5c6a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreeeb97fb40255eadd05cbf1f7ef0ca9b69f68ae182targetblankeb97fb4a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -612,6 +612,7 @@ Unstaged changes:
     Modified:   .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjMuZWlnZW52ZWMudmFyLkRBLnBydW5lLmlu
     Modified:   .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjQuZWlnZW52ZWMudmFyLkRBLnBydW5lLmlu
     Modified:   analysis/GWAS_ATLAS_results.Rmd
+    Modified:   analysis/Stratification.Rmd
     Modified:   analysis/shift_GWAS_ATLAS.Rmd
     Modified:   code/parse_gwas_atlas_nonsig/CAD_3925.R
     Modified:   code/parse_gwas_atlas_nonsig/T2D_4085.R
@@ -662,6 +663,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/eb97fb40255eadd05cbf1f7ef0ca9b69f68ae182/analysis/STAN_model_strat.Rmd" target="_blank">eb97fb4</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-05-12
+</td>
+<td>
+maybe fixed stan model?
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/b0d721fd5c0aae82c05a463c2e0648043b56d555/docs/STAN_model_strat.html" target="_blank">b0d721f</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-21
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/e9aa5c6d19309fd434735c556eeb5b439a156b17/analysis/STAN_model_strat.Rmd" target="_blank">e9aa5c6</a>
 </td>
 <td>
@@ -688,6 +723,7 @@ added new stan model
 <p><span class="math display">\[D_l = 1 \text{   if  } \beta_l &gt; 0\]</span> <span class="math display">\[D_l = 0 \text{   if  } \beta_l &lt; 0\]</span></p>
 <p><span class="math display">\[R = \sum_lD_l\]</span></p>
 <p><span class="math display">\[R \sim Bin(1/2, L)\]</span></p>
+<p><span class="math display">\[\hat{\beta} = \beta + \sum_i \lambda_i^{1/2} V \beta_i + e\]</span></p>
 </div>
 <div id="functions-to-simulate-data" class="section level2">
 <h2>Functions to Simulate Data</h2>
@@ -713,60 +749,83 @@ added new stan model
   Bhat &lt;- Btrue + loading_time_pc + rnorm(L, mean = 0, sd = epsilon_sd)
   return(Bhat)
 }</code></pre>
-<p>Function to Calculate R - the fraction of sites with <span class="math inline">\(\hat{\beta} &gt; 0\)</span></p>
-<pre class="r"><code>calc_R &lt;- function(Bhat) {
-  return(sum(Bhat &gt; 0))
-}</code></pre>
 </div>
 <div id="stan-model" class="section level2">
 <h2>STAN model</h2>
-<pre class="stan"><code>data {
+<pre class="stan"><code>functions {  
+  real my_ll_lpmf(int R, int L, real b){
+    real lprob;
+    lprob = lchoose(L, R) + log((b)^(R)) + log((1 - b)^(L - R));
+    return lprob;
+  }
+}
+data {
   int&lt;lower=0&gt; L;   // number of Beta hats
   int&lt;lower=0&gt; n;   // number of predictors (PCs)
   matrix[L, n] x;   // predictor matrix (loadings n x L)
   vector[L] y;      // outcome vector
-  int&lt;lower=0&gt; R;   // number B &gt; 0 
+  real b; // 
 }
 parameters {
-  real alpha;           // intercept
   vector[n] beta;       // coefficients for predictors
   real&lt;lower=0&gt; sigma;  // error scale
 }
 model {
-  y ~ normal(x * beta + alpha, sigma);  // likelihood
-  R ~ binomial(L, 0.5); 
+  int R;
+  vector[L] true_beta;
+  real true_causal;
+  R = 0;
+  true_beta = x*beta;
+  //print(R, true_beta);
+  for (i in 1:L) {
+    true_causal = y[i] - true_beta[i];
+    if (true_causal &gt; 0) {
+      R = R + 1;
+    }
+  };
+  R ~ my_ll_lpmf(L, b); 
+  //print(&quot;R:&quot;, R, &quot;true_beta:&quot;, true_beta);
+  //print(&quot;R:&quot;, R);
+  y ~ normal(x * beta, sigma);  // likelihood
 }</code></pre>
 </div>
 <div id="fit-model" class="section level2">
 <h2>Fit model</h2>
 <p>Function to fit model</p>
-<pre class="r"><code>fit_model &lt;- function(L, n, loading_mean, loading_sd, Bpc, epsilon_sd, Btrue) {
+<pre class="r"><code>fit_model &lt;- function(L, n, loading_mean, loading_sd, Bpc, epsilon_sd, Btrue, b) {
   loadings &lt;- simulate_loadings(L = L, n = n, loading_mean = loading_mean, loading_sd = loading_sd)
   Bhat &lt;- calc_beta_hat(L = L, n = n, Btrue = Btrue, Bpc = Bpc, epsilon_sd = epsilon_sd, loadings = loadings)
-  R &lt;- calc_R(Bhat)
-  data &lt;- list(y = Bhat, L = L, n = n, x = t(loadings), R=R)
-  fit &lt;- sampling(simple, data = data, refresh = 0)
+  data &lt;- list(y = Bhat, L = L, n = n, x = t(loadings), b=b)
+  fit &lt;- sampling(simple, data = data, refresh = 0, chains=4)
   return(fit)
 }</code></pre>
 </div>
 <div id="examples" class="section level2">
 <h2>Examples</h2>
 <p>1 PC with no effect</p>
-<pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 1, loading_mean = 1, loading_sd = 1, Bpc = 0, epsilon_sd = 1, Btrue = rep(0, 1000))</code></pre>
+<pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 1, loading_mean = 1, loading_sd = 1, Bpc = 0, epsilon_sd = 1, Btrue = rep(0, 1000), b=0.5)</code></pre>
 <pre class="r"><code>fit_ss &lt;- extract(mod)
 hist(fit_ss$beta, main = &quot;Posterior&quot;)
 abline(v=0,col=&quot;red&quot;)</code></pre>
-<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>1 PC with Bpc = 2</p>
-<pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 1, loading_mean = 1, loading_sd = 1, Bpc = 2, epsilon_sd = 1, Btrue = rep(0, 1000))</code></pre>
+<pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 1, loading_mean = 1, loading_sd = 1, Bpc = 2, epsilon_sd = 1, Btrue = rep(0, 1000), b=0.5)</code></pre>
 <pre class="r"><code>fit_ss &lt;- extract(mod)
 hist(fit_ss$beta, main = &quot;Posterior&quot;)
 abline(v=2,col=&quot;red&quot;)</code></pre>
-<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>4 PCs no effects</p>
-<pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 4, loading_mean = 1, loading_sd = 1, Bpc = rep(0,4), epsilon_sd = 1, Btrue = rep(0, 1000))
-
-fit_ss &lt;- extract(mod)
+<pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 4, loading_mean = 1, loading_sd = 1, Bpc = rep(0,4), epsilon_sd = 1, Btrue = rep(0, 1000), b=0.5)</code></pre>
+<pre><code>Warning: There were 3950 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
+<pre><code>Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
+<pre><code>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
+<pre><code>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<pre class="r"><code>fit_ss &lt;- extract(mod)
 beta &lt;- fit_ss$beta
 par(mfrow = c(2,2))
 hist(beta[,1])
@@ -777,10 +836,47 @@ hist(beta[,3])
 abline(v=0,col=&quot;red&quot;)
 hist(beta[,4])
 abline(v=0,col=&quot;red&quot;)</code></pre>
-<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>4 PCs - PC has effect = -2</p>
-<pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 4, loading_mean = 1, loading_sd = 1, Bpc = c(0,-2,0,0), epsilon_sd = 1, Btrue = rep(0, 1000))
-
+<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b0d721fd5c0aae82c05a463c2e0648043b56d555/docs/figure/STAN_model_strat.Rmd/unnamed-chunk-9-1.png" target="_blank">b0d721f</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>4 PCs - PC 2 has effect = -2</p>
+<pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 4, loading_mean = 1, loading_sd = 1, Bpc = c(0,-2,0,0), epsilon_sd = 1, Btrue = rep(0, 1000), b=0.5)
+ 
 fit_ss &lt;- extract(mod)
 beta &lt;- fit_ss$beta
 par(mfrow = c(2,2))
@@ -792,10 +888,44 @@ hist(beta[,3])
 abline(v=0,col=&quot;red&quot;)
 hist(beta[,4])
 abline(v=0,col=&quot;red&quot;)</code></pre>
-<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code># print(mod)
-# plot(mod)
-# traceplot(mod,pars=&quot;beta[1]&quot; )</code></pre>
+<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
+Past versions of unnamed-chunk-10-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/b0d721fd5c0aae82c05a463c2e0648043b56d555/docs/figure/STAN_model_strat.Rmd/unnamed-chunk-10-1.png" target="_blank">b0d721f</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-04-21
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
