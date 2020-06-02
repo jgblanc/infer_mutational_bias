@@ -9,16 +9,17 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 rm(list = ls())
 library(rstan)
+library(data.table)
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = TRUE)
 set.seed(407)
 ```
 
-## Intro  
+## Model   
 
 Model:  
 
-$$\vec{\hat{\beta}} = \vec{\beta_T} + \sum_i \lambda_i^{1/2} \vec{V} \beta_i + \vec{e}$$  
+$$\vec{\hat{\beta}} = \vec{\beta_T} + \sum_i \lambda_i^{-1/2} \vec{V} \beta_i + \vec{e}$$  
 
 $$D_l = 1 \text{   if  } \beta_l > 0$$
 $$D_l = 0 \text{   if  } \beta_l < 0$$  
@@ -27,7 +28,9 @@ $$R = \sum_lD_l$$
 
 $$R \sim Bin(1/2, L)$$
 
-$$\hat{\beta} = \beta + \sum_i \lambda_i^{1/2} V \beta_i + e$$
+For a single site:  
+
+$$\hat{\beta} = \beta + \sum_i \lambda_i^{-1/2} V \beta_i + e$$
 
 ## Functions to Simulate Data  
 
@@ -73,7 +76,7 @@ calc_beta_hat <- function(L, n, Btrue, Bpc, epsilon_sd, loadings) {
 functions {  
   real my_ll_lpmf(int R, int L, real b){
     real lprob;
-    lprob = lchoose(L, R) + log((b)^(R)) + log((1 - b)^(L - R));
+    lprob = lchoose(L, R) + (R*log(b)) + ((L - R)*log(1 - b));
     return lprob;
   }
 }
@@ -94,7 +97,6 @@ model {
   real true_causal;
   R = 0;
   est_beta = x*beta;
-  //print(R, true_beta);
   for (i in 1:L) {
     true_causal = y[i] - est_beta[i];
     if (true_causal > 0) {
@@ -116,10 +118,11 @@ fit_model <- function(L, n, loading_mean, loading_sd, Bpc, epsilon_sd, Btrue, b)
   loadings <- simulate_loadings(L = L, n = n, loading_mean = loading_mean, loading_sd = loading_sd)
   Bhat <- calc_beta_hat(L = L, n = n, Btrue = Btrue, Bpc = Bpc, epsilon_sd = epsilon_sd, loadings = loadings)
   data <- list(y = Bhat, L = L, n = n, x = t(loadings), b=b)
-  fit <- sampling(simple, data = data, refresh = 0, chains=4)
+  fit <- sampling(simple, data = data, chains=4, refresh = 0) #refresh = 0
   return(fit)
 }
 ```
+
 
 ## Examples  
 
@@ -179,6 +182,121 @@ hist(beta[,4])
 abline(v=0,col="red")
 ```
 
+
+
+
+## Real Loading Data 
+
+Now that we have tested our model on simulated data, let's use real SNP loadings and eigenvalues but stick with a simulated GWAS where there are no true causal SNPs. We will run the model for 1,000 SNPs and n=10 PCs 
+
+```{r}
+# Load SNP Loadings + Eigenvalues 
+gwas <- fread("../output/GWAS_ATLAS_ANNOTATED/test_loadings.txt")
+evals <- fread("../output/GWAS_ATLAS_ANNOTATED/EUR_0.01.eigenval")
+
+# Take 1,000 SNPS and only the loadings
+loadings <- as.matrix(gwas[1:1000,21:30])
+
+# Mean Loading for all 10 PCs
+colMeans(loadings)
+
+# Simulate a set of Beta Hats with all Bpc = 0
+Bhat <- calc_beta_hat(L=nrow(loadings), n=10, Btrue = rep(0,nrow(loadings)), Bpc = rep(0,10), epsilon_sd = 1, loadings = t(loadings))
+
+# Weight loadings by sqrt(eigenvalue)
+wloadings <- loadings
+for (i in 1:10) {
+  wloadings[,i] <- as.numeric(sqrt(evals[i,1])) * loadings[,i]
+}
+
+# Fit Model 
+data <- list(y = Bhat, L = nrow(wloadings), n = 10, x = loadings, b=0.5)
+fit <- sampling(simple, data = data, chains=4, refresh = 0)
+```
+
+```{r}
+# Extract posterior samples
+fit_ss <- extract(fit)$beta
+
+# Posterior Means
+bpos <- colMeans(fit_ss)
+bpos
+
+# Calculate True Effect Sizes (should be 0)
+true <- Bhat -  wloadings %*% bpos
+hist(true)
+```
+
+Now let's repeat the whole process but also simulate a stratification effect along PC 2 $\beta_{PC2} = 1$
+```{r}
+# Simulate a set of Beta Hats with all Bpc = 0
+Bpc <- rep(0,10)
+Bpc[2] <- 1
+Bhat <- calc_beta_hat(L=nrow(loadings), n=10, Btrue = rep(0,nrow(loadings)), Bpc = Bpc, epsilon_sd = 1, loadings = t(loadings))
+
+# Fit Model 
+data <- list(y = Bhat, L = nrow(wloadings), n = 10, x = loadings, b=0.5)
+fit <- sampling(simple, data = data, chains=4, refresh = 0 )
+```
+
+```{r}
+# Extract posterior samples
+fit_ss <- extract(fit)$beta
+
+# Posterior Means
+bpos <- colMeans(fit_ss)
+bpos
+
+# Calculate True Effect Sizes (should be 0)
+true <- Bhat -  wloadings %*% bpos
+hist(true)
+```
+
+## Real GWAS Data  
+
+Finally, we will use actual GWAS effect size estimates. Like the loadings, all effect sizes have been polarized to be the effect of the derived allele. For now, we will run the model on a single LD block (num_snps = 1368) with 10 principal components.  
+
+```{r}
+# Pick single LD block
+gwas_block <- subset(gwas, gwas$LD_Block == 653)
+
+# Mean Loading 
+loadings <- as.matrix(gwas_block[,21:30])
+colMeans(loadings)
+
+# Look at Manhattan Plot 
+dat <- gwas_block[,c("BP", "P", "Risk_Derived", "RAF", "ES_Derived")]
+ggplot(dat, aes(x=BP,y=-log10(P), col = Risk_Derived)) + geom_point()
+ggplot(dat, aes(x=RAF,y=abs(ES_Derived), col = Risk_Derived)) + geom_point()
+```
+
+```{r}
+# Weight loadings by sqrt(eigenvalue)
+wloadings <- loadings
+for (i in 1:10) {
+  wloadings[,i] <- as.numeric(sqrt(evals[i,1])) * loadings[,i]
+}
+
+# Fit Model 
+data <- list(y = gwas_block$ES_Derived, L = nrow(wloadings), n = 10, x = loadings, b=0.5)
+#fit <- sampling(simple, data = data, chains=4)
+#saveRDS(fit,"~/Desktop/stan_block653")
+```
+
+```{r}
+fit <- readRDS("~/Desktop/stan_block653")
+# Posterior Means 
+bs <- as.matrix(extract(fit)$beta) 
+bpos <- colMeans(bs)
+
+# Calculate True beta
+true <- gwas_block$ES_Derived - wloadings %*% bpos
+gwas_block$true <- true
+
+# Plot
+ggplot(gwas_block, aes(x=RAF,y=abs(true), col = Risk_Derived)) + geom_point()
+ggplot(gwas_block, aes(x=ES_Derived,y=true, col = Risk_Derived)) + geom_point()
+```
 
 
 
