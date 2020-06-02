@@ -411,7 +411,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-05-12
+<strong>Last updated:</strong> 2020-06-01
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -502,10 +502,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree2a19adc1366f5d9d9cecd613b36caec96a5ce837targetblank2a19adca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/2a19adc1366f5d9d9cecd613b36caec96a5ce837" target="_blank">2a19adc</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreed9fae30d08d966d1d2844a6e1fcbbceb0c46ad9atargetblankd9fae30a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/d9fae30d08d966d1d2844a6e1fcbbceb0c46ad9a" target="_blank">d9fae30</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree2a19adc1366f5d9d9cecd613b36caec96a5ce837targetblank2a19adca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreed9fae30d08d966d1d2844a6e1fcbbceb0c46ad9atargetblankd9fae30a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -526,10 +526,9 @@ Ignored files:
     Ignored:    code/parse_gwas_atlas_nonsig/.DS_Store
     Ignored:    data/.ipynb_checkpoints/
     Ignored:    data/1000G_20101123_v3_GIANT_chr1_23_minimacnamesifnotRS_CEU_MAF0.01/
-    Ignored:    data/47UKBB/
     Ignored:    data/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.EUR/
-    Ignored:    data/BBJ/
     Ignored:    data/GWAS_ATLAS/
+    Ignored:    data/LD_Blocks/
     Ignored:    data/STRAT/
     Ignored:    data/UKBB/
     Ignored:    output/.DS_Store
@@ -599,10 +598,22 @@ Untracked files:
     Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcHJ1bmVkL2hlaWdodF8xNDJfMC4wMDAxLnBydW5lLmlu
     Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcHJ1bmVkL3NjaGl6b3BocmVuaWFfMzk4Ml8wLjAwMDEucHJ1bmUuaW4=
     Untracked:  .snakemake/scripts/tmp7997be50.get_evolutionary_information_from_1kg_GWAS_ATLAS.py
+    Untracked:  analysis/GWAS_Atlas_LD_Blocks.Rmd
+    Untracked:  analysis/Instrumental_variable.Rmd
+    Untracked:  analysis/LD_Block_Jacknife.Rmd
     Untracked:  analysis/test.Rmd
+    Untracked:  code/LD_Block/
     Untracked:  code/parse_gwas_atlas_nonsig/height_142.R
+    Untracked:  code/pc_regression.rds
+    Untracked:  code/pc_regression.stan
+    Untracked:  code/pc_regression_da.rds
+    Untracked:  code/pc_regression_da.stan
+    Untracked:  code/pc_regression_gwas.R
+    Untracked:  code/pc_regression_parameters.R
     Untracked:  code/rsID_Pos_conversion.py
     Untracked:  code/rsID_Pos_conversion.py~
+    Untracked:  output/GWAS_ATLAS_ANNOTATED/
+    Untracked:  output/PC_REG/
 
 Unstaged changes:
     Modified:   .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjA1LmVpZ2VudmVjLnZhci5EQS5wcnVuZS5pbg==
@@ -614,6 +625,10 @@ Unstaged changes:
     Modified:   analysis/GWAS_ATLAS_results.Rmd
     Modified:   analysis/Stratification.Rmd
     Modified:   analysis/shift_GWAS_ATLAS.Rmd
+    Deleted:    code/Untitled.ipynb
+    Deleted:    code/make_DA_dict.py
+    Deleted:    code/make_DA_dict.py~
+    Modified:   code/parse_gwas_atlas/schizophrenia_3982.R
     Modified:   code/parse_gwas_atlas_nonsig/CAD_3925.R
     Modified:   code/parse_gwas_atlas_nonsig/T2D_4085.R
     Modified:   code/parse_gwas_atlas_nonsig/UC_2030.R
@@ -658,6 +673,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/d9fae30d08d966d1d2844a6e1fcbbceb0c46ad9a/analysis/STAN_model_strat.Rmd" target="_blank">d9fae30</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-06-01
+</td>
+<td>
+work
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/9222112d705e427a763601d5bde4e9ed88e19ac7/docs/STAN_model_strat.html" target="_blank">9222112</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-05-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -750,14 +799,15 @@ added new stan model
 </div>
 </div>
 </div>
-<div id="intro" class="section level2">
-<h2>Intro</h2>
+<div id="model" class="section level2">
+<h2>Model</h2>
 <p>Model:</p>
-<p><span class="math display">\[\vec{\hat{\beta}} = \vec{\beta_T} + \sum_i \lambda_i^{1/2} \vec{V} \beta_i + \vec{e}\]</span></p>
+<p><span class="math display">\[\vec{\hat{\beta}} = \vec{\beta_T} + \sum_i \lambda_i^{-1/2} \vec{V} \beta_i + \vec{e}\]</span></p>
 <p><span class="math display">\[D_l = 1 \text{   if  } \beta_l &gt; 0\]</span> <span class="math display">\[D_l = 0 \text{   if  } \beta_l &lt; 0\]</span></p>
 <p><span class="math display">\[R = \sum_lD_l\]</span></p>
 <p><span class="math display">\[R \sim Bin(1/2, L)\]</span></p>
-<p><span class="math display">\[\hat{\beta} = \beta + \sum_i \lambda_i^{1/2} V \beta_i + e\]</span></p>
+<p>For a single site:</p>
+<p><span class="math display">\[\hat{\beta} = \beta + \sum_i \lambda_i^{-1/2} V \beta_i + e\]</span></p>
 </div>
 <div id="functions-to-simulate-data" class="section level2">
 <h2>Functions to Simulate Data</h2>
@@ -789,7 +839,7 @@ added new stan model
 <pre class="stan"><code>functions {  
   real my_ll_lpmf(int R, int L, real b){
     real lprob;
-    lprob = lchoose(L, R) + log((b)^(R)) + log((1 - b)^(L - R));
+    lprob = lchoose(L, R) + (R*log(b)) + ((L - R)*log(1 - b));
     return lprob;
   }
 }
@@ -810,7 +860,6 @@ model {
   real true_causal;
   R = 0;
   est_beta = x*beta;
-  //print(R, true_beta);
   for (i in 1:L) {
     true_causal = y[i] - est_beta[i];
     if (true_causal &gt; 0) {
@@ -830,7 +879,7 @@ model {
   loadings &lt;- simulate_loadings(L = L, n = n, loading_mean = loading_mean, loading_sd = loading_sd)
   Bhat &lt;- calc_beta_hat(L = L, n = n, Btrue = Btrue, Bpc = Bpc, epsilon_sd = epsilon_sd, loadings = loadings)
   data &lt;- list(y = Bhat, L = L, n = n, x = t(loadings), b=b)
-  fit &lt;- sampling(simple, data = data, refresh = 0, chains=4)
+  fit &lt;- sampling(simple, data = data, chains=4, refresh = 0) #refresh = 0
   return(fit)
 }</code></pre>
 </div>
@@ -923,17 +972,9 @@ jgblanc
 </div>
 </div>
 <p>4 PCs no effects</p>
-<pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 4, loading_mean = 1, loading_sd = 1, Bpc = rep(0,4), epsilon_sd = 1, Btrue = rep(0, 1000), b=0.5)</code></pre>
-<pre><code>Warning: There were 3950 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
-http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
-<pre><code>Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
-<pre><code>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-Running the chains for more iterations may help. See
-http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
-<pre><code>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-Running the chains for more iterations may help. See
-http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
-<pre class="r"><code>fit_ss &lt;- extract(mod)
+<pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 4, loading_mean = 1, loading_sd = 1, Bpc = rep(0,4), epsilon_sd = 1, Btrue = rep(0, 1000), b=0.5)
+
+fit_ss &lt;- extract(mod)
 beta &lt;- fit_ss$beta
 par(mfrow = c(2,2))
 hist(beta[,1])
@@ -1056,6 +1097,112 @@ jgblanc
 </table>
 </div>
 </div>
+</div>
+<div id="real-loading-data" class="section level2">
+<h2>Real Loading Data</h2>
+<p>Now that we have tested our model on simulated data, let’s use real SNP loadings and eigenvalues but stick with a simulated GWAS where there are no true causal SNPs. We will run the model for 1,000 SNPs and n=10 PCs</p>
+<pre class="r"><code># Load SNP Loadings + Eigenvalues 
+gwas &lt;- fread(&quot;../output/GWAS_ATLAS_ANNOTATED/test_loadings.txt&quot;)
+evals &lt;- fread(&quot;../output/GWAS_ATLAS_ANNOTATED/EUR_0.01.eigenval&quot;)
+
+# Take 1,000 SNPS and only the loadings
+loadings &lt;- as.matrix(gwas[1:1000,21:30])
+
+# Mean Loading for all 10 PCs
+colMeans(loadings)</code></pre>
+<pre><code>        PC1         PC2         PC3         PC4         PC5         PC6 
+-0.04021341  0.01811280  0.02114615 -0.04767877 -0.02810305  0.03964168 
+        PC7         PC8         PC9        PC10 
+-0.03706557  0.04877190 -0.01101306  0.04824812 </code></pre>
+<pre class="r"><code># Simulate a set of Beta Hats with all Bpc = 0
+Bhat &lt;- calc_beta_hat(L=nrow(loadings), n=10, Btrue = rep(0,nrow(loadings)), Bpc = rep(0,10), epsilon_sd = 1, loadings = t(loadings))
+
+# Weight loadings by sqrt(eigenvalue)
+wloadings &lt;- loadings
+for (i in 1:10) {
+  wloadings[,i] &lt;- as.numeric(sqrt(evals[i,1])) * loadings[,i]
+}
+
+# Fit Model 
+data &lt;- list(y = Bhat, L = nrow(wloadings), n = 10, x = loadings, b=0.5)
+fit &lt;- sampling(simple, data = data, chains=4, refresh = 0)</code></pre>
+<pre class="r"><code># Extract posterior samples
+fit_ss &lt;- extract(fit)$beta
+
+# Posterior Means
+bpos &lt;- colMeans(fit_ss)
+bpos</code></pre>
+<pre><code> [1] -0.010058215  0.038589907  0.038404114  0.006984415  0.029433218
+ [6]  0.044376371  0.063833628  0.018800777  0.013935411  0.007542575</code></pre>
+<pre class="r"><code># Calculate True Effect Sizes (should be 0)
+true &lt;- Bhat -  wloadings %*% bpos
+hist(true)</code></pre>
+<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Now let’s repeat the whole process but also simulate a stratification effect along PC 2 <span class="math inline">\(\beta_{PC2} = 1\)</span></p>
+<pre class="r"><code># Simulate a set of Beta Hats with all Bpc = 0
+Bpc &lt;- rep(0,10)
+Bpc[2] &lt;- 1
+Bhat &lt;- calc_beta_hat(L=nrow(loadings), n=10, Btrue = rep(0,nrow(loadings)), Bpc = Bpc, epsilon_sd = 1, loadings = t(loadings))
+
+# Fit Model 
+data &lt;- list(y = Bhat, L = nrow(wloadings), n = 10, x = loadings, b=0.5)
+fit &lt;- sampling(simple, data = data, chains=4, refresh = 0 )</code></pre>
+<pre class="r"><code># Extract posterior samples
+fit_ss &lt;- extract(fit)$beta
+
+# Posterior Means
+bpos &lt;- colMeans(fit_ss)
+bpos</code></pre>
+<pre><code> [1] -0.074465397  1.002352839 -0.022841057  0.060906720 -0.013521199
+ [6]  0.026057472 -0.037018837  0.005576999 -0.064826509  0.012216425</code></pre>
+<pre class="r"><code># Calculate True Effect Sizes (should be 0)
+true &lt;- Bhat -  wloadings %*% bpos
+hist(true)</code></pre>
+<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="real-gwas-data" class="section level2">
+<h2>Real GWAS Data</h2>
+<p>Finally, we will use actual GWAS effect size estimates. Like the loadings, all effect sizes have been polarized to be the effect of the derived allele. For now, we will run the model on a single LD block (num_snps = 1368) with 10 principal components.</p>
+<pre class="r"><code># Pick single LD block
+gwas_block &lt;- subset(gwas, gwas$LD_Block == 653)
+
+# Mean Loading 
+loadings &lt;- as.matrix(gwas_block[,21:30])
+colMeans(loadings)</code></pre>
+<pre><code>         PC1          PC2          PC3          PC4          PC5          PC6 
+ 0.005813129 -0.158050840  0.253824005 -0.173507468  0.210143126  0.410926552 
+         PC7          PC8          PC9         PC10 
+-0.082428311  0.188188663  0.059780068 -0.212362135 </code></pre>
+<pre class="r"><code># Look at Manhattan Plot 
+dat &lt;- gwas_block[,c(&quot;BP&quot;, &quot;P&quot;, &quot;Risk_Derived&quot;, &quot;RAF&quot;, &quot;ES_Derived&quot;)]
+ggplot(dat, aes(x=BP,y=-log10(P), col = Risk_Derived)) + geom_point()</code></pre>
+<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(dat, aes(x=RAF,y=abs(ES_Derived), col = Risk_Derived)) + geom_point()</code></pre>
+<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-15-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Weight loadings by sqrt(eigenvalue)
+wloadings &lt;- loadings
+for (i in 1:10) {
+  wloadings[,i] &lt;- as.numeric(sqrt(evals[i,1])) * loadings[,i]
+}
+
+# Fit Model 
+data &lt;- list(y = gwas_block$ES_Derived, L = nrow(wloadings), n = 10, x = loadings, b=0.5)
+#fit &lt;- sampling(simple, data = data, chains=4)
+#saveRDS(fit,&quot;~/Desktop/stan_block653&quot;)</code></pre>
+<pre class="r"><code>fit &lt;- readRDS(&quot;~/Desktop/stan_block653&quot;)
+# Posterior Means 
+bs &lt;- as.matrix(extract(fit)$beta) 
+bpos &lt;- colMeans(bs)
+
+# Calculate True beta
+true &lt;- gwas_block$ES_Derived - wloadings %*% bpos
+gwas_block$true &lt;- true
+
+# Plot
+ggplot(gwas_block, aes(x=RAF,y=abs(true), col = Risk_Derived)) + geom_point()</code></pre>
+<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(gwas_block, aes(x=ES_Derived,y=true, col = Risk_Derived)) + geom_point()</code></pre>
+<p><img src="figure/STAN_model_strat.Rmd/unnamed-chunk-17-2.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1079,8 +1226,8 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] rstan_2.19.3         ggplot2_3.2.1        StanHeaders_2.21.0-1
-[4] workflowr_1.6.0     
+[1] data.table_1.12.8    rstan_2.19.3         ggplot2_3.2.1       
+[4] StanHeaders_2.21.0-1 workflowr_1.6.0     
 
 loaded via a namespace (and not attached):
  [1] Rcpp_1.0.3         compiler_3.6.2     pillar_1.4.3       later_1.0.0       
@@ -1088,15 +1235,15 @@ loaded via a namespace (and not attached):
  [9] digest_0.6.25      evaluate_0.14      lifecycle_0.1.0    tibble_2.1.3      
 [13] gtable_0.3.0       pkgconfig_2.0.3    rlang_0.4.4        cli_2.0.1         
 [17] parallel_3.6.2     yaml_2.2.1         xfun_0.12          loo_2.2.0         
-[21] gridExtra_2.3      withr_2.1.2        stringr_1.4.0      dplyr_0.8.4       
+[21] gridExtra_2.3      withr_2.1.2        stringr_1.4.0      dplyr_0.8.5       
 [25] knitr_1.28         fs_1.3.1           stats4_3.6.2       rprojroot_1.3-2   
 [29] grid_3.6.2         tidyselect_1.0.0   inline_0.3.15      glue_1.3.1        
 [33] R6_2.4.1           processx_3.4.2     fansi_0.4.1        rmarkdown_2.1     
-[37] callr_3.4.2        purrr_0.3.3        magrittr_1.5       whisker_0.4       
-[41] codetools_0.2-16   matrixStats_0.56.0 ps_1.3.2           backports_1.1.5   
-[45] scales_1.1.0       promises_1.1.0     htmltools_0.4.0    assertthat_0.2.1  
-[49] colorspace_1.4-1   httpuv_1.5.2       stringi_1.4.6      lazyeval_0.2.2    
-[53] munsell_0.5.0      crayon_1.3.4      </code></pre>
+[37] farver_2.0.3       callr_3.4.2        purrr_0.3.3        magrittr_1.5      
+[41] whisker_0.4        codetools_0.2-16   matrixStats_0.56.0 ps_1.3.2          
+[45] backports_1.1.5    scales_1.1.0       promises_1.1.0     htmltools_0.4.0   
+[49] assertthat_0.2.1   colorspace_1.4-1   httpuv_1.5.2       labeling_0.3      
+[53] stringi_1.4.6      lazyeval_0.2.2     munsell_0.5.0      crayon_1.3.4      </code></pre>
 </div>
 </div>
 
