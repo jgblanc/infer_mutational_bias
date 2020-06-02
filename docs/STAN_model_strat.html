@@ -502,10 +502,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreef28c165beec8bccab2ee01eb05774e0d64a4ee9atargetblankf28c165a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/f28c165beec8bccab2ee01eb05774e0d64a4ee9a" target="_blank">f28c165</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree6077f68ec043bb597b753eeba15655d386ecf720targetblank6077f68a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/6077f68ec043bb597b753eeba15655d386ecf720" target="_blank">6077f68</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreef28c165beec8bccab2ee01eb05774e0d64a4ee9atargetblankf28c165a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree6077f68ec043bb597b753eeba15655d386ecf720targetblank6077f68a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,7 +521,6 @@ Ignored files:
     Ignored:    .snakemake/shadow/
     Ignored:    .snakemake/singularity/
     Ignored:    analysis/.DS_Store
-    Ignored:    analysis/figure/
     Ignored:    code/.DS_Store
     Ignored:    code/parse_gwas_atlas/.DS_Store
     Ignored:    code/parse_gwas_atlas_nonsig/.DS_Store
@@ -674,6 +673,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/6077f68ec043bb597b753eeba15655d386ecf720/analysis/STAN_model_strat.Rmd" target="_blank">6077f68</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-06-02
+</td>
+<td>
+fixed loadings - for real this time
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/c478e34c0a77bd148645d84e04b8147847d7e5c8/docs/STAN_model_strat.html" target="_blank">c478e34</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-06-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -847,7 +880,10 @@ added new stan model
 <div id="functions-to-simulate-data" class="section level2">
 <h2>Functions to Simulate Data</h2>
 <p>Function to simulate SNP loadings:<br />
-* n = number of PCs * L = number of SNPs * loading_mean = used to skew the loadings * loading_sd = standard deviation used to draw loadings</p>
+* n = number of PCs<br />
+* L = number of SNPs<br />
+* loading_mean = used to skew the loadings<br />
+* loading_sd = standard deviation used to draw loadings</p>
 <pre class="r"><code>simulate_loadings &lt;- function(L, n, loading_mean, loading_sd) {
   loadings &lt;- matrix(0, ncol = L, nrow = n)
   for (i in 1:n) {
@@ -856,8 +892,11 @@ added new stan model
   return(loadings)
 }</code></pre>
 <p>Function to simulate Beta hats:<br />
-* n = number of PCs * L = number of SNPs * Bpc = the true value of <span class="math inline">\(\beta_{PC}\)</span><br />
-* epsilon_sd = standard deviation of the error * loadings = SNP loadings simulated above</p>
+* n = number of PCs<br />
+* L = number of SNPs<br />
+* Bpc = the true value of <span class="math inline">\(\beta_{PC}\)</span><br />
+* epsilon_sd = standard deviation of the error<br />
+* loadings = SNP loadings simulated above</p>
 <pre class="r"><code>calc_beta_hat &lt;- function(L, n, Btrue, Bpc, epsilon_sd, loadings) {
   Bhat &lt;- rep(0, L)
   mat &lt;- matrix(NA, ncol = L, nrow = n)
@@ -1029,9 +1068,17 @@ jgblanc
 </div>
 </div>
 <p>4 PCs no effects</p>
-<pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 4, loading_mean = 1, loading_sd = 1, Bpc = rep(0,4), epsilon_sd = 1, Btrue = rep(0, 1000), b=0.5)
-
-fit_ss &lt;- extract(mod)
+<pre class="r"><code>mod &lt;- fit_model(L = 1000, n = 4, loading_mean = 1, loading_sd = 1, Bpc = rep(0,4), epsilon_sd = 1, Btrue = rep(0, 1000), b=0.5)</code></pre>
+<pre><code>Warning: There were 3983 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
+<pre><code>Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
+<pre><code>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
+<pre><code>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<pre class="r"><code>fit_ss &lt;- extract(mod)
 beta &lt;- fit_ss$beta
 par(mfrow = c(2,2))
 hist(beta[,1])
@@ -1211,8 +1258,8 @@ fit_ss &lt;- extract(fit)$beta
 # Posterior Means
 bpos &lt;- colMeans(fit_ss)
 bpos</code></pre>
-<pre><code> [1] -0.004939983  0.029034832  0.033072255  0.005894278  0.026296393
- [6]  0.038629639  0.057178418  0.017234201  0.012270685  0.006703805</code></pre>
+<pre><code> [1]  0.002327818  0.037340951 -0.045567983 -0.028508346 -0.041854469
+ [6]  0.031196282 -0.023099199  0.029627160  0.042982724  0.016422066</code></pre>
 <pre class="r"><code># Calculate True Effect Sizes (should be 0)
 true &lt;- Bhat -  wloadings %*% bpos
 hist(true)</code></pre>
@@ -1239,6 +1286,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c478e34c0a77bd148645d84e04b8147847d7e5c8/docs/figure/STAN_model_strat.Rmd/unnamed-chunk-12-1.png" target="_blank">c478e34</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-06-02
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/75b0dcff766d4198fceecd4a6f8ece627ba859c3/docs/figure/STAN_model_strat.Rmd/unnamed-chunk-12-1.png" target="_blank">75b0dcf</a>
@@ -1269,8 +1327,8 @@ fit_ss &lt;- extract(fit)$beta
 # Posterior Means
 bpos &lt;- colMeans(fit_ss)
 bpos</code></pre>
-<pre><code> [1] -0.037687693  0.747670034 -0.019734055  0.052283554 -0.012344353
- [6]  0.023025595 -0.033318243  0.005580967 -0.058659926  0.010755555</code></pre>
+<pre><code> [1] -0.034507392  0.748745646 -0.032839237 -0.009007422  0.012251484
+ [6] -0.010765420 -0.009234299  0.040168434  0.010056108 -0.020646100</code></pre>
 <pre class="r"><code># Calculate True Effect Sizes (should be 0)
 true &lt;- Bhat -  wloadings %*% bpos
 hist(true)</code></pre>
@@ -1297,6 +1355,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c478e34c0a77bd148645d84e04b8147847d7e5c8/docs/figure/STAN_model_strat.Rmd/unnamed-chunk-14-1.png" target="_blank">c478e34</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-06-02
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/75b0dcff766d4198fceecd4a6f8ece627ba859c3/docs/figure/STAN_model_strat.Rmd/unnamed-chunk-14-1.png" target="_blank">75b0dcf</a>
@@ -1415,8 +1484,8 @@ for (i in 1:10) {
 # Fit Model 
 data &lt;- list(y = gwas_block$ES_Derived, L = nrow(wloadings), n = 10, x = wloadings, b=0.5)
 #fit &lt;- sampling(simple, data = data, chains=4)
-#saveRDS(fit,&quot;~/Desktop/stan_block653&quot;)</code></pre>
-<pre class="r"><code>fit &lt;- readRDS(&quot;~/Desktop/stan_block653&quot;)
+#saveRDS(fit,&quot;~/Desktop/stan_block653_new&quot;)</code></pre>
+<pre class="r"><code>fit &lt;- readRDS(&quot;~/Desktop/stan_block653_new&quot;)
 # Posterior Means 
 bs &lt;- as.matrix(extract(fit)$beta) 
 bpos &lt;- colMeans(bs)
