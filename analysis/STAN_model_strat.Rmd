@@ -35,9 +35,9 @@ $$\hat{\beta} = \beta + \sum_i \lambda_i^{-1/2} V \beta_i + e$$
 ## Functions to Simulate Data  
 
 Function to simulate SNP loadings:  
-* n = number of PCs
-* L = number of SNPs
-* loading_mean = used to skew the loadings 
+* n = number of PCs  
+* L = number of SNPs  
+* loading_mean = used to skew the loadings  
 * loading_sd = standard deviation used to draw loadings  
 ```{r}
 simulate_loadings <- function(L, n, loading_mean, loading_sd) {
@@ -50,11 +50,11 @@ simulate_loadings <- function(L, n, loading_mean, loading_sd) {
 ``` 
 
 Function to simulate Beta hats:  
-* n = number of PCs
-* L = number of SNPs
-* Bpc = the true value of $\beta_{PC}$  
-* epsilon_sd = standard deviation of the error
-* loadings = SNP loadings simulated above
+* n = number of PCs  
+* L = number of SNPs  
+* Bpc = the true value of $\beta_{PC}$   
+* epsilon_sd = standard deviation of the error  
+* loadings = SNP loadings simulated above  
 
 ```{r}
 calc_beta_hat <- function(L, n, Btrue, Bpc, epsilon_sd, loadings) {
@@ -280,11 +280,11 @@ for (i in 1:10) {
 # Fit Model 
 data <- list(y = gwas_block$ES_Derived, L = nrow(wloadings), n = 10, x = wloadings, b=0.5)
 #fit <- sampling(simple, data = data, chains=4)
-#saveRDS(fit,"~/Desktop/stan_block653")
+#saveRDS(fit,"~/Desktop/stan_block653_new")
 ```
 
 ```{r}
-fit <- readRDS("~/Desktop/stan_block653")
+fit <- readRDS("~/Desktop/stan_block653_new")
 # Posterior Means 
 bs <- as.matrix(extract(fit)$beta) 
 bpos <- colMeans(bs)
