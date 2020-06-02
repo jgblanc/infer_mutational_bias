@@ -210,7 +210,7 @@ for (i in 1:10) {
 }
 
 # Fit Model 
-data <- list(y = Bhat, L = nrow(wloadings), n = 10, x = loadings, b=0.5)
+data <- list(y = Bhat, L = nrow(wloadings), n = 10, x = wloadings, b=0.5)
 fit <- sampling(simple, data = data, chains=4, refresh = 0)
 ```
 
@@ -235,7 +235,7 @@ Bpc[2] <- 1
 Bhat <- calc_beta_hat(L=nrow(loadings), n=10, Btrue = rep(0,nrow(loadings)), Bpc = Bpc, epsilon_sd = 1, loadings = t(loadings))
 
 # Fit Model 
-data <- list(y = Bhat, L = nrow(wloadings), n = 10, x = loadings, b=0.5)
+data <- list(y = Bhat, L = nrow(wloadings), n = 10, x = wloadings, b=0.5)
 fit <- sampling(simple, data = data, chains=4, refresh = 0 )
 ```
 
@@ -278,7 +278,7 @@ for (i in 1:10) {
 }
 
 # Fit Model 
-data <- list(y = gwas_block$ES_Derived, L = nrow(wloadings), n = 10, x = loadings, b=0.5)
+data <- list(y = gwas_block$ES_Derived, L = nrow(wloadings), n = 10, x = wloadings, b=0.5)
 #fit <- sampling(simple, data = data, chains=4)
 #saveRDS(fit,"~/Desktop/stan_block653")
 ```
