@@ -332,7 +332,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-05-12
+<strong>Last updated:</strong> 2020-06-09
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -363,10 +363,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree2a19adc1366f5d9d9cecd613b36caec96a5ce837targetblank2a19adca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/2a19adc1366f5d9d9cecd613b36caec96a5ce837" target="_blank">2a19adc</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree7e3297a0f6f8737751a6ddca54983a002c99ab77targetblank7e3297aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/7e3297a0f6f8737751a6ddca54983a002c99ab77" target="_blank">7e3297a</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree2a19adc1366f5d9d9cecd613b36caec96a5ce837targetblank2a19adca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastree7e3297a0f6f8737751a6ddca54983a002c99ab77targetblank7e3297aa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -387,10 +387,10 @@ Ignored files:
     Ignored:    code/parse_gwas_atlas_nonsig/.DS_Store
     Ignored:    data/.ipynb_checkpoints/
     Ignored:    data/1000G_20101123_v3_GIANT_chr1_23_minimacnamesifnotRS_CEU_MAF0.01/
-    Ignored:    data/47UKBB/
     Ignored:    data/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.EUR/
-    Ignored:    data/BBJ/
     Ignored:    data/GWAS_ATLAS/
+    Ignored:    data/LD_Blocks/
+    Ignored:    data/MISC_GWAS/
     Ignored:    data/STRAT/
     Ignored:    data/UKBB/
     Ignored:    output/.DS_Store
@@ -460,10 +460,22 @@ Untracked files:
     Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcHJ1bmVkL2hlaWdodF8xNDJfMC4wMDAxLnBydW5lLmlu
     Untracked:  .snakemake/metadata/b3V0cHV0L0dXQVNfQVRMQVMvcHJ1bmVkL3NjaGl6b3BocmVuaWFfMzk4Ml8wLjAwMDEucHJ1bmUuaW4=
     Untracked:  .snakemake/scripts/tmp7997be50.get_evolutionary_information_from_1kg_GWAS_ATLAS.py
+    Untracked:  analysis/GWAS_Atlas_LD_Blocks.Rmd
+    Untracked:  analysis/Instrumental_variable.Rmd
+    Untracked:  analysis/LD_Block_Jacknife.Rmd
     Untracked:  analysis/test.Rmd
+    Untracked:  code/LD_Block/
     Untracked:  code/parse_gwas_atlas_nonsig/height_142.R
+    Untracked:  code/pc_regression.rds
+    Untracked:  code/pc_regression.stan
+    Untracked:  code/pc_regression_da.rds
+    Untracked:  code/pc_regression_da.stan
+    Untracked:  code/pc_regression_gwas.R
+    Untracked:  code/pc_regression_parameters.R
     Untracked:  code/rsID_Pos_conversion.py
     Untracked:  code/rsID_Pos_conversion.py~
+    Untracked:  output/GWAS_ATLAS_ANNOTATED/
+    Untracked:  output/PC_REG/
 
 Unstaged changes:
     Modified:   .snakemake/metadata/b3V0cHV0L1NUUkFUL3BydW5lZC9jaHIxX0VVUl8wLjA1LmVpZ2VudmVjLnZhci5EQS5wcnVuZS5pbg==
@@ -475,6 +487,11 @@ Unstaged changes:
     Modified:   analysis/GWAS_ATLAS_results.Rmd
     Modified:   analysis/Stratification.Rmd
     Modified:   analysis/shift_GWAS_ATLAS.Rmd
+    Modified:   code/Neal_UKBB.R
+    Deleted:    code/Untitled.ipynb
+    Deleted:    code/make_DA_dict.py
+    Deleted:    code/make_DA_dict.py~
+    Modified:   code/parse_gwas_atlas/schizophrenia_3982.R
     Modified:   code/parse_gwas_atlas_nonsig/CAD_3925.R
     Modified:   code/parse_gwas_atlas_nonsig/T2D_4085.R
     Modified:   code/parse_gwas_atlas_nonsig/UC_2030.R
@@ -519,6 +536,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/7e3297a0f6f8737751a6ddca54983a002c99ab77/analysis/index.Rmd" target="_blank">7e3297a</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-06-09
+</td>
+<td>
+start misc process
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/9222112d705e427a763601d5bde4e9ed88e19ac7/docs/index.html" target="_blank">9222112</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-05-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1044,7 +1095,8 @@ To see the results of my data processing from the GWAS Atlas, click here <a href
 To see the results of my UKBB vs BBJ data processing, click here <a href="BBJvUKKBB.html">link</a><br />
 To see the results of PCA on 1kg data, click here <a href="Stratification.html">link</a><br />
 To see the results of looking for stratification in GWAS summary statistics, click here <a href="shift_GWAS_ATLAS.html">link</a><br />
-To see STAN inference, click here <a href="STAN_model_strat.html">link</a></p>
+To see STAN inference, click here <a href="STAN_model_strat.html">link</a><br />
+To see misc gwas processing, click here <a href="misc_gwas.html">link</a></p>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
