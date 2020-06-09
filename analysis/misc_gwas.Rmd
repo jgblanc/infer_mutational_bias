@@ -1,0 +1,240 @@
+---
+title: "misc_gwas"
+author: "Jennifer Blanc"
+date: "6/8/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list =ls())
+library(data.table)
+library(tidyverse)
+library(knitr)
+```
+
+## Code  
+
+Read in summary statisticsL 
+```{r}
+read_ss <- function(name) {
+  df <- fread(paste0("../data/MISC_GWAS/",name, ".txt"))
+  return(df)
+}
+```
+
+Pick only GWAS Significant SNPs 
+```{r}
+sig_snps <- function(df) {
+  out <- df %>% filter(P < 5e-8)
+  return(out)
+}
+```
+
+Pick lowest p-value SNP per block 
+```{r}
+lowest_pval <- function(df) {
+  out <- df %>% group_by(LD_BLOCK) %>% arrange(P) %>% slice(1)
+  return(out)
+}
+```
+
+Pick SNPs below a given threshold  
+```{r}
+nonsig_snps <- function(df, threshold) {
+  out <- df %>% filter(abs(ES) < threshold)
+}
+```
+
+Proportion of derived alleles that increase the trait  
+```{r}
+increasing_derived_alleles <- function(df) {
+  return(sum(df$ES_DERIVED > 0)/nrow(df))
+}
+```
+
+Proportion of derived alleles that increase the trait for multiple thresholds  
+```{r}
+increasing_derived_alleles_thresolds <- function(data) {
+  df <- matrix(NA, nrow = 5, ncol = 2)
+  colnames(df) <- c("Prop_Inc", "Num_SNPs")
+  threshold <- c(1e-2, 1e-3, 1e-4, 1e-5, 1e-6)
+  for (i in 1:5) {
+    non_sig <- nonsig_snps(data, threshold[i])
+    df[i,1] <- increasing_derived_alleles(non_sig)
+    df[i,2] <- nrow(non_sig)
+    data <- non_sig
+  }
+  return(df)
+}
+```
+
+
+Make ES vs IAF plot
+```{r}
+derive <- c("springgreen4", "purple1")
+make_plot <- function(df, name) {
+  pl <- ggplot(data=df, aes(x=IAF,y=abs(ES), color = INCREASING_DERIVED)) + geom_point(alpha=0.5, size=2) + theme_classic() + ggtitle(name) + labs(y = "Effect Size", x = "Trait Increaseing Allele Frequency",color = "Risk Derived")+ ylim(0,max(abs(df$ES)+0.01)) +  xlim(0,1) + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5, size = 20), axis.text.x = element_text(size = 10), axis.text.y = element_text(size = 10), axis.title.x = element_text(size = 18), axis.title.y = element_text(size = 18), legend.title = element_text(size = 14), legend.text = element_text(size = 14), legend.position = "bottom") 
+  return(pl)
+}
+```
+
+
+## Traits  
+
+**Household Income**  
+
+IAF vs Effect size:  
+```{r}
+data <- fread("../data/MISC_GWAS/test/household_income.txt")
+sig <- sig_snps(data)
+ld_block <- lowest_pval(sig)
+make_plot(ld_block, "Household Income")
+```
+
+Proportion of derived alleles that increase the trait
+```{r}
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+```
+
+Correlation between derived alleles and PC  
+```{r}
+loadings_all <- data[,21:40]
+avg_loadings_all <- apply(loadings_all, 2, mean)
+
+loadings <- sig[,21:40]
+avg_loadings <- apply(loadings, 2, mean)
+avg_load <- as.data.frame(cbind(avg_loadings, seq(1,20)))
+
+ggplot(data = avg_load, aes(x=avg_loadings,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("average correlation between derived alleles and PCs") + theme_bw() + geom_point(data = avg_load, aes(x=avg_loadings_all,y=V2), color = "black", alpha = 0.5)
+```
+
+**Skin Color**  
+
+IAF vs Effect size:  
+```{r}
+data <- fread("../data/MISC_GWAS/test/skin_color.txt")
+sig <- sig_snps(data)
+ld_block <- lowest_pval(sig)
+make_plot(ld_block, "Household Income")
+```
+
+Proportion of derived alleles that increase the trait
+```{r}
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+```
+
+Correlation between derived alleles and PC  
+```{r}
+loadings_all <- data[,21:40]
+avg_loadings_all <- apply(loadings_all, 2, mean)
+
+loadings <- sig[,21:40]
+avg_loadings <- apply(loadings, 2, mean)
+avg_load <- as.data.frame(cbind(avg_loadings, seq(1,20)))
+
+ggplot(data = avg_load, aes(x=avg_loadings,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("average correlation between derived alleles and PCs") + theme_bw() + geom_point(data = avg_load, aes(x=avg_loadings_all,y=V2), color = "black", alpha = 0.5)
+```
+
+**Neuroticism score**  
+
+IAF vs Effect size:  
+```{r}
+data <- read_ss("neuroticism_score")
+sig <- sig_snps(data)
+ld_block <- lowest_pval(sig)
+make_plot(ld_block, "Neuroticism score")
+```
+
+Proportion of derived alleles that increase the trait
+```{r}
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+```
+
+**Age at first sex**  
+
+IAF vs Effect size:  
+```{r}
+data <- read_ss("age_at_first_sex")
+sig <- sig_snps(data)
+ld_block <- lowest_pval(sig)
+make_plot(ld_block, "Age at first sex")
+```
+
+Proportion of derived alleles that increase the trait
+```{r}
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+```
+
+**Overall Health Rating**  
+
+IAF vs Effect size:  
+```{r}
+data <- read_ss("overall_health_rating")
+sig <- sig_snps(data)
+ld_block <- lowest_pval(sig)
+make_plot(ld_block, "Overall health rating")
+```
+
+Proportion of derived alleles that increase the trait
+```{r}
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+```
+
+**Birth Weight**  
+
+IAF vs Effect size:  
+```{r}
+data <- read_ss("birth_weight")
+sig <- sig_snps(data)
+ld_block <- lowest_pval(sig)
+make_plot(ld_block, "Birth Weight")
+```
+
+Proportion of derived alleles that increase the trait
+```{r}
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+```
+
+
+**Alcohol Intake Frequency**  
+
+IAF vs Effect size:  
+```{r}
+data <- read_ss("alcohol_intake_frequency")
+sig <- sig_snps(data)
+ld_block <- lowest_pval(sig)
+make_plot(ld_block, "Alcohol Intake Frequency")
+```
+
+Proportion of derived alleles that increase the trait
+```{r}
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+```
+
+**Forced Vital Capacity**  
+
+IAF vs Effect size:  
+```{r}
+data <- read_ss("forced_vital_capacity")
+sig <- sig_snps(data)
+ld_block <- lowest_pval(sig)
+make_plot(ld_block, "Forced Vital Capacity")
+```
+
+
+Proportion of derived alleles that increase the trait
+```{r}
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+```
+
+
+
