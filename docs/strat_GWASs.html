@@ -9,9 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Jennifer Blanc" />
 
 
-<title>Home</title>
+<title>scratch</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +20,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -250,6 +254,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -257,6 +324,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -307,7 +384,9 @@ div.section {
 
 
 
-<h1 class="title toc-ignore">Home</h1>
+<h1 class="title toc-ignore">scratch</h1>
+<h4 class="author">Jennifer Blanc</h4>
+<h4 class="date">6/14/2020</h4>
 
 </div>
 
@@ -335,7 +414,7 @@ div.section {
 <strong>Last updated:</strong> 2020-06-15
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>infer_mutational_bias/analysis/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -357,6 +436,66 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
 <p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20191108code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20191108)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20191108code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20191108)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
@@ -543,7 +682,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/cd1a0f02e0111f2d04f81a0fadeddbbe6d776fd6/analysis/index.Rmd" target="_blank">cd1a0f0</a>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/cd1a0f02e0111f2d04f81a0fadeddbbe6d776fd6/analysis/strat_GWASs.Rmd" target="_blank">cd1a0f0</a>
 </td>
 <td>
 jgblanc
@@ -555,567 +694,6 @@ jgblanc
 process
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/845a11ed8974fff944ca18efb108928918ad9a44/docs/index.html" target="_blank">845a11e</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-06-09
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/7e3297a0f6f8737751a6ddca54983a002c99ab77/analysis/index.Rmd" target="_blank">7e3297a</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-06-09
-</td>
-<td>
-start misc process
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/9222112d705e427a763601d5bde4e9ed88e19ac7/docs/index.html" target="_blank">9222112</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-05-12
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/06c8accfcb5c55cd44a130e63bbfdf9e48739ba6/docs/index.html" target="_blank">06c8acc</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-05-12
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/eb97fb40255eadd05cbf1f7ef0ca9b69f68ae182/analysis/index.Rmd" target="_blank">eb97fb4</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-05-12
-</td>
-<td>
-maybe fixed stan model?
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/b0d721fd5c0aae82c05a463c2e0648043b56d555/docs/index.html" target="_blank">b0d721f</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-04-21
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/e9aa5c6d19309fd434735c556eeb5b439a156b17/analysis/index.Rmd" target="_blank">e9aa5c6</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-04-21
-</td>
-<td>
-added new stan model
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/9f469922912eddda8397953f696521887190e2c7/docs/index.html" target="_blank">9f46992</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-03-17
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/05bcd8b4be77010a4b330202dd8b8e2a47f012d8/docs/index.html" target="_blank">05bcd8b</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-03-17
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/c0d4d1ec960544829c62ac38aa2c66faf52f6fd2/analysis/index.Rmd" target="_blank">c0d4d1e</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-03-17
-</td>
-<td>
-looked for shift
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/06b1b04ea7cd9f8a86c401df6f020112eca278a3/docs/index.html" target="_blank">06b1b04</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-03-17
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/71255ca2c212d9a6030152e496dd95eca8f7788a/analysis/index.Rmd" target="_blank">71255ca</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-03-17
-</td>
-<td>
-looked for shift
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/04abf02cd3e979fca4e7ab4589ceaab4fb82a8d3/docs/index.html" target="_blank">04abf02</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-02-26
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9e721a39f5426ac5b7ee5f76fe2d12a5237e694c/analysis/index.Rmd" target="_blank">9e721a3</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-02-26
-</td>
-<td>
-Added PCA results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/c3ab5d6e2a7bd42ad4fca0dd7397dae17ab909a8/docs/index.html" target="_blank">c3ab5d6</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-02-11
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/f28be1131a253c938a890792e6d90d49c77e3bb4/analysis/index.Rmd" target="_blank">f28be11</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-02-11
-</td>
-<td>
-Did comparisons
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/eb46920ea1ca4f47b62c87e6dfc2b896f3259a2f/docs/index.html" target="_blank">eb46920</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/75fc4f09786930c22163257fb11b424b750d29f9/docs/index.html" target="_blank">75fc4f0</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/f3aca4497294619fe053d187d28fadb1ebf1312f/analysis/index.Rmd" target="_blank">f3aca44</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Start of GWAS atlas analysis
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/f507bb5022d5669a96a901f53dd6bdcc1683c254/docs/index.html" target="_blank">f507bb5</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/fcf86504b6ca802d1c5e4b3adb4555d6fa9c4ffd/analysis/index.Rmd" target="_blank">fcf8650</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Start of GWAS atlas analysis
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/7694f8a39f9a13a323bb8113570cf6e8a212d8b7/docs/index.html" target="_blank">7694f8a</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/e9fc5ca03b196ffb3fbcc24b363631169ef35ad2/analysis/index.Rmd" target="_blank">e9fc5ca</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-24
-</td>
-<td>
-Start of GWAS atlas analysis
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/b86e80772e5699cee034960c90a70c63cd19fd3f/docs/index.html" target="_blank">b86e807</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-14
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/7bfd1996bd9dba31b503ce791aed3012976ba5a3/analysis/index.Rmd" target="_blank">7bfd199</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2020-01-14
-</td>
-<td>
-Worked on inference problem
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/d501548d967ef91d377dfea94686709b0e4dbd6e/docs/index.html" target="_blank">d501548</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-12-02
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/76aeb72ddd7f4a731525e51064b1d8a95d743e76/analysis/index.Rmd" target="_blank">76aeb72</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-12-02
-</td>
-<td>
-Started analyzing cs results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/ba34a9c894904c7a3bf668707026918e07318da7/docs/index.html" target="_blank">ba34a9c</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-26
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/a345f14861ed70fcb037605855396c7f58e9d1b5/analysis/index.Rmd" target="_blank">a345f14</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-26
-</td>
-<td>
-Update 11/26
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/548c5f30e2be63906b6f28123ffe0cc508a6ba6f/docs/index.html" target="_blank">548c5f3</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-12
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/2c7bc48d122b8b25403bea947eb99c616c375fda/analysis/index.Rmd" target="_blank">2c7bc48</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-12
-</td>
-<td>
-Publish simple stan inference
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/fa94f8e3d53c4b704290aef88111c63f4b37387d/docs/index.html" target="_blank">fa94f8e</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-08
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/jgblanc/infer_mutational_bias/blob/001ead2785e17ee071c08c4e3a557fc1f62fbbc8/analysis/index.Rmd" target="_blank">001ead2</a>
-</td>
-<td>
-jgblanc
-</td>
-<td>
-2019-11-08
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -1123,17 +701,223 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>Welcome to my research website.</p>
-<p>To see my inference of selection using the poisson random field model, click here <a href="simple_inference_PRF.html">link</a><br />
-To see my simple inference of W using STAN, click here <a href="simple_stan_inference.html">link</a><br />
-To see the results of data processing, click here <a href="CS_results.html">link</a><br />
-To see the results of my data processing from the GWAS Atlas, click here <a href="GWAS_ATLAS_results.html">link</a><br />
-To see the results of my UKBB vs BBJ data processing, click here <a href="BBJvUKKBB.html">link</a><br />
-To see the results of PCA on 1kg data, click here <a href="Stratification.html">link</a><br />
-To see the results of looking for stratification in GWAS summary statistics, click here <a href="shift_GWAS_ATLAS.html">link</a><br />
-To see STAN inference, click here <a href="STAN_model_strat.html">link</a><br />
-To see misc gwas processing, click here <a href="misc_gwas.html">link</a><br />
-To see more GWAS processing, click here <a href="strat_GWASs.html">link</a></p>
+<div id="code" class="section level2">
+<h2>Code</h2>
+<p>Read in summary statistics</p>
+<pre class="r"><code>read_ss &lt;- function(name) {
+  df &lt;- fread(paste0(&quot;~/Desktop/&quot;,name, &quot;.txt&quot;))
+  return(df)
+}</code></pre>
+<p>Pick only GWAS Significant SNPs</p>
+<pre class="r"><code>sig_snps &lt;- function(df) {
+  out &lt;- df %&gt;% filter(P &lt; 5e-8)
+  return(out)
+}</code></pre>
+<p>Pick lowest p-value SNP per block</p>
+<pre class="r"><code>lowest_pval &lt;- function(df) {
+  out &lt;- df %&gt;% group_by(LD_BLOCK) %&gt;% arrange(P) %&gt;% slice(1)
+  return(out)
+}</code></pre>
+<p>Pick SNPs below a given threshold</p>
+<pre class="r"><code>nonsig_snps &lt;- function(df, threshold) {
+  out &lt;- df %&gt;% filter(abs(ES) &lt;= threshold)
+}</code></pre>
+<p>Proportion of derived alleles that increase the trait</p>
+<pre class="r"><code>increasing_derived_alleles &lt;- function(df) {
+  #return(sum(df$ES_DERIVED &gt; 0)/nrow(df))
+  return(sum(df$INCREASING_DERIVED == &#39;T&#39;)/nrow(df))
+}</code></pre>
+<p>Proportion of derived alleles that increase the trait for multiple thresholds</p>
+<pre class="r"><code>increasing_derived_alleles_thresolds &lt;- function(data) {
+  data &lt;- data %&gt;% filter(ES != 0)
+  df &lt;- matrix(NA, nrow = 5, ncol = 3)
+  colnames(df) &lt;- c(&quot;Prop_Inc&quot;, &quot;Num_SNPs&quot;, &quot;Threshold&quot;)
+  threshold &lt;- c(1e-2, 1e-3, 1e-4, 1e-5, 1e-6)
+  for (i in 1:5) {
+    non_sig &lt;- nonsig_snps(data, threshold[i])
+    df[i,3] &lt;- threshold[i]
+    df[i,1] &lt;- increasing_derived_alleles(non_sig)
+    df[i,2] &lt;- nrow(non_sig)
+    data &lt;- non_sig
+  }
+  return(df)
+}</code></pre>
+<p>Proportion of Derived increasing alleles per bin</p>
+<pre class="r"><code>increasing_derived_alleles_DAF &lt;- function(data) {
+  #dat$bin &lt;- cut(dat$DAF, 20)
+  data$bin &lt;- cut2(data$DAF, m=nrow(data)/20)
+  df &lt;- data %&gt;% group_by(bin) %&gt;% summarise(num_snps = n(),prop_risk = sum(INCREASING_DERIVED == &#39;T&#39;)/n())
+  return(df)
+}</code></pre>
+<p>Make ES vs IAF plot</p>
+<pre class="r"><code>derive &lt;- c(&quot;springgreen4&quot;, &quot;purple1&quot;)
+make_plot &lt;- function(df, name) {
+  pl &lt;- ggplot(data=df, aes(x=IAF,y=abs(ES), color = INCREASING_DERIVED)) + geom_point(alpha=0.5, size=2) + theme_classic() + ggtitle(name) + labs(y = &quot;Effect Size&quot;, x = &quot;Trait Increaseing Allele Frequency&quot;,color = &quot;Risk Derived&quot;)+ ylim(0,max(abs(df$ES)+0.01)) +  xlim(0,1) + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5, size = 20), axis.text.x = element_text(size = 10), axis.text.y = element_text(size = 10), axis.title.x = element_text(size = 18), axis.title.y = element_text(size = 18), legend.title = element_text(size = 14), legend.text = element_text(size = 14), legend.position = &quot;bottom&quot;) 
+  return(pl)
+}</code></pre>
+<p>Make DAF vs Prop_Risk</p>
+<pre class="r"><code>make_daf_plot &lt;- function(df) {
+  pl &lt;- ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = &quot;navy&quot;) + geom_hline(yintercept = 0.5, col = &quot;red&quot;) + theme_bw() + xlab(&quot;DAF&quot;) + ylab(&quot;Proportion of Increasing SNPs&quot;) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle(&quot;Equal Width Bins&quot;) + theme(plot.title = element_text(hjust = 0.5))
+  return(pl)
+}</code></pre>
+<p>ADHD</p>
+<pre class="r"><code>data &lt;- fread(&quot;~/Desktop/ADHD_PGC.txt&quot;)
+tbl &lt;- increasing_derived_alleles_thresolds(data)
+kable(tbl)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Prop_Inc</th>
+<th align="right">Num_SNPs</th>
+<th align="right">Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.4989474</td>
+<td align="right">2375106</td>
+<td align="right">1e-02</td>
+</tr>
+<tr class="even">
+<td align="right">0.4997036</td>
+<td align="right">237845</td>
+<td align="right">1e-03</td>
+</tr>
+<tr class="odd">
+<td align="right">0.5468171</td>
+<td align="right">12410</td>
+<td align="right">1e-04</td>
+</tr>
+<tr class="even">
+<td align="right">NaN</td>
+<td align="right">0</td>
+<td align="right">1e-05</td>
+</tr>
+<tr class="odd">
+<td align="right">NaN</td>
+<td align="right">0</td>
+<td align="right">1e-06</td>
+</tr>
+</tbody>
+</table>
+<p>ALL SNPs</p>
+<pre class="r"><code>df &lt;- increasing_derived_alleles_DAF(data)</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>make_daf_plot(df)</code></pre>
+<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Non-significant SNPs (BETA &lt; 1e-4)</p>
+<pre class="r"><code>non_sig &lt;- nonsig_snps(data, 1e-4)
+df &lt;- increasing_derived_alleles_DAF(non_sig)</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>make_daf_plot(df)</code></pre>
+<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>OCD</p>
+<pre class="r"><code>data &lt;- fread(&quot;~/Desktop/OCD_PGC.txt&quot;)
+tbl &lt;- increasing_derived_alleles_thresolds(data)
+kable(tbl)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Prop_Inc</th>
+<th align="right">Num_SNPs</th>
+<th align="right">Threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.4999073</td>
+<td align="right">1110760</td>
+<td align="right">1e-02</td>
+</tr>
+<tr class="even">
+<td align="right">0.5038397</td>
+<td align="right">106258</td>
+<td align="right">1e-03</td>
+</tr>
+<tr class="odd">
+<td align="right">0.5612085</td>
+<td align="right">5759</td>
+<td align="right">1e-04</td>
+</tr>
+<tr class="even">
+<td align="right">NaN</td>
+<td align="right">0</td>
+<td align="right">1e-05</td>
+</tr>
+<tr class="odd">
+<td align="right">NaN</td>
+<td align="right">0</td>
+<td align="right">1e-06</td>
+</tr>
+</tbody>
+</table>
+<p>ALL SNPs</p>
+<pre class="r"><code>df &lt;- increasing_derived_alleles_DAF(data)</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>make_daf_plot(df)</code></pre>
+<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Non-significant SNPs (BETA &lt; 1e-4)</p>
+<pre class="r"><code>non_sig &lt;- nonsig_snps(data, 1e-4)
+df &lt;- increasing_derived_alleles_DAF(non_sig)</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>make_daf_plot(df)</code></pre>
+<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.2 (2019-12-12)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS High Sierra 10.13.6
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] Hmisc_4.3-1       Formula_1.2-3     survival_3.1-8    lattice_0.20-38  
+ [5] knitr_1.28        forcats_0.4.0     stringr_1.4.0     dplyr_1.0.0      
+ [9] purrr_0.3.4       readr_1.3.1       tidyr_1.1.0       tibble_3.0.1     
+[13] ggplot2_3.3.1     tidyverse_1.3.0   data.table_1.12.8 workflowr_1.6.0  
+
+loaded via a namespace (and not attached):
+ [1] httr_1.4.1          jsonlite_1.6.1      splines_3.6.2      
+ [4] modelr_0.1.6        assertthat_0.2.1    highr_0.8          
+ [7] latticeExtra_0.6-29 cellranger_1.1.0    yaml_2.2.1         
+[10] pillar_1.4.4        backports_1.1.7     glue_1.4.1         
+[13] digest_0.6.25       RColorBrewer_1.1-2  promises_1.1.1     
+[16] checkmate_2.0.0     rvest_0.3.5         colorspace_1.4-1   
+[19] htmltools_0.4.0     httpuv_1.5.2        Matrix_1.2-18      
+[22] pkgconfig_2.0.3     broom_0.5.4         haven_2.2.0        
+[25] scales_1.1.1        whisker_0.4         jpeg_0.1-8.1       
+[28] later_1.1.0.1       git2r_0.26.1        htmlTable_1.13.3   
+[31] farver_2.0.3        generics_0.0.2      ellipsis_0.3.1     
+[34] withr_2.2.0         nnet_7.3-12         cli_2.0.2          
+[37] magrittr_1.5        crayon_1.3.4        readxl_1.3.1       
+[40] evaluate_0.14       fs_1.4.1            fansi_0.4.1        
+[43] nlme_3.1-142        xml2_1.2.2          foreign_0.8-72     
+[46] tools_3.6.2         hms_0.5.3           lifecycle_0.2.0    
+[49] munsell_0.5.0       reprex_0.3.0        cluster_2.1.0      
+[52] compiler_3.6.2      rlang_0.4.6         grid_3.6.2         
+[55] rstudioapi_0.11     htmlwidgets_1.5.1   labeling_0.3       
+[58] base64enc_0.1-3     rmarkdown_2.1       gtable_0.3.0       
+[61] DBI_1.1.0           R6_2.4.1            gridExtra_2.3      
+[64] lubridate_1.7.4     rprojroot_1.3-2     stringi_1.4.6      
+[67] Rcpp_1.0.4.6        vctrs_0.3.1         rpart_4.1-15       
+[70] acepack_1.4.1       png_0.1-7           dbplyr_1.4.2       
+[73] tidyselect_1.1.0    xfun_0.12          </code></pre>
+</div>
+</div>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
@@ -1149,6 +933,8 @@ footer is added to webpages before the MathJax javascript. -->
 </script>
 
 
+</div>
+</div>
 
 </div>
 
@@ -1181,6 +967,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
