@@ -1,0 +1,151 @@
+---
+title: "scratch"
+author: "Jennifer Blanc"
+date: "6/14/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list =ls())
+library(data.table)
+library(tidyverse)
+library(knitr)
+library(Hmisc)
+```
+
+## Code  
+
+Read in summary statistics  
+```{r}
+read_ss <- function(name) {
+  df <- fread(paste0("~/Desktop/",name, ".txt"))
+  return(df)
+}
+```
+
+Pick only GWAS Significant SNPs 
+```{r}
+sig_snps <- function(df) {
+  out <- df %>% filter(P < 5e-8)
+  return(out)
+}
+```
+
+Pick lowest p-value SNP per block 
+```{r}
+lowest_pval <- function(df) {
+  out <- df %>% group_by(LD_BLOCK) %>% arrange(P) %>% slice(1)
+  return(out)
+}
+```
+
+Pick SNPs below a given threshold  
+```{r}
+nonsig_snps <- function(df, threshold) {
+  out <- df %>% filter(abs(ES) <= threshold)
+}
+```
+
+Proportion of derived alleles that increase the trait  
+```{r}
+increasing_derived_alleles <- function(df) {
+  #return(sum(df$ES_DERIVED > 0)/nrow(df))
+  return(sum(df$INCREASING_DERIVED == 'T')/nrow(df))
+}
+```
+
+Proportion of derived alleles that increase the trait for multiple thresholds  
+```{r}
+increasing_derived_alleles_thresolds <- function(data) {
+  data <- data %>% filter(ES != 0)
+  df <- matrix(NA, nrow = 5, ncol = 3)
+  colnames(df) <- c("Prop_Inc", "Num_SNPs", "Threshold")
+  threshold <- c(1e-2, 1e-3, 1e-4, 1e-5, 1e-6)
+  for (i in 1:5) {
+    non_sig <- nonsig_snps(data, threshold[i])
+    df[i,3] <- threshold[i]
+    df[i,1] <- increasing_derived_alleles(non_sig)
+    df[i,2] <- nrow(non_sig)
+    data <- non_sig
+  }
+  return(df)
+}
+```
+
+Proportion of Derived increasing alleles per bin 
+```{r}
+increasing_derived_alleles_DAF <- function(data) {
+  #dat$bin <- cut(dat$DAF, 20)
+  data$bin <- cut2(data$DAF, m=nrow(data)/20)
+  df <- data %>% group_by(bin) %>% summarise(num_snps = n(),prop_risk = sum(INCREASING_DERIVED == 'T')/n())
+  return(df)
+}
+```
+
+
+Make ES vs IAF plot
+```{r}
+derive <- c("springgreen4", "purple1")
+make_plot <- function(df, name) {
+  pl <- ggplot(data=df, aes(x=IAF,y=abs(ES), color = INCREASING_DERIVED)) + geom_point(alpha=0.5, size=2) + theme_classic() + ggtitle(name) + labs(y = "Effect Size", x = "Trait Increaseing Allele Frequency",color = "Risk Derived")+ ylim(0,max(abs(df$ES)+0.01)) +  xlim(0,1) + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5, size = 20), axis.text.x = element_text(size = 10), axis.text.y = element_text(size = 10), axis.title.x = element_text(size = 18), axis.title.y = element_text(size = 18), legend.title = element_text(size = 14), legend.text = element_text(size = 14), legend.position = "bottom") 
+  return(pl)
+}
+```
+
+Make DAF vs Prop_Risk
+```{r}
+make_daf_plot <- function(df) {
+  pl <- ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Increasing SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))
+  return(pl)
+}
+```
+
+
+ADHD
+```{r}
+data <- fread("~/Desktop/ADHD_PGC.txt")
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+```
+
+ALL SNPs 
+```{r}
+df <- increasing_derived_alleles_DAF(data)
+make_daf_plot(df)
+```
+
+Non-significant SNPs (BETA < 1e-4)
+```{r}
+non_sig <- nonsig_snps(data, 1e-4)
+df <- increasing_derived_alleles_DAF(non_sig)
+make_daf_plot(df)
+```
+
+OCD 
+```{r}
+data <- fread("~/Desktop/OCD_PGC.txt")
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+```
+
+ALL SNPs 
+```{r}
+df <- increasing_derived_alleles_DAF(data)
+make_daf_plot(df)
+```
+
+Non-significant SNPs (BETA < 1e-4)
+```{r}
+non_sig <- nonsig_snps(data, 1e-4)
+df <- increasing_derived_alleles_DAF(non_sig)
+make_daf_plot(df)
+```
+
+
+
+
+
+
+
+
