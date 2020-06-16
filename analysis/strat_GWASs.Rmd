@@ -110,10 +110,12 @@ sample_snps <- function(data, num_snps) {
 ```
 
 
+## Traits  
 
-ADHD
+## ADHD - FREQ is EUR
 ```{r}
 data <- fread("~/Desktop/ADHD_PGC.txt")
+data <- data %>% filter(ES != 0)
 tbl <- increasing_derived_alleles_thresolds(data)
 kable(tbl)
 ```
@@ -121,21 +123,28 @@ kable(tbl)
 ALL SNPs 
 ```{r}
 df <- increasing_derived_alleles_DAF(data)
-make_daf_plot(df)
-
-sig <- sig_snps(data, 1e-3)
-df <- increasing_derived_alleles_DAF(sig)
+increasing_derived_alleles(data)
 make_daf_plot(df)
 ```
 
-Non-significant SNPs (BETA < 1e-4)
+Moderately associated SNPS 
+```{r}
+sig <- sig_snps(data, 1e-3)
+df <- increasing_derived_alleles_DAF(sig)
+increasing_derived_alleles(sig)
+make_daf_plot(df)
+```
+
+
+Very non-significant SNPs (BETA < 1e-4)
 ```{r}
 non_sig <- nonsig_snps(data, 1e-4)
 df <- increasing_derived_alleles_DAF(non_sig)
+increasing_derived_alleles(non_sig)
 make_daf_plot(df)
 ```
 
-OCD 
+### OCD - FREQ IS EUR  
 ```{r}
 data <- fread("~/Desktop/OCD_PGC.txt")
 data <- data %>% filter(ES != 0) # Remove SNPs that are not risk or protective 
@@ -150,48 +159,117 @@ increasing_derived_alleles(data)
 make_daf_plot(df)
 ```
 
+Moderately associated SNPs (P < 1e-3)
+```{r}
+sig <- sig_snps(data, 1e-3)
+df <- increasing_derived_alleles_DAF(sig)
+increasing_derived_alleles(sig)
+make_daf_plot(df)
+```
+
+
 Very Non-significant SNPs (BETA < 1e-4)
 ```{r}
 non_sig <- nonsig_snps(data, 1e-4)
 df <- increasing_derived_alleles_DAF(non_sig)
+increasing_derived_alleles(non_sig)
 make_daf_plot(df)
 ```
 
-More significant SNPs (P < 1e-3)
-```{r}
-sig <- sig_snps(data, 1e-3)
-df <- increasing_derived_alleles_DAF(sig)
-```
 
 
-
-Overall Health Rating 
+### Overall Health Rating 
 ```{r}
 data <- fread("~/Desktop/overall_health_rating.txt")
+data <- data %>% filter(ES != 0)
 tbl <- increasing_derived_alleles_thresolds(data)
 kable(tbl)
-data <- data %>% filter(ES != 0)
 increasing_derived_alleles(data)
 ```
 
 ALL SNPs 
 ```{r}
 df <- increasing_derived_alleles_DAF(data)
+increasing_derived_alleles(data)
 make_daf_plot(df)
 ```
 
-Non-significant SNPs (BETA < 1e-4)
+Moderately associated SNPs (P < 1e-3)
+```{r}
+sig <- sig_snps(data, 1e-3)
+df <- increasing_derived_alleles_DAF(sig)
+increasing_derived_alleles(sig)
+make_daf_plot(df)
+```
+
+Very Non-significant SNPs (BETA < 1e-4)
 ```{r}
 non_sig <- nonsig_snps(data, 1e-4)
 df <- increasing_derived_alleles_DAF(non_sig)
+increasing_derived_alleles(non_sig)
 make_daf_plot(df)
 ```
 
+### GIANT Height
+```{r}
+data <- fread("~/Desktop/height_GIANT.txt")
+data <- data %>% filter(ES != 0)
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+increasing_derived_alleles(data)
+```
 
+ALL SNPs 
+```{r}
+df <- increasing_derived_alleles_DAF(data)
+increasing_derived_alleles(data)
+make_daf_plot(df)
+```
 
+Moderately associated SNPs (P < 1e-3)
+```{r}
+sig <- sig_snps(data, 1e-3)
+df <- increasing_derived_alleles_DAF(sig)
+increasing_derived_alleles(sig)
+make_daf_plot(df)
+```
 
+Very Non-significant SNPs (BETA < 1e-4)
+```{r}
+non_sig <- nonsig_snps(data, 1e-4)
+df <- increasing_derived_alleles_DAF(non_sig)
+increasing_derived_alleles(non_sig)
+make_daf_plot(df)
+```
 
+### UKBB Height
+```{r}
+data <- fread("~/Desktop/height_Neale.txt")
+data <- data %>% filter(ES != 0)
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+increasing_derived_alleles(data)
+```
 
+ALL SNPs 
+```{r}
+df <- increasing_derived_alleles_DAF(data)
+increasing_derived_alleles(data)
+make_daf_plot(df)
+```
 
+Moderately associated SNPs (P < 1e-3)
+```{r}
+sig <- sig_snps(data, 1e-3)
+df <- increasing_derived_alleles_DAF(sig)
+increasing_derived_alleles(sig)
+make_daf_plot(df)
+```
 
-
+Very Non-significant SNPs (BETA < 1e-4)
+```{r}
+non_sig <- nonsig_snps(data, 1e-4)
+df <- increasing_derived_alleles_DAF(non_sig)
+increasing_derived_alleles(non_sig)
+make_daf_plot(df)
+```
