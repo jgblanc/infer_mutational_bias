@@ -411,7 +411,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-06-15
+<strong>Last updated:</strong> 2020-06-16
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -502,10 +502,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreecd1a0f02e0111f2d04f81a0fadeddbbe6d776fd6targetblankcd1a0f0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/cd1a0f02e0111f2d04f81a0fadeddbbe6d776fd6" target="_blank">cd1a0f0</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreeaa432805ad9beb1ef67407a75b76ae1bf64496e6targetblankaa43280a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/jgblanc/infer_mutational_bias/tree/aa432805ad9beb1ef67407a75b76ae1bf64496e6" target="_blank">aa43280</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreecd1a0f02e0111f2d04f81a0fadeddbbe6d776fd6targetblankcd1a0f0a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomjgblancinfermutationalbiastreeaa432805ad9beb1ef67407a75b76ae1bf64496e6targetblankaa43280a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -682,6 +682,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/aa432805ad9beb1ef67407a75b76ae1bf64496e6/analysis/strat_GWASs.Rmd" target="_blank">aa43280</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-06-16
+</td>
+<td>
+added comparison
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/jgblanc/infer_mutational_bias/9fa9f638f77fdf1fe80ccb754e33c2b6c712362f/docs/strat_GWASs.html" target="_blank">9fa9f63</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-06-15
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/jgblanc/infer_mutational_bias/blob/cd1a0f02e0111f2d04f81a0fadeddbbe6d776fd6/analysis/strat_GWASs.Rmd" target="_blank">cd1a0f0</a>
 </td>
 <td>
@@ -709,8 +743,8 @@ process
   return(df)
 }</code></pre>
 <p>Pick only GWAS Significant SNPs</p>
-<pre class="r"><code>sig_snps &lt;- function(df) {
-  out &lt;- df %&gt;% filter(P &lt; 5e-8)
+<pre class="r"><code>sig_snps &lt;- function(df, threshold) {
+  out &lt;- df %&gt;% filter(P &lt; threshold)
   return(out)
 }</code></pre>
 <p>Pick lowest p-value SNP per block</p>
@@ -755,10 +789,15 @@ make_plot &lt;- function(df, name) {
   pl &lt;- ggplot(data=df, aes(x=IAF,y=abs(ES), color = INCREASING_DERIVED)) + geom_point(alpha=0.5, size=2) + theme_classic() + ggtitle(name) + labs(y = &quot;Effect Size&quot;, x = &quot;Trait Increaseing Allele Frequency&quot;,color = &quot;Risk Derived&quot;)+ ylim(0,max(abs(df$ES)+0.01)) +  xlim(0,1) + scale_color_manual(values = derive) + theme(plot.title = element_text(hjust = 0.5, size = 20), axis.text.x = element_text(size = 10), axis.text.y = element_text(size = 10), axis.title.x = element_text(size = 18), axis.title.y = element_text(size = 18), legend.title = element_text(size = 14), legend.text = element_text(size = 14), legend.position = &quot;bottom&quot;) 
   return(pl)
 }</code></pre>
-<p>Make DAF vs Prop_Risk</p>
+<p>Make DAF vs Proportion of Trait Increasing allele</p>
 <pre class="r"><code>make_daf_plot &lt;- function(df) {
   pl &lt;- ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = &quot;navy&quot;) + geom_hline(yintercept = 0.5, col = &quot;red&quot;) + theme_bw() + xlab(&quot;DAF&quot;) + ylab(&quot;Proportion of Increasing SNPs&quot;) + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle(&quot;Equal Width Bins&quot;) + theme(plot.title = element_text(hjust = 0.5))
   return(pl)
+}</code></pre>
+<p>Randomly sample <em>x</em> number of SNPs per LD block</p>
+<pre class="r"><code>sample_snps &lt;- function(data, num_snps) {
+  df &lt;- data %&gt;% group_by(LD_BLOCK) %&gt;% sample_n(num_snps)
+  return(df)
 }</code></pre>
 <p>ADHD</p>
 <pre class="r"><code>data &lt;- fread(&quot;~/Desktop/ADHD_PGC.txt&quot;)
@@ -804,64 +843,204 @@ kable(tbl)</code></pre>
 <pre class="r"><code>df &lt;- increasing_derived_alleles_DAF(data)</code></pre>
 <pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <pre class="r"><code>make_daf_plot(df)</code></pre>
-<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
+Past versions of unnamed-chunk-12-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9fa9f638f77fdf1fe80ccb754e33c2b6c712362f/docs/figure/strat_GWASs.Rmd/unnamed-chunk-12-1.png" target="_blank">9fa9f63</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-06-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>sig &lt;- sig_snps(data, 1e-3)
+df &lt;- increasing_derived_alleles_DAF(sig)</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>make_daf_plot(df)</code></pre>
+<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Non-significant SNPs (BETA &lt; 1e-4)</p>
 <pre class="r"><code>non_sig &lt;- nonsig_snps(data, 1e-4)
 df &lt;- increasing_derived_alleles_DAF(non_sig)</code></pre>
 <pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <pre class="r"><code>make_daf_plot(df)</code></pre>
-<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>OCD</p>
 <pre class="r"><code>data &lt;- fread(&quot;~/Desktop/OCD_PGC.txt&quot;)
+data &lt;- data %&gt;% filter(ES != 0) # Remove SNPs that are not risk or protective 
 tbl &lt;- increasing_derived_alleles_thresolds(data)
 kable(tbl)</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="right">Prop_Inc</th>
-<th align="right">Num_SNPs</th>
-<th align="right">Threshold</th>
+<th>Prop_Inc N</th>
+<th>um_SNPs T</th>
+<th align="left">hreshold</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.4999073</td>
-<td align="right">1110760</td>
-<td align="right">1e-02</td>
+<td>0.4999073</td>
+<td>1110760</td>
+<td align="left">1e-02</td>
 </tr>
 <tr class="even">
-<td align="right">0.5038397</td>
-<td align="right">106258</td>
-<td align="right">1e-03</td>
+<td>0.5038397</td>
+<td>106258</td>
+<td align="left">1e-03</td>
 </tr>
 <tr class="odd">
-<td align="right">0.5612085</td>
-<td align="right">5759</td>
-<td align="right">1e-04</td>
+<td>0.5612085</td>
+<td>5759</td>
+<td align="left">1e-04</td>
 </tr>
 <tr class="even">
-<td align="right">NaN</td>
-<td align="right">0</td>
-<td align="right">1e-05</td>
+<td>NaN</td>
+<td>0</td>
+<td align="left">1e-05</td>
 </tr>
 <tr class="odd">
-<td align="right">NaN</td>
-<td align="right">0</td>
-<td align="right">1e-06</td>
+<td>NaN</td>
+<td>0</td>
+<td align="left">1e-06</td>
 </tr>
 </tbody>
 </table>
 <p>ALL SNPs</p>
 <pre class="r"><code>df &lt;- increasing_derived_alleles_DAF(data)</code></pre>
 <pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>increasing_derived_alleles(data)</code></pre>
+<pre><code>[1] 0.5106481</code></pre>
 <pre class="r"><code>make_daf_plot(df)</code></pre>
-<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-15-1">
+Past versions of unnamed-chunk-15-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-15-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/jgblanc/infer_mutational_bias/blob/9fa9f638f77fdf1fe80ccb754e33c2b6c712362f/docs/figure/strat_GWASs.Rmd/unnamed-chunk-15-1.png" target="_blank">9fa9f63</a>
+</td>
+<td>
+jgblanc
+</td>
+<td>
+2020-06-15
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Very Non-significant SNPs (BETA &lt; 1e-4)</p>
+<pre class="r"><code>non_sig &lt;- nonsig_snps(data, 1e-4)
+df &lt;- increasing_derived_alleles_DAF(non_sig)</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>make_daf_plot(df)</code></pre>
+<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>More significant SNPs (P &lt; 1e-3)</p>
+<pre class="r"><code>sig &lt;- sig_snps(data, 1e-3)
+df &lt;- increasing_derived_alleles_DAF(sig)</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<p>Overall Health Rating</p>
+<pre class="r"><code>data &lt;- fread(&quot;~/Desktop/overall_health_rating.txt&quot;)
+tbl &lt;- increasing_derived_alleles_thresolds(data)
+kable(tbl)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th>Prop_Inc N</th>
+<th>um_SNPs T</th>
+<th align="left">hreshold</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.4994874</td>
+<td>9383315</td>
+<td align="left">1e-02</td>
+</tr>
+<tr class="even">
+<td>0.4986912</td>
+<td>2101573</td>
+<td align="left">1e-03</td>
+</tr>
+<tr class="odd">
+<td>0.4965884</td>
+<td>213537</td>
+<td align="left">1e-04</td>
+</tr>
+<tr class="even">
+<td>0.4987348</td>
+<td>21340</td>
+<td align="left">1e-05</td>
+</tr>
+<tr class="odd">
+<td>0.4969498</td>
+<td>2131</td>
+<td align="left">1e-06</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>data &lt;- data %&gt;% filter(ES != 0)
+increasing_derived_alleles(data)</code></pre>
+<pre><code>[1] 0.4997188</code></pre>
+<p>ALL SNPs</p>
+<pre class="r"><code>df &lt;- increasing_derived_alleles_DAF(data)</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>make_daf_plot(df)</code></pre>
+<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Non-significant SNPs (BETA &lt; 1e-4)</p>
 <pre class="r"><code>non_sig &lt;- nonsig_snps(data, 1e-4)
 df &lt;- increasing_derived_alleles_DAF(non_sig)</code></pre>
 <pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
 <pre class="r"><code>make_daf_plot(df)</code></pre>
-<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/strat_GWASs.Rmd/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
