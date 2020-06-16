@@ -26,8 +26,8 @@ read_ss <- function(name) {
 
 Pick only GWAS Significant SNPs 
 ```{r}
-sig_snps <- function(df) {
-  out <- df %>% filter(P < 5e-8)
+sig_snps <- function(df, threshold) {
+  out <- df %>% filter(P < threshold)
   return(out)
 }
 ```
@@ -93,13 +93,22 @@ make_plot <- function(df, name) {
 }
 ```
 
-Make DAF vs Prop_Risk
+Make DAF vs Proportion of Trait Increasing allele 
 ```{r}
 make_daf_plot <- function(df) {
   pl <- ggplot(df, aes(x=bin, y=prop_risk)) + geom_point(col = "navy") + geom_hline(yintercept = 0.5, col = "red") + theme_bw() + xlab("DAF") + ylab("Proportion of Increasing SNPs") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Equal Width Bins") + theme(plot.title = element_text(hjust = 0.5))
   return(pl)
 }
 ```
+
+Randomly sample _x_ number of SNPs per LD block 
+```{r}
+sample_snps <- function(data, num_snps) {
+  df <- data %>% group_by(LD_BLOCK) %>% sample_n(num_snps)
+  return(df)
+}
+```
+
 
 
 ADHD
@@ -113,6 +122,10 @@ ALL SNPs
 ```{r}
 df <- increasing_derived_alleles_DAF(data)
 make_daf_plot(df)
+
+sig <- sig_snps(data, 1e-3)
+df <- increasing_derived_alleles_DAF(sig)
+make_daf_plot(df)
 ```
 
 Non-significant SNPs (BETA < 1e-4)
@@ -125,8 +138,40 @@ make_daf_plot(df)
 OCD 
 ```{r}
 data <- fread("~/Desktop/OCD_PGC.txt")
+data <- data %>% filter(ES != 0) # Remove SNPs that are not risk or protective 
 tbl <- increasing_derived_alleles_thresolds(data)
 kable(tbl)
+```
+
+ALL SNPs 
+```{r}
+df <- increasing_derived_alleles_DAF(data)
+increasing_derived_alleles(data)
+make_daf_plot(df)
+```
+
+Very Non-significant SNPs (BETA < 1e-4)
+```{r}
+non_sig <- nonsig_snps(data, 1e-4)
+df <- increasing_derived_alleles_DAF(non_sig)
+make_daf_plot(df)
+```
+
+More significant SNPs (P < 1e-3)
+```{r}
+sig <- sig_snps(data, 1e-3)
+df <- increasing_derived_alleles_DAF(sig)
+```
+
+
+
+Overall Health Rating 
+```{r}
+data <- fread("~/Desktop/overall_health_rating.txt")
+tbl <- increasing_derived_alleles_thresolds(data)
+kable(tbl)
+data <- data %>% filter(ES != 0)
+increasing_derived_alleles(data)
 ```
 
 ALL SNPs 
@@ -141,6 +186,7 @@ non_sig <- nonsig_snps(data, 1e-4)
 df <- increasing_derived_alleles_DAF(non_sig)
 make_daf_plot(df)
 ```
+
 
 
 
