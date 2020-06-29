@@ -11,11 +11,12 @@ rm(list =ls())
 library(data.table)
 library(tidyverse)
 library(knitr)
+library(ggpubr)
 ```
 
 ## Code  
 
-Read in summary statisticsL 
+Read in summary statistics  
 ```{r}
 read_ss <- function(name) {
   df <- fread(paste0("../data/MISC_GWAS/",name, ".txt"))
@@ -25,8 +26,8 @@ read_ss <- function(name) {
 
 Pick only GWAS Significant SNPs 
 ```{r}
-sig_snps <- function(df) {
-  out <- df %>% filter(P < 5e-8)
+sig_snps <- function(df, threshold) {
+  out <- df %>% filter(P < threshold)
   return(out)
 }
 ```
@@ -80,161 +81,90 @@ make_plot <- function(df, name) {
 ```
 
 
-## Traits  
+## Workflow outline  
 
-**Household Income**  
+1) Download raw summary statistics  
+2) Parse all summary stats into same format: "SNP" (CHR:BP), "EA" (effect allele),"NEA"(non-effect allele), "CHR", "BP", "BETA" (Should be called OR-need to fix), "SE", "P", "EAF" (effect allele frequency) ,"MAF", "IAF" (increasing allele frequency), "INCREASING_ALLELE" (BETA > 0), "INCREASING" (Allele w/ BETA > 0), "ES" (log(OR))
+3) Add column that uses a table that has derived/ancestral assignments for 1KG SNPs to add the columns: "EA_DERIVED" (T/F effect allele derived), "DAF" (derived allele freq), "INCREASING_DERIVED" (T/F is the increasing allele derived), "ES_DERIVED" (Effect size of the derived allele). SNPs that don't have derived information are dropped from the table.    
+4) Add column that assigns each SNP to one of 1703 LD Blocks defined by https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4731402/  
 
-IAF vs Effect size:  
+
+## Schizophrenia GWAS Results 
+
+**EUR Psychiatric Genetic Consortium**  
+
+The raw GWAS was downloaded from (https://www.med.unc.edu/pgc/download-results/scz/), EUR only descent. They are discussed in this paper: https://www.nature.com/articles/s41588-019-0512-x   
+
+First, we can plot the trait increasing allele frequency vs effect size for GWAS significant SNPs (P < 5e-8), picking the lowest p-value per LD Block and coloring by derived status.    
 ```{r}
-data <- fread("../data/MISC_GWAS/test/household_income.txt")
-sig <- sig_snps(data)
+data <- fread("~/scratch/SCZ-EUR_PGC.txt")
+sig <- sig_snps(data, 5e-8)
 ld_block <- lowest_pval(sig)
-make_plot(ld_block, "Household Income")
+make_plot(ld_block, "SCZ-EUR_PGC")
 ```
 
-Proportion of derived alleles that increase the trait
+Now we can make the same plot but dropping all SNPs on chromosome 6.  
 ```{r}
-tbl <- increasing_derived_alleles_thresolds(data)
-kable(tbl)
+drop_six <- ld_block %>% filter(CHR != 6)
+make_plot(drop_six, "Exclude CHR 6")
 ```
 
-Correlation between derived alleles and PC  
+We can also look at specific LD Blocks on chromosome 6  
 ```{r}
-loadings_all <- data[,21:40]
-avg_loadings_all <- apply(loadings_all, 2, mean)
-
-loadings <- sig[,21:40]
-avg_loadings <- apply(loadings, 2, mean)
-avg_load <- as.data.frame(cbind(avg_loadings, seq(1,20)))
-
-ggplot(data = avg_load, aes(x=avg_loadings,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("average correlation between derived alleles and PCs") + theme_bw() + geom_point(data = avg_load, aes(x=avg_loadings_all,y=V2), color = "black", alpha = 0.5)
+p650 <- data %>% filter(CHR == 6 & LD_BLOCK == 650) %>% mutate(sig = P < 5e-8) %>%ggplot(aes(x = BP, y=ES_DERIVED, color = sig)) + geom_point()
+p651 <- data %>% filter(CHR == 6 & LD_BLOCK == 651) %>% mutate(sig = P < 5e-8) %>%ggplot(aes(x = BP, y=ES_DERIVED, color = sig)) + geom_point()
+p652 <- data %>% filter(CHR == 6 & LD_BLOCK == 652) %>% mutate(sig = P < 5e-8) %>%ggplot(aes(x = BP, y=ES_DERIVED, color = sig)) + geom_point()
+p653 <- data %>% filter(CHR == 6 & LD_BLOCK == 653) %>% mutate(sig = P < 5e-8) %>%ggplot(aes(x = BP, y=ES_DERIVED, color = sig)) + geom_point()
+ggarrange(p650,p651,p652,p653)
 ```
 
-**Skin Color**  
 
-IAF vs Effect size:  
 ```{r}
-data <- fread("../data/MISC_GWAS/test/skin_color.txt")
-sig <- sig_snps(data)
+#df <- data %>% mutate(daf_bin = cut(DAF,c(-Inf,0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, Inf), labels = seq(0.1,1, 0.1))) %>% mutate(es_bin = cut(ES_DERIVED,c(-Inf,-0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1,0.2,0.3,0.4,0.5,0.6,0.7, Inf), labels = c(-0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8)))
+#df_bin <- df %>% group_by(daf_bin, es_bin) %>% summarise(num_snps = n())
+#ggplot(data = df_bin, aes(x=daf_bin, y=es_bin, fill = num_snps)) + geom_tile()
+```
+
+
+
+**EAS Psychiatric Genetic Consortium**  
+
+The raw GWAS was downloaded from (https://www.med.unc.edu/pgc/download-results/scz/), EUR only descent. They are discussed in this paper: https://www.nature.com/articles/s41588-019-0512-x   
+
+First, we can plot the trait increasing allele frequency vs effect size for GWAS significant SNPs (P < 5e-8), picking the lowest p-value per LD Block and coloring by derived status. (n=21)   
+```{r}
+data <- fread("~/scratch/SCZ-EAS_PGC.txt")
+sig <- sig_snps(data, 5e-8)
 ld_block <- lowest_pval(sig)
-make_plot(ld_block, "Household Income")
+make_plot(ld_block, "SCZ-EAS_PGC")
 ```
 
-Proportion of derived alleles that increase the trait
+Here is the same plot with all the significant SNPs (not picking the lowest per LD Block).  
 ```{r}
-tbl <- increasing_derived_alleles_thresolds(data)
-kable(tbl)
+make_plot(sig, "SCZ-EAS_PGC, all SNPs")
 ```
 
-Correlation between derived alleles and PC  
+
+Let's try dropping the significance threshold (P < 5e-4), still picking the lowest p-value per LD Block.  
 ```{r}
-loadings_all <- data[,21:40]
-avg_loadings_all <- apply(loadings_all, 2, mean)
-
-loadings <- sig[,21:40]
-avg_loadings <- apply(loadings, 2, mean)
-avg_load <- as.data.frame(cbind(avg_loadings, seq(1,20)))
-
-ggplot(data = avg_load, aes(x=avg_loadings,y=V2)) + geom_point(size = 2, color = "navy") + geom_vline(xintercept = 0, color = "red") + ylab("PC") + scale_y_continuous(minor_breaks = seq(1 , 20, 1), breaks = seq(1, 20, 1)) + xlab("average correlation between derived alleles and PCs") + theme_bw() + geom_point(data = avg_load, aes(x=avg_loadings_all,y=V2), color = "black", alpha = 0.5)
+sig <- sig_snps(data, 5e-6)
+make_plot(sig, "SCZ-EAS_PGC")
 ```
 
-**Neuroticism score**  
+**EUR Walters Group Data**  
 
-IAF vs Effect size:  
+The raw GWAS was downloaded from (https://walters.psycm.cf.ac.uk/, EUR only descent. They are discussed in this paper: https://www.nature.com/articles/s41588-018-0059-2   
+
+First, we can plot the trait increasing allele frequency vs effect size for GWAS significant SNPs (P < 5e-8), picking the lowest p-value per LD Block and coloring by derived status.    
 ```{r}
-data <- read_ss("neuroticism_score")
-sig <- sig_snps(data)
+data <- fread("~/scratch/SCZ_3982.txt")
+sig <- sig_snps(data, 5e-8)
 ld_block <- lowest_pval(sig)
-make_plot(ld_block, "Neuroticism score")
+make_plot(ld_block, "SCZ-Walters")
 ```
 
-Proportion of derived alleles that increase the trait
+Now we can make the same plot but dropping all SNPs on chromosome 6.  
 ```{r}
-tbl <- increasing_derived_alleles_thresolds(data)
-kable(tbl)
+drop_six <- ld_block %>% filter(CHR != 6)
+make_plot(drop_six, "Exclude CHR 6")
 ```
-
-**Age at first sex**  
-
-IAF vs Effect size:  
-```{r}
-data <- read_ss("age_at_first_sex")
-sig <- sig_snps(data)
-ld_block <- lowest_pval(sig)
-make_plot(ld_block, "Age at first sex")
-```
-
-Proportion of derived alleles that increase the trait
-```{r}
-tbl <- increasing_derived_alleles_thresolds(data)
-kable(tbl)
-```
-
-**Overall Health Rating**  
-
-IAF vs Effect size:  
-```{r}
-data <- read_ss("overall_health_rating")
-sig <- sig_snps(data)
-ld_block <- lowest_pval(sig)
-make_plot(ld_block, "Overall health rating")
-```
-
-Proportion of derived alleles that increase the trait
-```{r}
-tbl <- increasing_derived_alleles_thresolds(data)
-kable(tbl)
-```
-
-**Birth Weight**  
-
-IAF vs Effect size:  
-```{r}
-data <- read_ss("birth_weight")
-sig <- sig_snps(data)
-ld_block <- lowest_pval(sig)
-make_plot(ld_block, "Birth Weight")
-```
-
-Proportion of derived alleles that increase the trait
-```{r}
-tbl <- increasing_derived_alleles_thresolds(data)
-kable(tbl)
-```
-
-
-**Alcohol Intake Frequency**  
-
-IAF vs Effect size:  
-```{r}
-data <- read_ss("alcohol_intake_frequency")
-sig <- sig_snps(data)
-ld_block <- lowest_pval(sig)
-make_plot(ld_block, "Alcohol Intake Frequency")
-```
-
-Proportion of derived alleles that increase the trait
-```{r}
-tbl <- increasing_derived_alleles_thresolds(data)
-kable(tbl)
-```
-
-**Forced Vital Capacity**  
-
-IAF vs Effect size:  
-```{r}
-data <- read_ss("forced_vital_capacity")
-sig <- sig_snps(data)
-ld_block <- lowest_pval(sig)
-make_plot(ld_block, "Forced Vital Capacity")
-```
-
-
-Proportion of derived alleles that increase the trait
-```{r}
-tbl <- increasing_derived_alleles_thresolds(data)
-kable(tbl)
-```
-
-
-
